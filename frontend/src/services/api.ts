@@ -1,6 +1,6 @@
 import { CropListing, PriceBreakdown, DemandForecast, VRPResult, MinistrySummary, RouteWaypoint } from '../types';
 
-const API_BASE = (import.meta.env.VITE_API_BASE as string) || 'http://localhost:8000/api/v1';
+const API_BASE = ((import.meta as any).env?.VITE_API_BASE as string) || 'http://localhost:8000/api/v1';
 
 export async function fetchListings(crop?: string, category?: string): Promise<CropListing[]> {
   try {
