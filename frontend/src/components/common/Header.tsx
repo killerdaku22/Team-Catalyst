@@ -18,9 +18,9 @@ export const Header: React.FC<HeaderProps> = ({
   isBackendConnected
 }) => {
   const navItems = [
-    { id: 'design-system', label: 'Design System', icon: Palette },
     { id: 'ministry', label: 'Overview', icon: Landmark },
     { id: 'marketplace', label: 'Marketplace', icon: ShoppingCart },
+    { id: 'farmer', label: 'Farmer Portal', icon: Sprout },
     { id: 'forecasting', label: 'Market Outlook', icon: BarChart3 },
     { id: 'logistics', label: 'Transport', icon: Truck },
   ];

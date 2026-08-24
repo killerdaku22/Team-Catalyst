@@ -10,7 +10,7 @@ import { DesignSystem } from './components/common/DesignSystem';
 
 export const App: React.FC = () => {
   const [activeRole, setActiveRole] = useState<UserRole>('MINISTRY_ADMIN');
-  const [activeTab, setActiveTab] = useState<string>('design-system');
+  const [activeTab, setActiveTab] = useState<string>('ministry');
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
 
   useEffect(() => {
