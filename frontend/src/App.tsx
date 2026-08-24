@@ -14,8 +14,8 @@ export const App: React.FC = () => {
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
 
   useEffect(() => {
-    // Check backend connection status
-    fetch('http://localhost:8000/api/v1/analytics/ministry-summary')
+    const apiBase = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:8000/api/v1';
+    fetch(`${apiBase}/analytics/ministry-summary`)
       .then(res => {
         if (res.ok) setIsBackendConnected(true);
       })
