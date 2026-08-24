@@ -34,7 +34,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     full_name = Column(String, nullable=False)
-    role = Column(Enum(UserRole), default=UserRole.FPO, nullable=False)
+    role = Column(Enum(UserRole, native_enum=False), default=UserRole.FPO, nullable=False)
     phone = Column(String, nullable=True)
     location_name = Column(String, nullable=True)
     latitude = Column(Float, nullable=True)
@@ -76,7 +76,7 @@ class CropListing(Base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     location_name = Column(String, nullable=False)
-    status = Column(Enum(ListingStatus), default=ListingStatus.AVAILABLE)
+    status = Column(Enum(ListingStatus, native_enum=False), default=ListingStatus.AVAILABLE)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     seller = relationship("User", back_populates="listings")
@@ -95,7 +95,7 @@ class DirectOrder(Base):
     total_amount = Column(Float, nullable=False)
     savings_vs_retail = Column(Float, nullable=False)
     farmer_earnings_uplift = Column(Float, nullable=False)
-    status = Column(Enum(OrderStatus), default=OrderStatus.PENDING)
+    status = Column(Enum(OrderStatus, native_enum=False), default=OrderStatus.PENDING)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     buyer = relationship("User", back_populates="orders")
@@ -116,7 +116,7 @@ class LogisticsTrip(Base):
     estimated_duration_hrs = Column(Float, nullable=False)
     co2_saved_kg = Column(Float, default=0.0)
     spoilage_risk_percent = Column(Float, default=2.5)
-    status = Column(Enum(TripStatus), default=TripStatus.SCHEDULED)
+    status = Column(Enum(TripStatus, native_enum=False), default=TripStatus.SCHEDULED)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 class MandiPriceRecord(Base):

@@ -6,14 +6,15 @@ import { BuyerPortalView } from './components/marketplace/BuyerPortalView';
 import { FarmerPortalView } from './components/marketplace/FarmerPortalView';
 import { DemandForecastView } from './components/forecasting/DemandForecastView';
 import { LogisticsRouteView } from './components/logistics/LogisticsRouteView';
+import { DesignSystem } from './components/common/DesignSystem';
 
 export const App: React.FC = () => {
   const [activeRole, setActiveRole] = useState<UserRole>('MINISTRY_ADMIN');
-  const [activeTab, setActiveTab] = useState<string>('ministry');
+  const [activeTab, setActiveTab] = useState<string>('design-system');
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
 
   useEffect(() => {
-    // Check FastAPI backend connection status
+    // Check backend connection status
     fetch('http://localhost:8000/api/v1/analytics/ministry-summary')
       .then(res => {
         if (res.ok) setIsBackendConnected(true);
@@ -22,7 +23,7 @@ export const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--ad-bg)', color: 'var(--ad-text-primary)' }}>
       {/* Header Navigation */}
       <Header
         activeRole={activeRole}
@@ -39,7 +40,8 @@ export const App: React.FC = () => {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1">
+        {activeTab === 'design-system' && <DesignSystem />}
         {activeTab === 'ministry' && <MinistryAdminView />}
         {activeTab === 'marketplace' && <BuyerPortalView />}
         {activeTab === 'farmer' && <FarmerPortalView />}
@@ -48,15 +50,15 @@ export const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="glass-panel border-t border-slate-800 py-6 mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
+      <footer style={{ borderTop: '1px solid var(--ad-border)', background: 'var(--ad-surface)' }} className="py-5 mt-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-ad-caption gap-3" style={{ color: 'var(--ad-text-tertiary)' }}>
           <div className="flex items-center space-x-2">
-            <span className="font-bold text-slate-200 font-mono">SIH26033 Prototype</span>
+            <span className="font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>AgriDirect</span>
             <span>•</span>
-            <span>Department of Consumer Affairs (DoCA)</span>
+            <span>SIH26033 • National Prototype</span>
           </div>
           <div>
-            Ministry of Consumer Affairs, Food & Public Distribution — Smart India Hackathon 2026
+            Prototype aligned with the Department of Consumer Affairs problem statement.
           </div>
         </div>
       </footer>
