@@ -192,7 +192,11 @@ export async function fetchDemandForecast(commodity: string = 'Tomato', region: 
   };
 }
 
-export async function optimizeRoute(selectedListings: CropListing[]): Promise<VRPResult> {
+export async function optimizeRoute(
+  selectedListings: CropListing[],
+  destination: { name: string; latitude: number; longitude: number } = { name: "Central Delhi Distribution Hub", latitude: 28.6139, longitude: 77.2090 },
+  max_capacity_kg: number = 5000.0
+): Promise<VRPResult> {
   try {
     const res = await fetch(`${API_BASE}/logistics/optimize-route`, {
       method: 'POST',
@@ -206,8 +210,8 @@ export async function optimizeRoute(selectedListings: CropListing[]): Promise<VR
           latitude: l.latitude,
           longitude: l.longitude
         })),
-        destination: { name: "Central Delhi Distribution Hub", latitude: 28.6139, longitude: 77.2090 },
-        max_capacity_kg: 5000.0
+        destination,
+        max_capacity_kg
       })
     });
     if (res.ok) {
@@ -230,9 +234,9 @@ export async function optimizeRoute(selectedListings: CropListing[]): Promise<VR
     type: "FARM_PICKUP"
   }));
   waypoints.push({
-    name: "Central Delhi Consumer Hub",
-    latitude: 28.6139,
-    longitude: 77.2090,
+    name: destination.name,
+    latitude: destination.latitude,
+    longitude: destination.longitude,
     type: "DESTINATION_HUB"
   });
 
@@ -240,7 +244,7 @@ export async function optimizeRoute(selectedListings: CropListing[]): Promise<VR
     route_waypoints: waypoints,
     stops_count: waypoints.length,
     total_weight_kg: total_w,
-    vehicle_capacity_utilization_percent: Number(((total_w / 5000) * 100).toFixed(1)),
+    vehicle_capacity_utilization_percent: Number(((total_w / max_capacity_kg) * 100).toFixed(1)),
     total_distance_km: 340.5,
     estimated_time_hours: 7.2,
     distance_saved_vs_unpooled_km: 215.0,

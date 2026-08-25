@@ -13,22 +13,67 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
+interface DestinationOption {
+  id: string;
+  name: string;
+  city: string;
+  latitude: number;
+  longitude: number;
+}
+
+const DESTINATION_HUBS: DestinationOption[] = [
+  { id: 'delhi', name: 'Central Delhi Distribution Hub (Azadpur APMC)', city: 'Delhi-NCR', latitude: 28.6139, longitude: 77.2090 },
+  { id: 'mumbai', name: 'Mumbai Vashi APMC Terminal', city: 'Navi Mumbai', latitude: 19.0760, longitude: 72.8777 },
+  { id: 'bengaluru', name: 'Bengaluru Electronic City Agro-Hub', city: 'Bengaluru', latitude: 12.9716, longitude: 77.5946 },
+  { id: 'lucknow', name: 'Lucknow Regional Agricultural Terminal', city: 'Uttar Pradesh', latitude: 26.8467, longitude: 80.9462 },
+  { id: 'kolkata', name: 'Kolkata Post-Harvest Terminal', city: 'West Bengal', latitude: 22.5726, longitude: 88.3639 },
+];
+
+interface VehicleOption {
+  id: string;
+  name: string;
+  capacity_kg: number;
+  type: string;
+}
+
+const VEHICLE_FLEET: VehicleOption[] = [
+  { id: 'reefer-5k', name: '❄️ Cold-Chain Reefer Truck', capacity_kg: 5000, type: 'Refrigerated' },
+  { id: 'heavy-10k', name: '🚛 Multi-Axle Heavy Carrier', capacity_kg: 10000, type: 'Heavy Duty' },
+  { id: 'ev-2.5k', name: '🚚 Green EV Commercial Van', capacity_kg: 2500, type: 'Zero Emission EV' },
+];
+
 export const LogisticsRouteView: React.FC = () => {
   const [availableListings, setAvailableListings] = useState<CropListing[]>([]);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedDestination, setSelectedDestination] = useState<DestinationOption>(DESTINATION_HUBS[0]);
+  const [selectedVehicle, setSelectedVehicle] = useState<VehicleOption>(VEHICLE_FLEET[0]);
   const [vrpResult, setVrpResult] = useState<VRPResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [optimizing, setOptimizing] = useState(false);
 
+  const runOptimization = async (listings: CropListing[], dest: DestinationOption, vehicle: VehicleOption) => {
+    setOptimizing(true);
+    const chosenListings = listings.filter(l => selectedIds.includes(l.id));
+    const result = await optimizeRoute(
+      chosenListings.length > 0 ? chosenListings : listings.slice(0, 2),
+      { name: dest.name, latitude: dest.latitude, longitude: dest.longitude },
+      vehicle.capacity_kg
+    );
+    setVrpResult(result);
+    setOptimizing(false);
+  };
+
   useEffect(() => {
     fetchListings().then(res => {
       setAvailableListings(res);
-      // Select first two by default
       const defaultSelected = res.slice(0, 2).map(item => item.id);
       setSelectedIds(defaultSelected);
       
-      // Initial optimization run
-      optimizeRoute(res.slice(0, 2)).then(vrp => {
+      optimizeRoute(
+        res.slice(0, 2),
+        { name: selectedDestination.name, latitude: selectedDestination.latitude, longitude: selectedDestination.longitude },
+        selectedVehicle.capacity_kg
+      ).then(vrp => {
         setVrpResult(vrp);
         setLoading(false);
       });
@@ -36,19 +81,14 @@ export const LogisticsRouteView: React.FC = () => {
   }, []);
 
   const toggleSelect = (id: number) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter(item => item !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
+    const newSelected = selectedIds.includes(id)
+      ? selectedIds.filter(item => item !== id)
+      : [...selectedIds, id];
+    setSelectedIds(newSelected);
   };
 
-  const handleRunVRP = async () => {
-    setOptimizing(true);
-    const chosenListings = availableListings.filter(l => selectedIds.includes(l.id));
-    const result = await optimizeRoute(chosenListings);
-    setVrpResult(result);
-    setOptimizing(false);
+  const handleRunVRP = () => {
+    runOptimization(availableListings, selectedDestination, selectedVehicle);
   };
 
   if (loading || !vrpResult) {
@@ -59,9 +99,16 @@ export const LogisticsRouteView: React.FC = () => {
     );
   }
 
-  // Generate polyline positions for Leaflet Map
   const mapPositions: [number, number][] = vrpResult.route_waypoints.map(w => [w.latitude, w.longitude]);
   const centerPos: [number, number] = mapPositions.length > 0 ? mapPositions[0] : [28.6139, 77.2090];
+  
+  // Cost calculations
+  const totalWeight = vrpResult.total_weight_kg;
+  const estimatedCostPooled = Math.round(1500 + vrpResult.total_distance_km * 12.5);
+  const costPerKgPooled = totalWeight > 0 ? (estimatedCostPooled / totalWeight).toFixed(2) : '0.00';
+  const estimatedCostUnpooled = Math.round(estimatedCostPooled * 2.4);
+  const costPerKgUnpooled = totalWeight > 0 ? (estimatedCostUnpooled / totalWeight).toFixed(2) : '0.00';
+  const savingsPercent = Math.round(((estimatedCostUnpooled - estimatedCostPooled) / estimatedCostUnpooled) * 100);
 
   return (
     <div className="space-y-6 animate-fadeIn">
@@ -76,7 +123,7 @@ export const LogisticsRouteView: React.FC = () => {
           </div>
           <h1 className="text-2xl font-extrabold text-white mt-1">Smart Multi-Stop Logistics & Pooling Optimizer</h1>
           <p className="text-xs text-slate-300">
-            Pool farm produce across adjacent FPO clusters into high-capacity cold-chain transport, reducing transit costs & carbon footprint.
+            Select origin farm clusters and urban destination terminals to calculate optimal route geometry and freight savings.
           </p>
         </div>
 
@@ -86,8 +133,53 @@ export const LogisticsRouteView: React.FC = () => {
           className="bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-bold px-5 py-3 rounded-xl shadow-lg shadow-cyan-500/20 transition-all flex items-center space-x-2 text-sm disabled:opacity-50"
         >
           <Zap className="w-4 h-4" />
-          <span>{optimizing ? 'Calculating Route...' : 'Run VRP Route Optimizer'}</span>
+          <span>{optimizing ? 'Recalculating...' : 'Optimize Pooled Route'}</span>
         </button>
+      </div>
+
+      {/* Origin & Destination Interactive Configuration Bar */}
+      <div className="glass-panel p-4 rounded-2xl border border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div>
+          <label className="block text-slate-300 font-semibold mb-1.5 flex items-center space-x-1.5">
+            <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Delivery Destination Terminal (Where to Deliver):</span>
+          </label>
+          <select
+            value={selectedDestination.id}
+            onChange={(e) => {
+              const dest = DESTINATION_HUBS.find(d => d.id === e.target.value) || DESTINATION_HUBS[0];
+              setSelectedDestination(dest);
+            }}
+            className="w-full bg-slate-900 border border-slate-700 text-cyan-300 font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-cyan-500 cursor-pointer"
+          >
+            {DESTINATION_HUBS.map(hub => (
+              <option key={hub.id} value={hub.id}>
+                📍 {hub.name} ({hub.city})
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-slate-300 font-semibold mb-1.5 flex items-center space-x-1.5">
+            <Truck className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Vehicle Fleet Type & Capacity:</span>
+          </label>
+          <select
+            value={selectedVehicle.id}
+            onChange={(e) => {
+              const veh = VEHICLE_FLEET.find(v => v.id === e.target.value) || VEHICLE_FLEET[0];
+              setSelectedVehicle(veh);
+            }}
+            className="w-full bg-slate-900 border border-slate-700 text-emerald-300 font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+          >
+            {VEHICLE_FLEET.map(veh => (
+              <option key={veh.id} value={veh.id}>
+                {veh.name} (Max {veh.capacity_kg.toLocaleString()} kg)
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Main Grid: Listings Selection vs Map & VRP Metrics */}
@@ -95,12 +187,12 @@ export const LogisticsRouteView: React.FC = () => {
         {/* Left Column: Farm Listing Selection (4 cols) */}
         <div className="lg:col-span-4 glass-panel p-5 rounded-2xl border border-slate-800 space-y-4">
           <h2 className="text-base font-bold text-white flex items-center justify-between">
-            <span>Select Farms to Pool</span>
+            <span>Select Origin Farms (From)</span>
             <span className="text-xs text-cyan-400 font-mono font-normal">{selectedIds.length} Selected</span>
           </h2>
-          <p className="text-xs text-slate-400">Combine small farm orders to optimize payload capacity</p>
+          <p className="text-xs text-slate-400">Select produce batches to consolidate onto this route:</p>
 
-          <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+          <div className="space-y-3 max-h-[460px] overflow-y-auto pr-1">
             {availableListings.map(item => {
               const isSelected = selectedIds.includes(item.id);
               return (
@@ -140,7 +232,7 @@ export const LogisticsRouteView: React.FC = () => {
           {/* Map Canvas */}
           <div className="glass-panel p-2 rounded-2xl border border-slate-800 overflow-hidden relative">
             <div className="h-[360px] w-full rounded-xl overflow-hidden z-10 relative">
-              <MapContainer center={centerPos} zoom={6} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
+              <MapContainer center={centerPos} zoom={5} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -163,32 +255,53 @@ export const LogisticsRouteView: React.FC = () => {
             </div>
           </div>
 
+          {/* Freight Cost & Efficiency Comparison */}
+          <div className="glass-card p-4 rounded-xl border border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/30 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
+            <div className="space-y-1">
+              <span className="text-slate-400 text-[11px] block font-sans">Pooled Freight Cost:</span>
+              <div className="text-lg font-extrabold text-emerald-400">₹{estimatedCostPooled.toLocaleString()}</div>
+              <span className="text-[11px] text-emerald-500 font-sans">₹{costPerKgPooled}/kg transit rate</span>
+            </div>
+
+            <div className="space-y-1">
+              <span className="text-slate-400 text-[11px] block font-sans">Separate Individual Trips:</span>
+              <div className="text-lg font-extrabold text-rose-400 line-through">₹{estimatedCostUnpooled.toLocaleString()}</div>
+              <span className="text-[11px] text-rose-400 font-sans">₹{costPerKgUnpooled}/kg unpooled</span>
+            </div>
+
+            <div className="space-y-1 sm:border-l sm:border-slate-800 sm:pl-4">
+              <span className="text-slate-400 text-[11px] block font-sans">Net Logistics Efficiency:</span>
+              <div className="text-lg font-extrabold text-cyan-400">+{savingsPercent}% Savings</div>
+              <span className="text-[11px] text-cyan-300 font-sans">Consolidated Cold-Chain</span>
+            </div>
+          </div>
+
           {/* VRP Analytics Dashboard Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="glass-card p-4 rounded-xl border border-slate-800">
-              <span className="text-[11px] text-slate-400 font-medium">Vehicle Payload Utilization</span>
+              <span className="text-[11px] text-slate-400 font-medium">Payload Utilization</span>
               <div className="text-xl font-black text-white mt-1">{vrpResult.vehicle_capacity_utilization_percent}%</div>
               <div className="w-full bg-slate-900 h-1.5 rounded-full mt-2 overflow-hidden">
-                <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${vrpResult.vehicle_capacity_utilization_percent}%` }}></div>
+                <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${Math.min(vrpResult.vehicle_capacity_utilization_percent, 100)}%` }}></div>
               </div>
             </div>
 
             <div className="glass-card p-4 rounded-xl border border-slate-800">
-              <span className="text-[11px] text-slate-400 font-medium">Total Route Distance</span>
+              <span className="text-[11px] text-slate-400 font-medium">Route Distance</span>
               <div className="text-xl font-black text-cyan-400 mt-1">{vrpResult.total_distance_km} km</div>
-              <span className="text-[10px] text-slate-400 block mt-1">Est. {vrpResult.estimated_time_hours} hrs travel</span>
+              <span className="text-[10px] text-slate-400 block mt-1">Est. {vrpResult.estimated_time_hours} hrs</span>
             </div>
 
             <div className="glass-card p-4 rounded-xl border border-slate-800">
-              <span className="text-[11px] text-slate-400 font-medium">Distance Saved (Pooled)</span>
+              <span className="text-[11px] text-slate-400 font-medium">Distance Saved</span>
               <div className="text-xl font-black text-emerald-400 mt-1">+{vrpResult.distance_saved_vs_unpooled_km} km</div>
-              <span className="text-[10px] text-emerald-500 block mt-1">Vs unpooled individual trips</span>
+              <span className="text-[10px] text-emerald-500 block mt-1">Via pooled waypoints</span>
             </div>
 
             <div className="glass-card p-4 rounded-xl border border-slate-800">
-              <span className="text-[11px] text-slate-400 font-medium">CO2 Emissions Reduced</span>
+              <span className="text-[11px] text-slate-400 font-medium">CO2 Saved</span>
               <div className="text-xl font-black text-teal-300 mt-1">{vrpResult.co2_saved_kg} kg</div>
-              <span className="text-[10px] text-teal-400 block mt-1">Green Logistics Impact</span>
+              <span className="text-[10px] text-teal-400 block mt-1">Green logistics</span>
             </div>
           </div>
         </div>
