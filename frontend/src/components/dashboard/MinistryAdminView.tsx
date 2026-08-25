@@ -43,9 +43,8 @@ export const MinistryAdminView: React.FC = () => {
           <div>
             <div className="flex items-center space-x-2">
               <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full font-mono font-semibold">
-                SIH26033 National Prototype
+                Official DoCA Monitoring Hub
               </span>
-              <span className="text-slate-400 text-xs font-mono">• Official DoCA Monitoring Hub</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-2 tracking-tight">
               Department of Consumer Affairs (DoCA) National Executive Dashboard

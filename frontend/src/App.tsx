@@ -55,10 +55,10 @@ export const App: React.FC = () => {
           <div className="flex items-center space-x-2">
             <span className="font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>AgriDirect</span>
             <span>•</span>
-            <span>SIH26033 • National Prototype</span>
+            <span>Agricultural Commerce & Market Intelligence Platform</span>
           </div>
           <div>
-            Prototype aligned with the Department of Consumer Affairs problem statement.
+            Department of Consumer Affairs (DoCA) Direct Farmer-to-Consumer Engine.
           </div>
         </div>
       </footer>

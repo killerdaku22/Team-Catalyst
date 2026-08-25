@@ -37,9 +37,8 @@ export const DemandForecastView: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2">
             <span className="bg-emerald-500/20 text-emerald-400 text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold">
-              Deterministic Time-Series AI Engine
+              Commodity Price & Demand Analytics
             </span>
-            <span className="text-slate-400 text-xs font-mono">• Zero Mock Values</span>
           </div>
           <h1 className="text-2xl font-extrabold text-white mt-1">Commodity Demand & Price Forecast</h1>
           <p className="text-xs text-slate-300">
@@ -75,7 +74,7 @@ export const DemandForecastView: React.FC = () => {
           <button
             onClick={loadForecast}
             className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-all"
-            title="Refresh AI Model"
+            title="Refresh Forecast Model"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
