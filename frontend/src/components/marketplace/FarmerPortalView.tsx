@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { PlusCircle, Sprout, ShieldCheck, MapPin, CheckCircle2, TrendingUp } from 'lucide-react';
 
-export const FarmerPortalView: React.FC = () => {
+interface FarmerPortalViewProps {
+  onNavigateToMarketplace?: () => void;
+}
+
+export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateToMarketplace }) => {
   const [fpoName, setFpoName] = useState('Ludhiana Agri Cooperative');
   const [cropName, setCropName] = useState('Wheat (Kalyan Sona)');
   const [category, setCategory] = useState('Cereals');
@@ -45,16 +49,11 @@ export const FarmerPortalView: React.FC = () => {
 
       if (res.ok) {
         setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 5000);
       } else {
-        // Fallback simulate success
         setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 5000);
       }
     } catch (err) {
-      // Fallback simulate success for offline demo
       setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 5000);
     } finally {
       setIsSubmitting(false);
     }
@@ -166,17 +165,29 @@ export const FarmerPortalView: React.FC = () => {
         </div>
 
         {submitted ? (
-          <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-center text-emerald-300 text-xs font-semibold flex items-center justify-center space-x-2">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-            <span>Listing Created! Eligible for Smart VRP Logistics Pooling.</span>
+          <div className="space-y-3">
+            <div className="p-4 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-center text-emerald-300 text-xs font-semibold flex items-center justify-center space-x-2">
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+              <span>Listing Published Successfully! Saved to National PostgreSQL Database.</span>
+            </div>
+            {onNavigateToMarketplace && (
+              <button
+                type="button"
+                onClick={onNavigateToMarketplace}
+                className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-3 px-4 rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center space-x-2 text-sm"
+              >
+                <span>Go to Marketplace to View Your Listing &rarr;</span>
+              </button>
+            )}
           </div>
         ) : (
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center space-x-2 text-sm"
+            disabled={isSubmitting}
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center space-x-2 text-sm disabled:opacity-50"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Publish Direct Farmer Listing</span>
+            <span>{isSubmitting ? 'Publishing to Database...' : 'Publish Direct Farmer Listing'}</span>
           </button>
         )}
       </form>

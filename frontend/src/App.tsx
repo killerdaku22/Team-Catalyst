@@ -44,7 +44,7 @@ export const App: React.FC = () => {
         {activeTab === 'design-system' && <DesignSystem />}
         {activeTab === 'ministry' && <MinistryAdminView />}
         {activeTab === 'marketplace' && <BuyerPortalView />}
-        {activeTab === 'farmer' && <FarmerPortalView />}
+        {activeTab === 'farmer' && <FarmerPortalView onNavigateToMarketplace={() => setActiveTab('marketplace')} />}
         {activeTab === 'forecasting' && <DemandForecastView />}
         {activeTab === 'logistics' && <LogisticsRouteView />}
       </main>
