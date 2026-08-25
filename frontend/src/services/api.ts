@@ -221,7 +221,7 @@ export async function optimizeRoute(
     console.warn("Fallback VRP optimization:", e);
   }
 
-  // Fallback VRP
+  // Deterministic Mathematical VRP Fallback
   const total_w = selectedListings.reduce((sum, item) => sum + item.quantity_kg, 0);
   const waypoints: RouteWaypoint[] = selectedListings.map(l => ({
     id: l.id,
@@ -240,16 +240,43 @@ export async function optimizeRoute(
     type: "DESTINATION_HUB"
   });
 
+  // Haversine calculation
+  const toRad = (x: number) => (x * Math.PI) / 180;
+  const calcDist = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 6371;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
+  let total_dist = 0;
+  for (let i = 0; i < waypoints.length - 1; i++) {
+    total_dist += calcDist(waypoints[i].latitude, waypoints[i].longitude, waypoints[i+1].latitude, waypoints[i+1].longitude);
+  }
+  total_dist = Math.max(10, Math.round(total_dist * 10) / 10);
+
+  const unpooled_dist = selectedListings.length <= 1
+    ? total_dist
+    : selectedListings.reduce((sum, l) => sum + calcDist(l.latitude, l.longitude, destination.latitude, destination.longitude), 0);
+
+  const dist_saved = Math.max(0, Math.round((unpooled_dist - total_dist) * 10) / 10);
+  const est_time = Math.round((total_dist / 45.0) * 10) / 10;
+  const co2_saved = Math.round(dist_saved * 0.26 * 10) / 10;
+
   return {
     route_waypoints: waypoints,
     stops_count: waypoints.length,
     total_weight_kg: total_w,
     vehicle_capacity_utilization_percent: Number(((total_w / max_capacity_kg) * 100).toFixed(1)),
-    total_distance_km: 340.5,
-    estimated_time_hours: 7.2,
-    distance_saved_vs_unpooled_km: 215.0,
-    co2_saved_kg: 55.9,
-    spoilage_risk_percent: 3.8
+    total_distance_km: total_dist,
+    estimated_time_hours: est_time,
+    distance_saved_vs_unpooled_km: dist_saved,
+    co2_saved_kg: co2_saved,
+    spoilage_risk_percent: Math.min(15, Math.round((1.2 + est_time * 0.4) * 10) / 10)
   };
 }
 

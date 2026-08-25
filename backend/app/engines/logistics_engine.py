@@ -92,14 +92,21 @@ class LogisticsOptimizationEngine:
         # Average speed: 45 km/h for rural-urban transit
         est_hours = total_distance / 45.0
         
-        # Individual trip comparison (5 separate small trips vs 1 pooled trip)
-        unpooled_distance = sum(
-            cls.haversine_distance(float(p["latitude"]), float(p["longitude"]), dest_lat, dest_lng) * 2
-            for p in selected_pickups
-        )
-        distance_saved_km = max(0.0, unpooled_distance - total_distance)
+        # Individual trip comparison (separate trips vs 1 consolidated pooled trip)
+        if len(selected_pickups) <= 1:
+            # Single farm pickup: no pooling distance saved
+            unpooled_distance = total_distance
+            distance_saved_km = 0.0
+        else:
+            # Multiple farm pickups: each farm would have dispatched individual trips to destination
+            unpooled_distance = sum(
+                cls.haversine_distance(float(p["latitude"]), float(p["longitude"]), dest_lat, dest_lng)
+                for p in selected_pickups
+            )
+            # Route consolidation saves duplicate transit
+            distance_saved_km = max(0.0, unpooled_distance - total_distance)
         
-        # CO2 emissions model: 0.26 kg CO2 per km saved
+        # CO2 emissions model: 0.26 kg CO2 per km saved (standard diesel commercial freight)
         co2_saved_kg = distance_saved_km * 0.26
         
         # Spoilage risk model: 0.5% per hour in transit with cold-chain control
