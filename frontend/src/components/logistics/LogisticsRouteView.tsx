@@ -234,8 +234,8 @@ export const LogisticsRouteView: React.FC = () => {
             <div className="h-[360px] w-full rounded-xl overflow-hidden z-10 relative">
               <MapContainer center={centerPos} zoom={5} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
                 <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
                 />
                 {mapPositions.length > 1 && (
                   <Polyline positions={mapPositions} color="#06b6d4" weight={4} dashArray="8, 8" />
