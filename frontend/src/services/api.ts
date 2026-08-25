@@ -184,9 +184,9 @@ export async function fetchDemandForecast(commodity: string = 'Tomato', region: 
       };
     }),
     key_drivers: [
-      `Seasonal demand surge expected in ${region} urban centers over next 10 days.`,
-      `Low arrival volume in regional mandis due to recent rain events.`,
-      `Direct FPO pooling reduces transit spoilage risk by ~65%.`
+      `Rising trend detected in regional ${region} mandis for ${commodity} (+0.64 Rs/day).`,
+      `Low arrival volume in regional mandis due to recent rain events, projected supply deficit within 7 days.`,
+      `Direct FPO pooling reduces ${commodity} transit spoilage risk by ~65%, improving net supply availability.`
     ],
     generated_at: new Date().toISOString().replace('T', ' ').substring(0, 19)
   };

@@ -11,51 +11,51 @@
    1. DESIGN TOKENS (CSS Custom Properties)
    ------------------------------------------------------------ */
 :root {
-  /* Backgrounds */
-  --ad-bg:             #FAFAF8;
-  --ad-bg-alt:         #F5F4F0;
-  --ad-surface:        #FFFFFF;
+  /* Backgrounds — Dark Slate Theme */
+  --ad-bg:             #0B1120;
+  --ad-bg-alt:         #111827;
+  --ad-surface:        #1E293B;
 
   /* Borders */
-  --ad-border:         #E5E2DB;
-  --ad-border-strong:  #D1CDC4;
+  --ad-border:         #334155;
+  --ad-border-strong:  #475569;
 
-  /* Text */
-  --ad-text-primary:   #1A1A1A;
-  --ad-text-secondary: #5C5C5C;
-  --ad-text-tertiary:  #8C8C8C;
+  /* Text — Light on Dark */
+  --ad-text-primary:   #F1F5F9;
+  --ad-text-secondary: #CBD5E1;
+  --ad-text-tertiary:  #94A3B8;
 
-  /* Brand green — restrained agricultural */
-  --ad-green-50:       #F0F7F1;
-  --ad-green-100:      #D9EDDC;
-  --ad-green-600:      #2D7A3A;
-  --ad-green-700:      #1E5C2B;
+  /* Brand green */
+  --ad-green-50:       rgba(16, 185, 129, 0.1);
+  --ad-green-100:      rgba(16, 185, 129, 0.2);
+  --ad-green-600:      #10B981;
+  --ad-green-700:      #059669;
 
   /* Semantic: Amber (warning/attention) */
-  --ad-amber-50:       #FFFBEB;
-  --ad-amber-600:      #B45309;
+  --ad-amber-50:       rgba(245, 158, 11, 0.1);
+  --ad-amber-600:      #F59E0B;
 
   /* Semantic: Red (error/negative) */
-  --ad-red-50:         #FEF2F2;
-  --ad-red-600:        #C53030;
+  --ad-red-50:         rgba(239, 68, 68, 0.1);
+  --ad-red-600:        #EF4444;
 
   /* Semantic: Blue (info/links) */
-  --ad-blue-50:        #EFF6FF;
-  --ad-blue-600:       #2563EB;
+  --ad-blue-50:        rgba(59, 130, 246, 0.1);
+  --ad-blue-600:       #3B82F6;
 
   /* Navigation */
-  --ad-nav-bg:         #FFFFFF;
-  --ad-nav-border:     #E5E2DB;
+  --ad-nav-bg:         #0F172A;
+  --ad-nav-border:     #1E293B;
 
   /* Radii */
   --ad-radius-sm:      4px;
   --ad-radius-md:      6px;
   --ad-radius-lg:      8px;
 
-  /* Shadows */
-  --ad-shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.05);
-  --ad-shadow-md:      0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --ad-shadow-lg:      0 4px 12px rgba(0, 0, 0, 0.08);
+  /* Shadows — Subtle on Dark */
+  --ad-shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.3);
+  --ad-shadow-md:      0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --ad-shadow-lg:      0 4px 12px rgba(0, 0, 0, 0.4);
 
   /* Focus */
   --ad-focus-ring:     0 0 0 2px var(--ad-green-600);
@@ -381,6 +381,36 @@
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 0.8125rem;
     font-weight: 500;
+  }
+
+
+  /* --- Navigation Item --- */
+  .ad-nav-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: var(--ad-radius-md);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--ad-text-tertiary);
+    cursor: pointer;
+    transition: all var(--ad-transition);
+    white-space: nowrap;
+  }
+
+  .ad-nav-item:hover {
+    color: var(--ad-text-primary);
+    background: var(--ad-bg-alt);
+  }
+
+  .ad-nav-item--active {
+    color: var(--ad-green-600);
+    background: var(--ad-green-50);
+    border-color: rgba(16, 185, 129, 0.2);
+    font-weight: 600;
   }
 
 
@@ -776,3 +806,60 @@
   color: var(--ad-text-primary) !important;
   font-size: 0.8125rem !important;
 }
+
+
+/* ------------------------------------------------------------
+   7. GLASS PANEL & CARD UTILITIES
+   ------------------------------------------------------------ */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+
+/* ------------------------------------------------------------
+   8. ANIMATIONS
+   ------------------------------------------------------------ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+
+/* ------------------------------------------------------------
+   9. DARK SELECTION & SCROLLBAR
+   ------------------------------------------------------------ */
+::selection {
+  background-color: rgba(16, 185, 129, 0.3);
+  color: #F1F5F9;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0B1120;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+

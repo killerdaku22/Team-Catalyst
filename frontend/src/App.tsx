@@ -40,7 +40,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Container */}
-      <main className="flex-1">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         {activeTab === 'design-system' && <DesignSystem />}
         {activeTab === 'ministry' && <MinistryAdminView />}
         {activeTab === 'marketplace' && <BuyerPortalView />}
