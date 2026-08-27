@@ -13,7 +13,8 @@ import {
   X,
   Compass,
   Check,
-  Split
+  Split,
+  MapPin
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -47,6 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
         return [
           { id: 'home', label: 'Overview', icon: Compass },
           { id: 'decision', label: 'My Decisions', icon: Split },
+          { id: 'best-market', label: 'Best Market', icon: MapPin },
           { id: 'farmer', label: 'Farmer Portal', icon: Sprout },
           { id: 'marketplace', label: 'Direct Marketplace', icon: ShoppingCart },
           { id: 'storage', label: 'Cold Storage IoT', icon: Snowflake },
@@ -57,10 +59,10 @@ export const Header: React.FC<HeaderProps> = ({
         return [
           { id: 'home', label: 'Overview', icon: Compass },
           { id: 'marketplace', label: 'Produce Sourcing & RFQs', icon: ShoppingCart },
+          { id: 'best-market', label: 'Best Market Opportunities', icon: MapPin },
           { id: 'decision', label: 'Decision Engine', icon: Split },
           { id: 'forecasting', label: 'Price Outlook', icon: BarChart3 },
           { id: 'logistics', label: 'Logistics & Landed Cost', icon: Truck },
-          { id: 'farmer', label: 'Farmer Origins', icon: Sprout },
         ];
       case 'LOGISTICS':
       case 'TRANSPORTER':
