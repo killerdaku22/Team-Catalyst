@@ -11,7 +11,7 @@ export { Card, CardHeader, CardBody } from './Card';
 export { KpiCard } from './KpiCard';
 
 export { DataProvenance } from './DataProvenance';
-export type { DataProvenanceProps } from './DataProvenance';
+export type { DataProvenanceProps, ProvenanceStatus } from './DataProvenance';
 
 export { DataTable } from './Table';
 export type { Column } from './Table';
@@ -21,7 +21,7 @@ export type { AlertVariant } from './Alert';
 
 export { EmptyState } from './EmptyState';
 
-export { LoadingSpinner, Skeleton, LoadingPage } from './LoadingState';
+export { LoadingSpinner, Skeleton, CardSkeleton, TableSkeleton, LoadingPage } from './LoadingState';
 
 export { Input, Select } from './Input';
 
