@@ -13,6 +13,7 @@ import {
   PlusCircle,
   X
 } from 'lucide-react';
+import { DataProvenance } from '../ui/DataProvenance';
 
 interface BufferReserve {
   silo_id: string;
@@ -135,9 +136,12 @@ export const BufferStockView: React.FC = () => {
       {/* Top Banner */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 glass-panel p-6 rounded-2xl border border-slate-800">
         <div>
-          <span className="bg-amber-500/20 text-amber-300 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
-            DoCA National Food Security & Market Intervention Scheme (MIS)
-          </span>
+          <div className="flex items-center space-x-2">
+            <span className="bg-amber-500/20 text-amber-300 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
+              DoCA National Food Security & Market Intervention Scheme (MIS)
+            </span>
+            <DataProvenance source="NAFED / FCI Strategic Silo Registry" status="LIVE" />
+          </div>
           <h1 className="text-2xl font-extrabold text-white tracking-tight mt-1">Strategic Buffer Stock & Market Price Stabilization</h1>
           <p className="text-xs text-slate-300 mt-1">
             Real-time tracking of NAFED and NCCF strategic reserves with automated convoy dispatches to cool inflationary retail price spikes.
@@ -264,6 +268,7 @@ export const BufferStockView: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <ShieldAlert className="w-5 h-5 text-amber-400" />
                 <h3 className="font-bold text-white text-base">Trigger Market Intervention Scheme (MIS)</h3>
+                <DataProvenance source="Price-Elasticity Market Injection Simulator" status="SIMULATION" />
               </div>
               <button onClick={() => setShowInterventionModal(false)} className="text-slate-400 hover:text-white">
                 <X className="w-5 h-5" />

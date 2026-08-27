@@ -18,6 +18,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
+import { DataProvenance } from '../ui/DataProvenance';
 
 export const MinistryAdminView: React.FC = () => {
   const [data, setData] = useState<MinistrySummary | null>(null);
@@ -128,13 +129,15 @@ export const MinistryAdminView: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-right font-mono">
-            <div className="text-xs text-slate-400">Supply Stability Index</div>
-            <div className="text-2xl font-black text-emerald-400 flex items-center justify-end space-x-1">
-              <span>{macro_metrics.supply_demand_stability_index}</span>
-              <span className="text-xs text-slate-400">/ 100</span>
+          <div className="flex flex-col items-end gap-2">
+            <DataProvenance source="DoCA National Price Monitoring Cell" status="LIVE" />
+            <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-right font-mono">
+              <div className="text-[10px] text-slate-400">Supply Stability Index</div>
+              <div className="text-xl font-black text-emerald-400 flex items-center justify-end space-x-1">
+                <span>{macro_metrics.supply_demand_stability_index}</span>
+                <span className="text-xs text-slate-400">/ 100</span>
+              </div>
             </div>
-            <div className="text-[11px] text-emerald-500 font-sans font-semibold">Optimal Distribution</div>
           </div>
         </div>
       </div>
@@ -284,6 +287,7 @@ export const MinistryAdminView: React.FC = () => {
               <span className="bg-blue-500/20 text-blue-400 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
                 DoCA Macroeconomic Policy Simulator
               </span>
+              <DataProvenance source="Microeconomic Equilibrium Policy Model" status="SIMULATION" />
             </div>
             <h2 className="text-xl font-extrabold text-white mt-1">
               What-If Intervention & Benefit-to-Cost Welfare Modeler
