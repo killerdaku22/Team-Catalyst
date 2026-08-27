@@ -31,6 +31,11 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--ad-bg)', color: 'var(--ad-text-primary)' }}>
+      {/* Accessible Skip Link */}
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
+
       {/* Header Navigation */}
       <Header
         activeRole={activeRole}
@@ -47,7 +52,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+      <main id="main-content" className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full" tabIndex={-1}>
         {activeTab === 'home' && (
           <LandingPageView
             onNavigate={(tab, role) => {
