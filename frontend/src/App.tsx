@@ -7,6 +7,7 @@ import { FarmerPortalView } from './components/marketplace/FarmerPortalView';
 import { DemandForecastView } from './components/forecasting/DemandForecastView';
 import { LogisticsRouteView } from './components/logistics/LogisticsRouteView';
 import { DesignSystem } from './components/common/DesignSystem';
+import { VoiceKisanAssistant } from './components/voice/VoiceKisanAssistant';
 
 export const App: React.FC = () => {
   const [activeRole, setActiveRole] = useState<UserRole>('MINISTRY_ADMIN');
@@ -62,6 +63,9 @@ export const App: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Multilingual Voice Assistant (Bhashini AI) */}
+      <VoiceKisanAssistant />
     </div>
   );
 };
