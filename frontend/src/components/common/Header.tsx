@@ -14,7 +14,8 @@ import {
   Compass,
   Check,
   Split,
-  MapPin
+  MapPin,
+  Radio
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -36,8 +37,9 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveRole,
   activeTab,
   setActiveTab,
-  isBackendConnected = true,
+  isBackendConnected = false,
 }) => {
+  const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Role-adaptive Navigation Items
@@ -51,6 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
           { id: 'best-market', label: 'Best Market', icon: MapPin },
           { id: 'farmer', label: 'Farmer Portal', icon: Sprout },
           { id: 'marketplace', label: 'Direct Marketplace', icon: ShoppingCart },
+          { id: 'intelligence', label: 'Market Alerts', icon: Radio },
           { id: 'storage', label: 'Cold Storage IoT', icon: Snowflake },
           { id: 'logistics', label: 'Pooled Transport', icon: Truck },
           { id: 'forecasting', label: 'Market Outlook', icon: BarChart3 },
@@ -60,6 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
           { id: 'home', label: 'Overview', icon: Compass },
           { id: 'marketplace', label: 'Produce Sourcing & RFQs', icon: ShoppingCart },
           { id: 'best-market', label: 'Best Market Opportunities', icon: MapPin },
+          { id: 'intelligence', label: 'Market Intelligence', icon: Radio },
           { id: 'decision', label: 'Decision Engine', icon: Split },
           { id: 'forecasting', label: 'Price Outlook', icon: BarChart3 },
           { id: 'logistics', label: 'Logistics & Landed Cost', icon: Truck },
@@ -70,6 +74,7 @@ export const Header: React.FC<HeaderProps> = ({
           { id: 'home', label: 'Overview', icon: Compass },
           { id: 'logistics', label: 'Smart Route Pooling', icon: Truck },
           { id: 'storage', label: 'Cold-Chain Hubs', icon: Snowflake },
+          { id: 'intelligence', label: 'Corridor Shocks', icon: Radio },
           { id: 'marketplace', label: 'Available Loads', icon: ShoppingCart },
           { id: 'forecasting', label: 'Freight Demand', icon: BarChart3 },
         ];
@@ -79,6 +84,7 @@ export const Header: React.FC<HeaderProps> = ({
         return [
           { id: 'home', label: 'Overview', icon: Compass },
           { id: 'ministry', label: 'National Market Monitor', icon: Landmark },
+          { id: 'intelligence', label: 'Market Intelligence & Shocks', icon: Radio },
           { id: 'buffer', label: 'Buffer Stock & MIS', icon: ShieldAlert },
           { id: 'decision', label: 'Decision Engine', icon: Split },
           { id: 'forecasting', label: 'Forecasting & Shock Models', icon: BarChart3 },

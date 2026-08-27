@@ -11,6 +11,7 @@ import { BufferStockView } from './components/buffer/BufferStockView';
 import { LandingPageView } from './components/home/LandingPageView';
 import { DecisionCenterView } from './components/decision/DecisionCenterView';
 import { BestMarketView } from './components/marketplace/BestMarketView';
+import { MarketIntelligenceView } from './components/intelligence/MarketIntelligenceView';
 import { DesignSystem } from './components/common/DesignSystem';
 import { VoiceKisanAssistant } from './components/voice/VoiceKisanAssistant';
 
@@ -73,6 +74,7 @@ export const App: React.FC = () => {
         {activeTab === 'farmer' && <FarmerPortalView onNavigateToMarketplace={() => setActiveTab('marketplace')} />}
         {activeTab === 'storage' && <ColdStorageView />}
         {activeTab === 'buffer' && <BufferStockView />}
+        {activeTab === 'intelligence' && <MarketIntelligenceView />}
         {activeTab === 'forecasting' && <DemandForecastView />}
         {activeTab === 'logistics' && <LogisticsRouteView />}
       </main>
