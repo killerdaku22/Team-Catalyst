@@ -167,14 +167,15 @@ def place_direct_order(
     Place a direct purchase order against an available crop listing.
     Authorized for Buyers and Administrators.
     """
-    listing = db.query(CropListing).filter(CropListing.id == order_in.listing_id).first()
+    # Acquire atomic row-level lock to prevent concurrent double-spend / overselling
+    listing = db.query(CropListing).filter(CropListing.id == order_in.listing_id).with_for_update().first()
     if not listing:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Crop listing not found"
         )
 
-    if listing.status == ListingStatus.SOLD:
+    if listing.status == ListingStatus.SOLD or listing.quantity_kg <= 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Listing has already been purchased and is no longer available"
@@ -214,7 +215,11 @@ def place_direct_order(
         status=OrderStatus.CONFIRMED
     )
 
-    listing.status = ListingStatus.SOLD
+    # Atomic inventory decrement
+    listing.quantity_kg -= order_in.quantity_kg
+    if listing.quantity_kg <= 0:
+        listing.status = ListingStatus.SOLD
+
     db.add(new_order)
     db.commit()
     db.refresh(new_order)

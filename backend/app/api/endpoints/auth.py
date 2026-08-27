@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
@@ -247,7 +247,9 @@ def refresh_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if session.expires_at < datetime.utcnow():
+    current_time = datetime.now(timezone.utc)
+    session_expires = session.expires_at.replace(tzinfo=timezone.utc) if session.expires_at.tzinfo is None else session.expires_at
+    if session_expires < current_time:
         session.is_revoked = True
         db.commit()
         raise HTTPException(

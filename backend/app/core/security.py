@@ -69,5 +69,5 @@ def create_refresh_token_pair(user_id: Union[str, int]) -> Tuple[str, str, datet
     """
     raw_token = secrets.token_urlsafe(48)
     token_hash = hash_token(raw_token)
-    expires_at = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    expires_at = datetime.now(timezone.utc) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
     return raw_token, token_hash, expires_at

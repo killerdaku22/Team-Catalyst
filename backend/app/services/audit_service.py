@@ -1,6 +1,6 @@
 import json
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List, Tuple
 from sqlalchemy.orm import Session
 from app.db.models import AuditEvent
@@ -49,8 +49,8 @@ class AuditService:
         latest = db.query(AuditEvent).order_by(AuditEvent.id.desc()).first()
         prev_hash = latest.current_hash if latest else GENESIS_HASH
 
-        now = datetime.utcnow()
-        timestamp_str = now.isoformat()
+        now = datetime.now(timezone.utc)
+        timestamp_str = now.strftime("%Y-%m-%d %H:%M:%S.%f")
         
         details_json, payload_hash = cls._compute_payload_hash(details or {})
         current_hash = cls._compute_event_hash(
@@ -120,7 +120,7 @@ class AuditService:
                 }
 
             # 3. Recompute current event hash
-            timestamp_str = event.created_at.isoformat()
+            timestamp_str = event.created_at.strftime("%Y-%m-%d %H:%M:%S.%f") if hasattr(event.created_at, 'strftime') else str(event.created_at)
             recomputed_current_hash = cls._compute_event_hash(
                 previous_hash=event.previous_hash,
                 payload_hash=event.payload_hash,
