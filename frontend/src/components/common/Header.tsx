@@ -7,16 +7,16 @@ import {
   ShoppingCart,
   Landmark,
   UserCheck,
-  Snowflake,
-  ShieldAlert,
   Menu,
   X,
-  Compass,
-  Check,
-  Split,
-  MapPin,
   Radio,
-  KeyRound
+  KeyRound,
+  Layers,
+  Scale,
+  Building2,
+  TrendingUp,
+  ShieldCheck,
+  Inbox
 } from 'lucide-react';
 import { AuthModal } from './AuthModal';
 
@@ -41,166 +41,147 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveTab,
   isBackendConnected = false,
 }) => {
-  const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
-  // Role-adaptive Navigation Items
+  // Role-adaptive Compact Navigation Items
   const getNavItemsForRole = (role: UserRole): NavItemConfig[] => {
     switch (role) {
       case 'FPO':
       case 'FARMER':
         return [
-          { id: 'home', label: 'Overview', icon: Compass },
-          { id: 'decision', label: 'My Decisions', icon: Split },
-          { id: 'best-market', label: 'Best Market', icon: MapPin },
-          { id: 'farmer', label: 'Farmer Portal', icon: Sprout },
-          { id: 'marketplace', label: 'Direct Marketplace', icon: ShoppingCart },
-          { id: 'intelligence', label: 'Market Alerts', icon: Radio },
-          { id: 'storage', label: 'Cold Storage IoT', icon: Snowflake },
-          { id: 'logistics', label: 'Pooled Transport', icon: Truck },
-          { id: 'forecasting', label: 'Market Outlook', icon: BarChart3 },
+          { id: 'farmer', label: 'My Produce', icon: Sprout },
+          { id: 'decision', label: 'Decisions', icon: Scale },
+          { id: 'best-market', label: 'Markets', icon: Building2 },
+          { id: 'marketplace', label: 'Marketplace', icon: ShoppingCart },
+          { id: 'logistics', label: 'Transport', icon: Truck },
         ];
       case 'BUYER':
         return [
-          { id: 'home', label: 'Overview', icon: Compass },
-          { id: 'marketplace', label: 'Produce Sourcing & RFQs', icon: ShoppingCart },
-          { id: 'best-market', label: 'Best Market Opportunities', icon: MapPin },
-          { id: 'intelligence', label: 'Market Intelligence', icon: Radio },
-          { id: 'decision', label: 'Decision Engine', icon: Split },
-          { id: 'forecasting', label: 'Price Outlook', icon: BarChart3 },
-          { id: 'logistics', label: 'Logistics & Landed Cost', icon: Truck },
+          { id: 'marketplace', label: 'Marketplace', icon: ShoppingCart },
+          { id: 'logistics', label: 'Transport', icon: Truck },
+          { id: 'forecasting', label: 'Price Trends', icon: TrendingUp },
+          { id: 'intelligence', label: 'Intelligence', icon: Radio },
         ];
       case 'LOGISTICS':
       case 'TRANSPORTER':
         return [
-          { id: 'home', label: 'Overview', icon: Compass },
-          { id: 'logistics', label: 'Smart Route Pooling', icon: Truck },
-          { id: 'storage', label: 'Cold-Chain Hubs', icon: Snowflake },
-          { id: 'intelligence', label: 'Corridor Shocks', icon: Radio },
+          { id: 'logistics', label: 'Routes & Fleet', icon: Truck },
           { id: 'marketplace', label: 'Available Loads', icon: ShoppingCart },
-          { id: 'forecasting', label: 'Freight Demand', icon: BarChart3 },
+          { id: 'intelligence', label: 'Disruptions', icon: Radio },
         ];
       case 'MINISTRY_ADMIN':
       case 'GOVT_AUDITOR':
       default:
         return [
-          { id: 'home', label: 'Overview', icon: Compass },
-          { id: 'ministry', label: 'National Market Monitor', icon: Landmark },
-          { id: 'intelligence', label: 'Market Intelligence & Shocks', icon: Radio },
-          { id: 'buffer', label: 'Buffer Stock & MIS', icon: ShieldAlert },
-          { id: 'decision', label: 'Decision Engine', icon: Split },
-          { id: 'forecasting', label: 'Forecasting & Shock Models', icon: BarChart3 },
-          { id: 'storage', label: 'Cold Storage Infrastructure', icon: Snowflake },
-          { id: 'logistics', label: 'Supply Corridors', icon: Truck },
+          { id: 'ministry', label: 'Market Monitor', icon: Landmark },
+          { id: 'intelligence', label: 'Intelligence', icon: Radio },
+          { id: 'buffer', label: 'Supply & Buffer', icon: Layers },
+          { id: 'forecasting', label: 'Forecasts', icon: TrendingUp },
+          { id: 'decision', label: 'Decision Engine', icon: Scale },
         ];
     }
   };
 
-  const currentNavItems = getNavItemsForRole(activeRole);
-
-  const handleNavClick = (tabId: string) => {
-    setActiveTab(tabId);
-    setMobileMenuOpen(false);
-  };
+  const navItems = getNavItemsForRole(activeRole);
 
   const handleRoleSelect = (role: UserRole) => {
     setActiveRole(role);
-    if (role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') setActiveTab('ministry');
-    else if (role === 'BUYER') setActiveTab('marketplace');
-    else if (role === 'FPO' || role === 'FARMER') setActiveTab('farmer');
-    else if (role === 'LOGISTICS' || role === 'TRANSPORTER') setActiveTab('logistics');
-    setMobileMenuOpen(false);
+    if (role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') {
+      setActiveTab('ministry');
+    } else if (role === 'BUYER') {
+      setActiveTab('marketplace');
+    } else if (role === 'LOGISTICS' || role === 'TRANSPORTER') {
+      setActiveTab('logistics');
+    } else {
+      setActiveTab('farmer');
+    }
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/90 shadow-lg shadow-black/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand Logo & Tagline */}
-          <div
-            className="flex items-center space-x-3 cursor-pointer group shrink-0"
-            onClick={() => handleNavClick(activeRole === 'FPO' ? 'farmer' : 'ministry')}
-          >
-            <div className="w-9 h-9 flex items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-teal-700 shadow-md shadow-emerald-900/40 group-hover:scale-105 transition-transform">
-              <Sprout className="w-5 h-5 text-white stroke-[2.5]" />
-            </div>
-            <div>
-              <span className="font-black text-lg tracking-tight text-white block leading-none">
-                AgriDirect
-              </span>
-              <span className="text-[10px] font-mono text-emerald-400 font-semibold tracking-wider uppercase">
-                SIH Problem 26033
-              </span>
-            </div>
+    <header className="sticky top-0 z-40 bg-[#121815] border-b border-[#2B3731] shadow-sm">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14">
+          
+          {/* Left: Brand Identity */}
+          <div className="flex items-center space-x-3 shrink-0">
+            <button
+              onClick={() => setActiveTab('home')}
+              className="flex items-center space-x-2 text-left focus:outline-none"
+            >
+              <div className="w-8 h-8 rounded-lg bg-[#2D6A4F] flex items-center justify-center text-white shadow-sm">
+                <Sprout className="w-4 h-4" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-white text-base leading-none tracking-tight">AgriDirect</span>
+                <span className="text-[10px] text-[#8E9C93] font-medium leading-tight">Agricultural Commerce</span>
+              </div>
+            </button>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800/80 shadow-inner mx-2 space-x-1" aria-label="Main Navigation">
-            {currentNavItems.map((item) => {
+          {/* Center: Role-Aware Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-1" aria-label="Main Navigation">
+            {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 ${
+                  onClick={() => setActiveTab(item.id)}
+                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
                     isActive
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm shadow-emerald-500/10'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent'
+                      ? 'bg-[#222C27] text-[#48BB78] border border-[#2B3731]'
+                      : 'text-[#C2CBC5] hover:text-white hover:bg-[#1A221E]'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-emerald-400' : 'text-slate-400'}`} />
+                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-[#48BB78]' : 'text-[#8E9C93]'}`} />
                   <span className="whitespace-nowrap">{item.label}</span>
                 </button>
               );
             })}
           </nav>
 
-          {/* Right Action: Role Switcher & Mobile Hamburger */}
-          <div className="flex items-center space-x-3 shrink-0">
-            {/* Connection Pill */}
-            <div className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-[10px] font-mono">
-              <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-              <span className="text-slate-400">{isBackendConnected ? 'Live API' : 'Fallback'}</span>
+          {/* Right Action: Role Selector & Auth Button */}
+          <div className="flex items-center space-x-2.5 shrink-0">
+            {/* Connection Indicator */}
+            <div className="hidden sm:flex items-center space-x-1.5 px-2 py-1 rounded bg-[#1A221E] border border-[#2B3731] text-[10px]">
+              <span className={`w-1.5 h-1.5 rounded-full ${isBackendConnected ? 'bg-[#48BB78]' : 'bg-[#ED8936]'}`} />
+              <span className="text-[#8E9C93]">{isBackendConnected ? 'Online' : 'Calibrated'}</span>
             </div>
 
-            {/* Role Switcher */}
-            <div className="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl shadow-sm">
-              <UserCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider hidden md:inline">
-                Role:
-              </span>
+            {/* Compact Role Selector */}
+            <div className="flex items-center space-x-1 bg-[#1A221E] border border-[#2B3731] px-2 py-1 rounded-md text-xs">
+              <UserCheck className="w-3.5 h-3.5 text-[#52796F] shrink-0" />
               <select
                 value={activeRole}
                 onChange={(e) => handleRoleSelect(e.target.value as UserRole)}
-                className="bg-transparent text-emerald-400 font-bold text-xs focus:outline-none cursor-pointer pr-1"
-                aria-label="Select active experience role"
+                className="bg-transparent text-[#F5F7F5] font-semibold text-xs focus:outline-none cursor-pointer pr-1"
+                aria-label="Active workspace role"
               >
-                <option value="MINISTRY_ADMIN" className="bg-slate-900 text-slate-100">National Policy Monitor</option>
-                <option value="FPO" className="bg-slate-900 text-slate-100">Farmer / FPO Producer</option>
-                <option value="BUYER" className="bg-slate-900 text-slate-100">Direct Institutional Buyer</option>
-                <option value="LOGISTICS" className="bg-slate-900 text-slate-100">Logistics Transporter</option>
+                <option value="FARMER" className="bg-[#1A221E] text-white">Farmer / FPO</option>
+                <option value="BUYER" className="bg-[#1A221E] text-white">Buyer</option>
+                <option value="LOGISTICS" className="bg-[#1A221E] text-white">Transporter</option>
+                <option value="MINISTRY_ADMIN" className="bg-[#1A221E] text-white">Policy Workspace</option>
               </select>
             </div>
 
-            {/* Quick Auth & Demo Switcher Button */}
+            {/* Sign In / Switch Button */}
             <button
               onClick={() => setAuthModalOpen(true)}
-              className="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shadow-sm"
+              className="bg-[#2D6A4F] hover:bg-[#245740] text-white px-2.5 py-1 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1"
               title="Sign In with Seeded RBAC Accounts"
             >
               <KeyRound className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Sign In / Switch</span>
+              <span className="hidden md:inline">Sign In</span>
             </button>
 
-            {/* Mobile Hamburger Toggle */}
+            {/* Mobile Hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+              className="lg:hidden p-1.5 rounded-md bg-[#1A221E] border border-[#2B3731] text-[#C2CBC5] hover:text-white"
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -210,35 +191,35 @@ export const Header: React.FC<HeaderProps> = ({
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
-        onLoginSuccess={(role, email) => {
+        onLoginSuccess={(role) => {
           handleRoleSelect(role);
         }}
       />
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-950 border-b border-slate-800 px-4 py-4 space-y-2 animate-fadeIn">
-          <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider px-2">Navigation ({activeRole})</div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-            {currentNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
-                    isActive
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-400' : 'text-slate-500'}`} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
+        <div className="lg:hidden bg-[#151B18] border-b border-[#2B3731] px-4 py-3 space-y-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setMobileMenuOpen(false);
+                }}
+                className={`w-full flex items-center space-x-2 px-3 py-2 rounded-md text-xs font-semibold ${
+                  isActive
+                    ? 'bg-[#222C27] text-[#48BB78]'
+                    : 'text-[#C2CBC5] hover:bg-[#1A221E]'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
         </div>
       )}
     </header>

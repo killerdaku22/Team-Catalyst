@@ -2,31 +2,24 @@ import React, { useState, useEffect } from 'react';
 import {
   PlusCircle,
   Sprout,
-  MapPin,
   CheckCircle2,
-  TrendingUp,
-  Sparkles,
   Building2,
-  Tag,
-  Layers,
-  ArrowRight,
-  ShieldCheck,
   Scale,
   Truck,
-  Warehouse,
-  Split,
-  ChevronRight,
-  AlertTriangle
+  AlertTriangle,
+  ArrowRight,
+  TrendingUp,
+  Tag
 } from 'lucide-react';
 import {
+  fetchActiveMarketEvents,
   evaluateBatchDecision,
-  fetchBestMarketOpportunities,
-  fetchActiveMarketEvents
+  fetchBestMarketOpportunities
 } from '../../services/api';
 import {
+  MarketEvent,
   BatchDecisionResult,
-  OpportunityRankingResult,
-  MarketEvent
+  OpportunityRankingResult
 } from '../../types';
 import { DataProvenance } from '../ui/DataProvenance';
 
@@ -34,636 +27,437 @@ interface FarmerPortalViewProps {
   onNavigateToMarketplace?: () => void;
 }
 
-interface FPOPreset {
-  id: string;
-  name: string;
-  location: string;
-  state: string;
-  latitude: number;
-  longitude: number;
-  defaultCrop: string;
-  defaultCategory: string;
-  defaultTargetPrice: number;
-  defaultBrokerPrice: number;
-  defaultRetailPrice: number;
-}
-
-const FPO_PRESETS: FPOPreset[] = [
-  {
-    id: 'ludhiana',
-    name: 'Ludhiana Agri Cooperative',
-    location: 'Ludhiana Farm Cluster, Punjab',
-    state: 'Punjab',
-    latitude: 30.9010,
-    longitude: 75.8573,
-    defaultCrop: 'Wheat (Kalyan Sona)',
-    defaultCategory: 'Cereals',
-    defaultTargetPrice: 25.0,
-    defaultBrokerPrice: 21.0,
-    defaultRetailPrice: 35.0,
-  },
-  {
-    id: 'nashik',
-    name: 'Nashik Farmer Producer Co',
-    location: 'Lasalgaon Farm Hub, Nashik, Maharashtra',
-    state: 'Maharashtra',
-    latitude: 19.9975,
-    longitude: 73.7898,
-    defaultCrop: 'Red Onion (Nashik Quality)',
-    defaultCategory: 'Vegetables',
-    defaultTargetPrice: 23.0,
-    defaultBrokerPrice: 17.5,
-    defaultRetailPrice: 38.0,
-  },
-  {
-    id: 'kolar',
-    name: 'Kolar Tomato Growers Union',
-    location: 'Kolar Agri Cluster, Karnataka',
-    state: 'Karnataka',
-    latitude: 13.1367,
-    longitude: 78.1292,
-    defaultCrop: 'Hybrid Red Tomato',
-    defaultCategory: 'Vegetables',
-    defaultTargetPrice: 32.0,
-    defaultBrokerPrice: 24.0,
-    defaultRetailPrice: 52.0,
-  },
-  {
-    id: 'agra',
-    name: 'Agra Potato Producers FPO',
-    location: 'Agra Farm Hub, Uttar Pradesh',
-    state: 'Uttar Pradesh',
-    latitude: 27.1767,
-    longitude: 78.0081,
-    defaultCrop: 'White Potato (Desi Jyoti)',
-    defaultCategory: 'Vegetables',
-    defaultTargetPrice: 18.0,
-    defaultBrokerPrice: 13.5,
-    defaultRetailPrice: 28.0,
-  }
+const FPO_OPTIONS = [
+  { id: 'kolar', name: 'Kolar Tomato Growers Producer Co.', location: 'Kolar, Karnataka', members: 420 },
+  { id: 'nashik', name: 'Nashik Onion Farmers Cooperative', location: 'Nashik, Maharashtra', members: 680 },
+  { id: 'agra', name: 'Agra Potato Producer Union', location: 'Agra, Uttar Pradesh', members: 310 },
+  { id: 'ludhiana', name: 'Punjab Cereal & Wheat Guild', location: 'Ludhiana, Punjab', members: 540 }
 ];
 
-const CROP_CATALOG: Record<string, string[]> = {
-  Vegetables: [
-    'Hybrid Red Tomato',
-    'Red Onion (Nashik Quality)',
-    'White Potato (Desi Jyoti)',
-    'Green Cauliflower',
-    'Fresh Green Peas',
-    'Green Bell Pepper (Capsicum)',
-    'Organic Spinach'
-  ],
-  Cereals: [
-    'Wheat (Kalyan Sona)',
-    'Basmati Paddy Rice (1121)',
-    'Yellow Maize (Corn)',
-    'Pearl Millet (Bajra)'
-  ],
-  Fruits: [
-    'Nagpur Orange',
-    'Alphonso Mango',
-    'Shimla Royal Apple',
-    'Nashik Thompson Seedless Grapes',
-    'Robusta Banana'
-  ],
-  Pulses: [
-    'Chana Dal (Chickpeas)',
-    'Toor / Arhar Dal',
-    'Green Moong Whole',
-    'Urad Dal'
-  ]
+const CROP_VARIETIES: Record<string, string[]> = {
+  Vegetables: ['Tomato (Hybrid Red)', 'Red Onion (Nashik Quality)', 'White Potato (Desi Jyoti)', 'Green Peas', 'Capsicum'],
+  Cereals: ['Wheat (Kalyan Sona)', 'Basmati Paddy Rice (1121)', 'Yellow Maize'],
+  Fruits: ['Nagpur Orange', 'Alphonso Mango', 'Shimla Royal Apple', 'Thompson Seedless Grapes'],
+  Pulses: ['Chana Dal (Chickpeas)', 'Toor / Arhar Dal', 'Green Moong Whole']
 };
 
 export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateToMarketplace }) => {
   const [activeTab, setActiveTab] = useState<'LISTING' | 'DECISION' | 'OPPORTUNITIES'>('LISTING');
-
-  // Form State
-  const [selectedFPOId, setSelectedFPOId] = useState('kolar');
-  const [fpoName, setFpoName] = useState('Kolar Tomato Growers Union');
-  const [cropName, setCropName] = useState('Hybrid Red Tomato');
-  const [category, setCategory] = useState('Vegetables');
-  const [grade, setGrade] = useState('Grade A Fresh');
-  const [quantity, setQuantity] = useState(3500);
-  const [targetPrice, setTargetPrice] = useState(28.0);
-  const [middlemanPrice, setMiddlemanPrice] = useState(21.0);
-  const [retailPrice, setRetailPrice] = useState(45.0);
-  const [location, setLocation] = useState('Kolar Agri Cluster, Karnataka');
-  const [latitude, setLatitude] = useState(13.1367);
-  const [longitude, setLongitude] = useState(78.1292);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Listing Form State
+  const [selectedFPO, setSelectedFPO] = useState('kolar');
+  const [cropCategory, setCropCategory] = useState('Vegetables');
+  const [cropVariety, setCropVariety] = useState('Tomato (Hybrid Red)');
+  const [quantityKg, setQuantityKg] = useState(15000);
+  const [targetPrice, setTargetPrice] = useState(34.5);
+  const [referenceMandiPrice, setReferenceMandiPrice] = useState(28.0);
+  const [harvestDate, setHarvestDate] = useState('2026-08-30');
+  const [isOrganic, setIsOrganic] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Decision Cockpit State
-  const [decisionResult, setDecisionResult] = useState<BatchDecisionResult | null>(null);
-  const [isEvaluatingDecision, setIsEvaluatingDecision] = useState(false);
-  const [minCashNeedPct, setMinCashNeedPct] = useState(30);
-
-  // Market Opportunities State
-  const [opportunityResult, setOpportunityResult] = useState<OpportunityRankingResult | null>(null);
-  const [isLoadingOpportunities, setIsLoadingOpportunities] = useState(false);
-  const [candidateRadius, setCandidateRadius] = useState(500);
-
-  // Market Events
+  // External intelligence
   const [marketEvents, setMarketEvents] = useState<MarketEvent[]>([]);
+  const [decisionResult, setDecisionResult] = useState<BatchDecisionResult | null>(null);
+  const [opportunityResult, setOpportunityResult] = useState<OpportunityRankingResult | null>(null);
 
   useEffect(() => {
-    fetchActiveMarketEvents().then(setMarketEvents);
+    fetchActiveMarketEvents().then(events => setMarketEvents(events)).catch(() => {});
   }, []);
 
-  const handleFPOChange = (fpoId: string) => {
-    setSelectedFPOId(fpoId);
-    const preset = FPO_PRESETS.find(f => f.id === fpoId);
-    if (preset) {
-      setFpoName(preset.name);
-      setLocation(preset.location);
-      setLatitude(preset.latitude);
-      setLongitude(preset.longitude);
-      setCategory(preset.defaultCategory);
-      setCropName(preset.defaultCrop);
-      setTargetPrice(preset.defaultTargetPrice);
-      setMiddlemanPrice(preset.defaultBrokerPrice);
-      setRetailPrice(preset.defaultRetailPrice);
-    }
+  const handleCategoryChange = (cat: string) => {
+    setCropCategory(cat);
+    const varieties = CROP_VARIETIES[cat] || [];
+    if (varieties.length > 0) setCropVariety(varieties[0]);
   };
 
-  const handleCategoryChange = (newCat: string) => {
-    setCategory(newCat);
-    const availableCrops = CROP_CATALOG[newCat] || [];
-    if (availableCrops.length > 0) {
-      setCropName(availableCrops[0]);
-    }
-  };
-
-  const handleEvaluateDecision = async () => {
-    setIsEvaluatingDecision(true);
-    try {
-      const res = await evaluateBatchDecision({
-        commodity: cropName.split(' ')[0],
-        quantity_kg: quantity,
-        current_local_price_per_kg: targetPrice,
-        shelf_life_days: category === 'Vegetables' ? 12 : 60,
-        storage_cost_per_kg_day: 0.08,
-        min_cash_need_pct: minCashNeedPct
-      });
-      setDecisionResult(res);
-    } finally {
-      setIsEvaluatingDecision(false);
-    }
-  };
-
-  const handleFetchOpportunities = async () => {
-    setIsLoadingOpportunities(true);
-    try {
-      const res = await fetchBestMarketOpportunities({
-        commodity: cropName.split(' ')[0],
-        quantity_kg: quantity,
-        origin_location: location,
-        origin_latitude: latitude,
-        origin_longitude: longitude,
-        local_baseline_price_per_kg: targetPrice,
-        candidate_radius_km: candidateRadius
-      });
-      setOpportunityResult(res);
-    } finally {
-      setIsLoadingOpportunities(false);
-    }
-  };
-
-  const handleSubmitListing = async (e: React.FormEvent) => {
+  const handleListingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    const apiBase = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:8000/api/v1';
+    
     try {
-      const apiBase = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:8000/api/v1';
       const payload = {
-        fpo_name: fpoName,
-        crop_name: cropName,
-        category: category,
-        grade: grade,
-        quantity_kg: Number(quantity),
-        price_per_kg: Number(targetPrice),
-        middleman_baseline_price: Number(middlemanPrice),
-        consumer_benchmark_price: Number(retailPrice),
-        harvest_date: new Date().toISOString().split('T')[0],
-        shelf_life_days: category === 'Vegetables' ? 14 : 120,
-        latitude: latitude,
-        longitude: longitude,
-        location_name: location
+        commodity: cropVariety.split(' ')[0],
+        variety: cropVariety,
+        quantity_kg: quantityKg,
+        price_per_kg: targetPrice,
+        harvest_date: harvestDate,
+        grade: 'A',
+        is_organic: isOrganic,
+        fpo_id: selectedFPO
       };
-
       await fetch(`${apiBase}/marketplace/listings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       setSubmitted(true);
-    } catch (err) {
+    } catch {
       setSubmitted(true);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const directTotal = quantity * targetPrice;
-  const brokerTotal = quantity * middlemanPrice;
-  const netUplift = directTotal - brokerTotal;
-  const upliftPercent = brokerTotal > 0 ? Math.round((netUplift / brokerTotal) * 100) : 0;
+  const directGross = (quantityKg * targetPrice);
+  const mandiGross = (quantityKg * referenceMandiPrice);
+  const estimatedUplift = directGross - mandiGross;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 animate-fadeIn">
-      {/* Top Navigation Tabs */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between glass-panel p-2 rounded-2xl border border-slate-800 gap-2">
-        <div className="flex flex-wrap gap-1.5">
+    <div className="space-y-6">
+      {/* Page Header (Compact 80-120px) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2B3731]">
+        <div>
+          <div className="flex items-center space-x-2">
+            <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">Producer Workspace</span>
+            <DataProvenance source="Verified FPO Registry" status="OBSERVED" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-0.5">Farmer & FPO Portal</h1>
+          <p className="text-xs text-[#8E9C93]">
+            List produce directly for institutional offtake and optimize harvest monetization.
+          </p>
+        </div>
+
+        {/* Action Tabs */}
+        <div className="flex items-center space-x-1.5 bg-[#121815] p-1 rounded-lg border border-[#2B3731] shrink-0">
           <button
             onClick={() => setActiveTab('LISTING')}
-            className={`px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center space-x-2 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1.5 ${
               activeTab === 'LISTING'
-                ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                ? 'bg-[#2D6A4F] text-white'
+                : 'text-[#C2CBC5] hover:text-white'
             }`}
           >
-            <PlusCircle className="w-4 h-4" />
-            <span>Direct Produce Listing</span>
+            <PlusCircle className="w-3.5 h-3.5" />
+            <span>Direct Listing</span>
           </button>
           <button
             onClick={() => {
               setActiveTab('DECISION');
-              if (!decisionResult) handleEvaluateDecision();
+              if (!decisionResult) {
+                evaluateBatchDecision({
+                  commodity: 'Tomato',
+                  quantity_kg: quantityKg,
+                  current_local_price_per_kg: referenceMandiPrice,
+                  shelf_life_days: 14,
+                  min_cash_need_pct: 0,
+                  storage_cost_per_kg_day: 0.08
+                }).then(setDecisionResult).catch(() => {});
+              }
             }}
-            className={`px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center space-x-2 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1.5 ${
               activeTab === 'DECISION'
-                ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                ? 'bg-[#2D6A4F] text-white'
+                : 'text-[#C2CBC5] hover:text-white'
             }`}
           >
-            <Scale className="w-4 h-4 text-emerald-400" />
-            <span>Batch Decision Engine</span>
+            <Scale className="w-3.5 h-3.5" />
+            <span>Decision Engine</span>
           </button>
           <button
             onClick={() => {
               setActiveTab('OPPORTUNITIES');
-              if (!opportunityResult) handleFetchOpportunities();
+              if (!opportunityResult) {
+                fetchBestMarketOpportunities({
+                  commodity: 'Tomato',
+                  quantity_kg: quantityKg,
+                  origin_location: 'Kolar, Karnataka',
+                  origin_latitude: 13.1367,
+                  origin_longitude: 78.1292,
+                  local_baseline_price_per_kg: referenceMandiPrice
+                }).then(setOpportunityResult).catch(() => {});
+              }
             }}
-            className={`px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center space-x-2 ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1.5 ${
               activeTab === 'OPPORTUNITIES'
-                ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                ? 'bg-[#2D6A4F] text-white'
+                : 'text-[#C2CBC5] hover:text-white'
             }`}
           >
-            <Building2 className="w-4 h-4 text-emerald-400" />
-            <span>Best Market Opportunities</span>
+            <Building2 className="w-3.5 h-3.5" />
+            <span>Best Markets</span>
           </button>
-        </div>
-
-        <div className="px-2">
-          <DataProvenance source="Verified FPO Registry" status="OBSERVED" />
         </div>
       </div>
 
-      {/* Active Market Shocks Banner */}
+      {/* Regional Disruption Alert Strip (If Active) */}
       {marketEvents.length > 0 && (
-        <div className="glass-panel p-4 rounded-xl border border-amber-500/30 bg-amber-950/10 flex items-start space-x-3">
-          <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-          <div className="flex-1 text-xs">
-            <div className="font-bold text-amber-300 flex items-center space-x-2">
-              <span>Active Regional Disruption Alert:</span>
-              <span className="bg-amber-500/20 px-2 py-0.5 rounded text-[10px] text-amber-300 font-mono">
-                {marketEvents[0].category}
-              </span>
-            </div>
-            <p className="text-slate-300 mt-0.5">{marketEvents[0].title}</p>
-            <p className="text-[11px] text-slate-400 mt-1">
-              Impact on {marketEvents[0].affected_commodities.join(', ')}: Price Multiplier ×{marketEvents[0].price_shock_multiplier} ({marketEvents[0].supply_impact_pct}% supply contraction). Source: {marketEvents[0].source}.
-            </p>
+        <div className="bg-[#1C211E] border border-[#B45309]/40 rounded-lg p-3 flex items-start space-x-2.5 text-xs">
+          <AlertTriangle className="w-4 h-4 text-[#ED8936] shrink-0 mt-0.5" />
+          <div className="flex-1 text-[#C2CBC5]">
+            <span className="font-semibold text-[#ED8936] mr-1.5">Market Alert:</span>
+            <span>{marketEvents[0].title} — Multiplier ×{marketEvents[0].price_shock_multiplier} on {marketEvents[0].affected_commodities.join(', ')}.</span>
           </div>
         </div>
       )}
 
-      {/* TAB 1: LISTING */}
+      {/* Main Content Area */}
       {activeTab === 'LISTING' && (
-        <div className="space-y-6">
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 flex items-center justify-between">
-            <div>
-              <span className="bg-emerald-500/20 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
-                Farmer & FPO Producer Portal
-              </span>
-              <h1 className="text-2xl font-extrabold text-white mt-1">List Produce Batch for Direct Buyer Sale</h1>
-              <p className="text-xs text-slate-400">Bypass regional commission brokers. Set your fair target price directly.</p>
-            </div>
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-              <Sprout className="w-6 h-6" />
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          {/* Left: Compact Enterprise Form (7 Cols) */}
+          <div className="lg:col-span-7 bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 space-y-4">
+            <h2 className="text-sm font-bold text-white uppercase tracking-wider pb-2 border-b border-[#2B3731]">
+              Produce Listing Specifications
+            </h2>
+
+            {submitted ? (
+              <div className="py-8 text-center space-y-3">
+                <CheckCircle2 className="w-10 h-10 text-[#48BB78] mx-auto" />
+                <h3 className="text-base font-bold text-white">Batch Successfully Registered</h3>
+                <p className="text-xs text-[#8E9C93] max-w-sm mx-auto">
+                  Your lot of {quantityKg.toLocaleString()} kg {cropVariety} is published on the institutional buyer board.
+                </p>
+                <div className="pt-2 flex justify-center space-x-3">
+                  <button
+                    onClick={() => setSubmitted(false)}
+                    className="ad-btn-secondary text-xs"
+                  >
+                    List Another Batch
+                  </button>
+                  {onNavigateToMarketplace && (
+                    <button
+                      onClick={onNavigateToMarketplace}
+                      className="ad-btn-primary text-xs"
+                    >
+                      View Live Board
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleListingSubmit} className="space-y-3.5 text-xs">
+                {/* Row 1: FPO Selection */}
+                <div>
+                  <label className="ad-label">FPO / Cooperative Entity</label>
+                  <select
+                    value={selectedFPO}
+                    onChange={(e) => setSelectedFPO(e.target.value)}
+                    className="ad-input"
+                  >
+                    {FPO_OPTIONS.map(fpo => (
+                      <option key={fpo.id} value={fpo.id} className="bg-[#1A221E] text-white">
+                        {fpo.name} ({fpo.location})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Row 2: Category & Variety (2 Columns) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="ad-label">Crop Category</label>
+                    <select
+                      value={cropCategory}
+                      onChange={(e) => handleCategoryChange(e.target.value)}
+                      className="ad-input"
+                    >
+                      {Object.keys(CROP_VARIETIES).map(cat => (
+                        <option key={cat} value={cat} className="bg-[#1A221E] text-white">{cat}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="ad-label">Crop Variety</label>
+                    <select
+                      value={cropVariety}
+                      onChange={(e) => setCropVariety(e.target.value)}
+                      className="ad-input"
+                    >
+                      {(CROP_VARIETIES[cropCategory] || []).map(v => (
+                        <option key={v} value={v} className="bg-[#1A221E] text-white">{v}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Row 3: Quantity & Target Price (2 Columns) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="ad-label">Quantity Available (kg)</label>
+                    <input
+                      type="number"
+                      value={quantityKg}
+                      onChange={(e) => setQuantityKg(Number(e.target.value))}
+                      min={100}
+                      step={100}
+                      className="ad-input"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="ad-label">Target Ask Price (₹/kg)</label>
+                    <input
+                      type="number"
+                      value={targetPrice}
+                      onChange={(e) => setTargetPrice(Number(e.target.value))}
+                      min={1}
+                      step={0.5}
+                      className="ad-input"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Row 4: Harvest Date & Quality Standard */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="ad-label">Harvest / Ready Date</label>
+                    <input
+                      type="date"
+                      value={harvestDate}
+                      onChange={(e) => setHarvestDate(e.target.value)}
+                      className="ad-input"
+                      required
+                    />
+                  </div>
+                  <div className="flex items-end pb-1">
+                    <label className="flex items-center space-x-2 cursor-pointer text-xs text-[#C2CBC5]">
+                      <input
+                        type="checkbox"
+                        checked={isOrganic}
+                        onChange={(e) => setIsOrganic(e.target.checked)}
+                        className="rounded border-[#2B3731] bg-[#121815] text-[#2D6A4F] focus:ring-0"
+                      />
+                      <span>Certified Organic / Residue Free</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Submit Action */}
+                <div className="pt-2 flex justify-end space-x-2.5">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="ad-btn-primary w-full sm:w-auto text-xs"
+                  >
+                    <span>{isSubmitting ? 'Publishing...' : 'Publish to Direct Marketplace'}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
 
-          <form onSubmit={handleSubmitListing} className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <div className="md:col-span-2">
-                <label className="block text-slate-300 font-semibold mb-1.5 flex items-center space-x-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Select Farmer Producer Organization (FPO / Cooperative):</span>
-                </label>
-                <select
-                  value={selectedFPOId}
-                  onChange={(e) => handleFPOChange(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 text-emerald-300 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer text-xs sm:text-sm"
-                >
-                  {FPO_PRESETS.map(fpo => (
-                    <option key={fpo.id} value={fpo.id}>
-                      {fpo.name} — {fpo.location}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          {/* Right: Compact Economic Realization Summary (5 Cols) */}
+          <div className="lg:col-span-5 space-y-4">
+            <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 space-y-3.5">
+              <h2 className="text-xs font-bold text-[#8E9C93] uppercase tracking-wider">
+                Price Realization Analysis
+              </h2>
 
-              <div>
-                <label className="block text-slate-400 mb-1">Crop Category</label>
-                <select
-                  value={category}
-                  onChange={(e) => handleCategoryChange(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                >
-                  {Object.keys(CROP_CATALOG).map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
+                  <span className="text-[10px] text-[#8E9C93] block">Direct Ask Value</span>
+                  <strong className="text-base font-bold text-white mt-0.5 block">
+                    ₹{directGross.toLocaleString()}
+                  </strong>
+                  <span className="text-[10px] text-[#52796F]">₹{targetPrice.toFixed(2)}/kg</span>
+                </div>
 
-              <div>
-                <label className="block text-slate-400 mb-1">Crop Variety</label>
-                <select
-                  value={cropName}
-                  onChange={(e) => setCropName(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                >
-                  {(CROP_CATALOG[category] || []).map(crop => (
-                    <option key={crop} value={crop}>{crop}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1">Available Quantity (Kilograms)</label>
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={(e) => setQuantity(Number(e.target.value))}
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
-                  min="100"
-                  step="50"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1">Target Direct Price (₹ / kg)</label>
-                <input
-                  type="number"
-                  value={targetPrice}
-                  onChange={(e) => setTargetPrice(Number(e.target.value))}
-                  className="w-full bg-slate-900 border border-slate-700 text-emerald-400 font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
-                  step="0.5"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* FairPrice Real-Time Uplift Summary */}
-            <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 flex items-center justify-between">
-              <div>
-                <span className="text-[11px] text-emerald-400 font-semibold uppercase tracking-wider">Farmer Direct Realization</span>
-                <div className="text-xl font-extrabold text-white">₹{directTotal.toLocaleString()}</div>
-                <div className="text-xs text-slate-400 mt-0.5">
-                  vs Broker Payout ₹{brokerTotal.toLocaleString()} (+{upliftPercent}% Net Uplift)
+                <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
+                  <span className="text-[10px] text-[#8E9C93] block">Local Mandi Benchmark</span>
+                  <strong className="text-base font-bold text-[#C2CBC5] mt-0.5 block">
+                    ₹{mandiGross.toLocaleString()}
+                  </strong>
+                  <span className="text-[10px] text-[#8E9C93]">₹{referenceMandiPrice.toFixed(2)}/kg</span>
                 </div>
               </div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-emerald-600/20 text-xs flex items-center space-x-2"
-              >
-                <PlusCircle className="w-4 h-4" />
-                <span>{isSubmitting ? 'Publishing...' : 'Publish Batch Listing'}</span>
-              </button>
-            </div>
 
-            {submitted && (
-              <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-300 text-xs flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Batch listing published successfully to direct buyer marketplace!</span>
+              {/* Net Estimated Uplift */}
+              <div className="bg-[#222C27] border border-[#2D6A4F]/40 p-3 rounded-lg flex items-center justify-between text-xs">
+                <div>
+                  <span className="text-[10px] text-[#52796F] font-semibold block uppercase">Estimated Direct Uplift</span>
+                  <strong className="text-sm font-bold text-[#48BB78]">
+                    +₹{estimatedUplift.toLocaleString()} ({Math.round((estimatedUplift / mandiGross) * 100)}%)
+                  </strong>
                 </div>
-                {onNavigateToMarketplace && (
-                  <button
-                    onClick={onNavigateToMarketplace}
-                    className="underline text-emerald-400 font-bold hover:text-emerald-300"
-                  >
-                    View in Marketplace →
-                  </button>
-                )}
+                <span className="ad-badge ad-badge-success text-[10px]">Zero Middleman APMC Deductions</span>
               </div>
-            )}
-          </form>
-        </div>
-      )}
 
-      {/* TAB 2: DECISION ENGINE */}
-      {activeTab === 'DECISION' && (
-        <div className="space-y-6">
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 flex items-center justify-between">
-            <div>
-              <span className="bg-blue-500/20 text-blue-400 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
-                AI Agricultural Decision Engine
-              </span>
-              <h2 className="text-2xl font-extrabold text-white mt-1">Optimal Batch Allocation: Sell / Store / Move / Split</h2>
-              <p className="text-xs text-slate-400">
-                Mathematical optimization comparing storage fees, transit costs, and price appreciation to maximize net realization.
+              <p className="text-[11px] text-[#8E9C93] leading-relaxed">
+                Direct buyer offtake avoids trader commission cess and mandi physical handling deductions.
               </p>
             </div>
-            <button
-              onClick={handleEvaluateDecision}
-              disabled={isEvaluatingDecision}
-              className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center space-x-2"
-            >
-              <Scale className="w-4 h-4" />
-              <span>{isEvaluatingDecision ? 'Calculating...' : 'Re-Evaluate Payoff'}</span>
-            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Decision Engine Tab */}
+      {activeTab === 'DECISION' && (
+        <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#2B3731] pb-3">
+            <div>
+              <h2 className="text-base font-bold text-white">Automated Batch Decision Analysis</h2>
+              <p className="text-xs text-[#8E9C93]">Optimal action computed across holding costs and spatial arbitrage.</p>
+            </div>
+            {decisionResult && (
+              <span className="ad-badge ad-badge-success text-xs font-bold px-2.5 py-1">
+                Recommendation: {decisionResult.optimal_action}
+              </span>
+            )}
           </div>
 
-          {/* Controls */}
-          <div className="glass-panel p-4 rounded-xl border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div>
-              <label className="block text-slate-400 mb-1">Batch Quantity (kg)</label>
-              <input
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-slate-400 mb-1">Current Spot Price (₹/kg)</label>
-              <input
-                type="number"
-                value={targetPrice}
-                onChange={(e) => setTargetPrice(Number(e.target.value))}
-                className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-slate-400 mb-1">Immediate Cash Need (%) for SPLIT</label>
-              <input
-                type="number"
-                value={minCashNeedPct}
-                onChange={(e) => setMinCashNeedPct(Number(e.target.value))}
-                className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2"
-                min="0"
-                max="100"
-              />
-            </div>
-          </div>
-
-          {/* Decision Comparison Cards */}
           {decisionResult && (
-            <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/40">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-[11px] text-emerald-400 font-mono font-bold uppercase">Optimal Action Recommendation</span>
-                    <h3 className="text-2xl font-black text-emerald-300 mt-0.5">
-                      {decisionResult.optimal_action}
-                    </h3>
-                    <p className="text-xs text-slate-300 mt-1">{decisionResult.recommendation_summary}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs text-slate-400">Max Net Realization</span>
-                    <div className="text-2xl font-extrabold text-white">₹{decisionResult.optimal_net_revenue.toLocaleString()}</div>
-                    <span className="text-xs text-emerald-400 font-bold">+{decisionResult.net_uplift_pct}% vs Spot Sale</span>
-                  </div>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
+                <span className="text-[#8E9C93] block text-[10px]">Optimal Net Revenue</span>
+                <strong className="text-base font-bold text-[#48BB78] mt-0.5 block">
+                  ₹{Math.round(decisionResult.optimal_net_revenue).toLocaleString()}
+                </strong>
               </div>
-
-              {/* 4 Options Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
-                {decisionResult.options_comparison.map(opt => {
-                  const isOptimal = opt.action === decisionResult.optimal_action;
-                  return (
-                    <div
-                      key={opt.action}
-                      className={`glass-panel p-4 rounded-xl border transition-all ${
-                        isOptimal
-                          ? 'border-emerald-500 bg-emerald-950/20 shadow-lg shadow-emerald-500/10'
-                          : 'border-slate-800'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-bold text-slate-200">{opt.action}</span>
-                        {isOptimal && (
-                          <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                            OPTIMAL
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-lg font-extrabold text-white">₹{opt.expected_net_revenue.toLocaleString()}</div>
-                      <div className="text-[11px] text-slate-400 mt-0.5">₹{opt.expected_price_per_kg}/kg realized</div>
-                      <div className={`mt-2 text-[11px] font-bold ${opt.revenue_uplift_pct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                        {opt.revenue_uplift_pct >= 0 ? `+${opt.revenue_uplift_pct}%` : `${opt.revenue_uplift_pct}%`} net uplift
-                      </div>
-                      <div className="mt-2 text-[10px] text-slate-500 font-mono">Risk: {opt.risk_level}</div>
-                    </div>
-                  );
-                })}
+              <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
+                <span className="text-[#8E9C93] block text-[10px]">Net Uplift vs Local</span>
+                <strong className="text-base font-bold text-white mt-0.5 block">
+                  +₹{Math.round(decisionResult.net_uplift_vs_local_sell_now).toLocaleString()} ({decisionResult.net_uplift_pct}%)
+                </strong>
+              </div>
+              <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
+                <span className="text-[#8E9C93] block text-[10px]">Strategy Summary</span>
+                <span className="text-xs text-[#C2CBC5] mt-0.5 block line-clamp-2">
+                  {decisionResult.recommendation_summary}
+                </span>
               </div>
             </div>
           )}
         </div>
       )}
 
-      {/* TAB 3: MARKET OPPORTUNITIES */}
+      {/* Best Markets Tab */}
       {activeTab === 'OPPORTUNITIES' && (
-        <div className="space-y-6">
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 flex items-center justify-between">
+        <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#2B3731] pb-3">
             <div>
-              <span className="bg-purple-500/20 text-purple-400 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
-                Best Market & Buyer Opportunity Engine
-              </span>
-              <h2 className="text-2xl font-extrabold text-white mt-1">Regional Mandis & Direct Institutional Buyers</h2>
-              <p className="text-xs text-slate-400">
-                Ranked by Net Realization after deducting logistics freight, handling fees, and temperature-adjusted transit spoilage.
-              </p>
+              <h2 className="text-base font-bold text-white">Ranked Candidate Markets</h2>
+              <p className="text-xs text-[#8E9C93]">Net realization after deducting transit freight and handling.</p>
             </div>
-            <button
-              onClick={handleFetchOpportunities}
-              disabled={isLoadingOpportunities}
-              className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center space-x-2"
-            >
-              <Building2 className="w-4 h-4" />
-              <span>{isLoadingOpportunities ? 'Scanning...' : 'Scan Opportunities'}</span>
-            </button>
           </div>
 
           {opportunityResult && (
-            <div className="space-y-4">
-              {/* Opportunities Table */}
-              <div className="glass-panel rounded-2xl border border-slate-800 overflow-hidden">
-                <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-900/80 text-slate-400 uppercase font-mono text-[10px]">
-                    <tr>
-                      <th className="p-3">Rank & Destination</th>
-                      <th className="p-3">Type</th>
-                      <th className="p-3">Distance & Transit</th>
-                      <th className="p-3">Gross Price</th>
-                      <th className="p-3">Freight & Spoilage</th>
-                      <th className="p-3">Net Realization</th>
-                      <th className="p-3 text-right">Net Uplift</th>
+            <div className="overflow-x-auto">
+              <table className="ad-table">
+                <thead>
+                  <tr>
+                    <th>Market / Buyer</th>
+                    <th>Gross Price</th>
+                    <th>Distance</th>
+                    <th>Freight Cost</th>
+                    <th>Net Realization</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {opportunityResult.ranked_opportunities.map((m, idx) => (
+                    <tr key={idx}>
+                      <td className="font-semibold text-white">{m.destination_name}</td>
+                      <td>₹{m.gross_market_price_per_kg.toFixed(2)}/kg</td>
+                      <td>{m.distance_km} km</td>
+                      <td>-₹{m.freight_cost_per_kg.toFixed(2)}/kg</td>
+                      <td className="font-bold text-[#48BB78]">₹{m.net_realization_per_kg.toFixed(2)}/kg</td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60">
-                    {opportunityResult.ranked_opportunities.map(opp => (
-                      <tr key={opp.destination_name} className="hover:bg-slate-800/30 transition-colors">
-                        <td className="p-3">
-                          <div className="font-bold text-white flex items-center space-x-2">
-                            <span className="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-mono text-[10px]">
-                              {opp.rank}
-                            </span>
-                            <span>{opp.destination_name}</span>
-                          </div>
-                          <span className="text-[10px] text-slate-400 ml-7">{opp.state}</span>
-                        </td>
-                        <td className="p-3">
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-mono ${
-                            opp.destination_type === 'INSTITUTIONAL_BUYER'
-                              ? 'bg-blue-500/20 text-blue-300'
-                              : opp.destination_type === 'PROCESSING_PLANT'
-                              ? 'bg-purple-500/20 text-purple-300'
-                              : 'bg-slate-800 text-slate-300'
-                          }`}>
-                            {opp.destination_type}
-                          </span>
-                        </td>
-                        <td className="p-3 font-mono text-slate-300">
-                          {opp.distance_km} km ({opp.estimated_transit_hours}h)
-                        </td>
-                        <td className="p-3 font-mono font-bold text-white">
-                          ₹{opp.gross_market_price_per_kg}/kg
-                        </td>
-                        <td className="p-3 font-mono text-slate-400">
-                          -₹{(opp.freight_cost_per_kg + opp.transit_spoilage_loss_per_kg).toFixed(2)}/kg
-                        </td>
-                        <td className="p-3 font-mono font-bold text-emerald-400 text-sm">
-                          ₹{opp.net_realization_per_kg}/kg
-                        </td>
-                        <td className="p-3 text-right">
-                          <span className="font-bold text-emerald-400 font-mono">
-                            +{opp.net_uplift_percent}%
-                          </span>
-                          <div className="text-[10px] text-slate-400">
-                            +₹{opp.net_uplift_amount_total.toLocaleString()}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
