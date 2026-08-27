@@ -36,10 +36,10 @@ export const App: React.FC = () => {
         activeRole={activeRole}
         setActiveRole={(role) => {
           setActiveRole(role);
-          if (role === 'MINISTRY_ADMIN') setActiveTab('ministry');
+          if (role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') setActiveTab('ministry');
           else if (role === 'BUYER') setActiveTab('marketplace');
-          else if (role === 'FPO') setActiveTab('farmer');
-          else if (role === 'LOGISTICS') setActiveTab('logistics');
+          else if (role === 'FPO' || role === 'FARMER') setActiveTab('decision');
+          else if (role === 'LOGISTICS' || role === 'TRANSPORTER') setActiveTab('logistics');
         }}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
