@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from app.core.config import settings
 from app.db.database import engine, Base
@@ -38,6 +39,9 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["Retry-After", "X-Total-Count"]
 )
+
+# High-Performance GZip Compression for Payloads > 500 Bytes
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

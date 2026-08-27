@@ -14,18 +14,35 @@ import {
 
 const API_BASE = ((import.meta as any).env?.VITE_API_BASE as string) || 'http://localhost:8000/api/v1';
 
-export async function fetchListings(crop?: string, category?: string): Promise<CropListing[]> {
+// Fast In-Memory SWR Latency Cache (30s TTL)
+const apiCache = new Map<string, { data: any; timestamp: number }>();
+const CACHE_TTL_MS = 30000;
+
+async function cachedFetch<T>(url: string, ttlMs = CACHE_TTL_MS): Promise<T | null> {
+  const cached = apiCache.get(url);
+  const now = Date.now();
+  if (cached && (now - cached.timestamp) < ttlMs) {
+    return cached.data as T;
+  }
   try {
-    let url = `${API_BASE}/marketplace/listings?`;
-    if (crop) url += `crop=${encodeURIComponent(crop)}&`;
-    if (category) url += `category=${encodeURIComponent(category)}&`;
     const res = await fetch(url);
     if (res.ok) {
-      return await res.json();
+      const data = await res.json();
+      apiCache.set(url, { data, timestamp: now });
+      return data as T;
     }
   } catch (e) {
-    console.warn("Using fallback listings:", e);
+    if (cached) return cached.data as T;
   }
+  return null;
+}
+
+export async function fetchListings(crop?: string, category?: string): Promise<CropListing[]> {
+  let url = `${API_BASE}/marketplace/listings?`;
+  if (crop) url += `crop=${encodeURIComponent(crop)}&`;
+  if (category) url += `category=${encodeURIComponent(category)}&`;
+  const cached = await cachedFetch<CropListing[]>(url, 15000);
+  if (cached) return cached;
 
   // Fallback Listings Data
   return [
