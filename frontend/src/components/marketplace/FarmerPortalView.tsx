@@ -28,6 +28,7 @@ import {
   OpportunityRankingResult,
   MarketEvent
 } from '../../types';
+import { DataProvenance } from '../ui/DataProvenance';
 
 interface FarmerPortalViewProps {
   onNavigateToMarketplace?: () => void;
@@ -270,8 +271,8 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
   return (
     <div className="max-w-5xl mx-auto space-y-6 animate-fadeIn">
       {/* Top Navigation Tabs */}
-      <div className="flex items-center justify-between glass-panel p-2 rounded-2xl border border-slate-800">
-        <div className="flex space-x-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between glass-panel p-2 rounded-2xl border border-slate-800 gap-2">
+        <div className="flex flex-wrap gap-1.5">
           <button
             onClick={() => setActiveTab('LISTING')}
             className={`px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center space-x-2 ${
@@ -295,7 +296,7 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
             }`}
           >
             <Scale className="w-4 h-4 text-emerald-400" />
-            <span>Batch Decision Engine (Sell/Store/Move)</span>
+            <span>Batch Decision Engine</span>
           </button>
           <button
             onClick={() => {
@@ -309,8 +310,12 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
             }`}
           >
             <Building2 className="w-4 h-4 text-emerald-400" />
-            <span>Best Market & Institutional Buyers</span>
+            <span>Best Market Opportunities</span>
           </button>
+        </div>
+
+        <div className="px-2">
+          <DataProvenance source="Verified FPO Registry" status="OBSERVED" />
         </div>
       </div>
 
