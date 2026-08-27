@@ -17,59 +17,15 @@ import {
   ShoppingBag,
   Globe2
 } from 'lucide-react';
-import { DataProvenance } from '../ui/DataProvenance';
+import { ValueChainSlider } from './ValueChainSlider';
 
 interface LandingPageViewProps {
   onNavigate: (tabId: string, role?: string) => void;
 }
 
-const SUPPLY_CHAIN_STAGES = [
-  {
-    stage: '01',
-    title: 'Harvest & Sorting',
-    subtitle: 'Farmgate Quality Grading',
-    desc: 'Farmers harvest produce at peak maturity. Batches are cataloged with shelf-life indices and moisture baselines.',
-    image: '/assets/agridirect-farmer-harvest.webp.png',
-    tag: 'FARM LEVEL'
-  },
-  {
-    stage: '02',
-    title: 'FPO Aggregation',
-    subtitle: 'Cooperative Lot Pooling',
-    desc: 'Local FPOs pool smallholder volumes into 10-20 tonne commercial lots with standardized legal metrology weighing.',
-    image: '/assets/agridirect-fpo-collection.webp.png',
-    tag: 'AGGREGATION'
-  },
-  {
-    stage: '03',
-    title: 'Pooled Logistics',
-    subtitle: '2-Opt CVRP Shared Transit',
-    desc: 'Shared multi-stop refrigerated transport reduces freight cost by 38% and cuts food miles carbon footprint.',
-    image: '/assets/agridirect-smart-logistics.webp.png',
-    tag: 'TRANSIT'
-  },
-  {
-    stage: '04',
-    title: 'Market Offtake',
-    subtitle: 'Institutional Direct Trade',
-    desc: 'Verified buyers receive inspected lots at contracted landed costs with zero middleman deductions.',
-    image: '/assets/agridirect-market-arrival.webp.png',
-    tag: 'SETTLEMENT'
-  },
-  {
-    stage: '05',
-    title: 'National Network',
-    subtitle: 'Corridor Price Equilibrium',
-    desc: 'Real-time spatial price telemetry enables macro buffer releases and prevents regional commodity price spikes.',
-    image: '/assets/agridirect-india-trade-network.webp.png',
-    tag: 'POLICY STABILITY'
-  }
-];
-
 export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) => {
   const [heroVideoPlaying, setHeroVideoPlaying] = useState(true);
   const [journeyVideoPlaying, setJourneyVideoPlaying] = useState(true);
-  const [activeStage, setActiveStage] = useState(0);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const journeyVideoRef = useRef<HTMLVideoElement>(null);
 
@@ -183,111 +139,10 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
       </section>
 
       {/* ============================================================
-          SECTION 2 — COMPLETE 5-STAGE AGRICULTURAL JOURNEY GALLERY
-          (Displays all authentic photography assets)
+          SECTION 2 — THE 5-STAGE VALUE CHAIN (Framer Motion Slider)
           ============================================================ */}
-      <section id="farm-gallery-section" className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
-          <div>
-            <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
-              Connected Produce Ecosystem
-            </span>
-            <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mt-0.5">
-              The 5-Stage Agricultural Value Chain
-            </h2>
-            <p className="text-xs text-[#8E9C93]">
-              From soil and harvesting to transparent offtake and national market stability.
-            </p>
-          </div>
-
-          {/* Step Selector Chips */}
-          <div className="flex items-center space-x-1 overflow-x-auto pb-1">
-            {SUPPLY_CHAIN_STAGES.map((s, idx) => (
-              <button
-                key={s.stage}
-                onClick={() => setActiveStage(idx)}
-                className={`px-2.5 py-1 rounded-md text-xs font-semibold whitespace-nowrap transition-colors ${
-                  activeStage === idx
-                    ? 'bg-[#2D6A4F] text-white'
-                    : 'bg-[#1A221E] text-[#8E9C93] hover:text-white border border-[#2B3731]'
-                }`}
-              >
-                {s.stage}. {s.title}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Active Stage Featured Visual Card */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 items-center">
-          <div className="lg:col-span-6 space-y-3">
-            <div className="flex items-center space-x-2">
-              <span className="ad-badge ad-badge-sage text-[10px]">
-                {SUPPLY_CHAIN_STAGES[activeStage].tag}
-              </span>
-              <span className="text-xs font-mono text-[#8E9C93]">
-                Stage {SUPPLY_CHAIN_STAGES[activeStage].stage} of 05
-              </span>
-            </div>
-            <h3 className="text-xl font-bold text-white">
-              {SUPPLY_CHAIN_STAGES[activeStage].title} — {SUPPLY_CHAIN_STAGES[activeStage].subtitle}
-            </h3>
-            <p className="text-xs text-[#C2CBC5] leading-relaxed">
-              {SUPPLY_CHAIN_STAGES[activeStage].desc}
-            </p>
-            <div className="pt-2 flex items-center space-x-3 text-xs">
-              <button
-                onClick={() => onNavigate(activeStage < 2 ? 'farmer' : (activeStage === 2 ? 'logistics' : 'marketplace'))}
-                className="ad-btn-primary text-xs"
-              >
-                <span>View Live Operations</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          <div className="lg:col-span-6 rounded-lg overflow-hidden border border-[#2B3731] aspect-[16/10] bg-[#121815]">
-            <img
-              src={SUPPLY_CHAIN_STAGES[activeStage].image}
-              alt={SUPPLY_CHAIN_STAGES[activeStage].title}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-full object-cover transition-opacity duration-300"
-            />
-          </div>
-        </div>
-
-        {/* Thumbnail Preview Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
-          {SUPPLY_CHAIN_STAGES.map((s, idx) => {
-            const isSelected = activeStage === idx;
-            return (
-              <div
-                key={s.stage}
-                onClick={() => setActiveStage(idx)}
-                className={`cursor-pointer rounded-lg overflow-hidden border transition-all ${
-                  isSelected
-                    ? 'border-[#2D6A4F] ring-2 ring-[#2D6A4F]/40'
-                    : 'border-[#2B3731] opacity-70 hover:opacity-100'
-                }`}
-              >
-                <div className="aspect-[16/10] bg-[#121815] overflow-hidden">
-                  <img
-                    src={s.image}
-                    alt={s.title}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-2 bg-[#1A221E] text-[11px]">
-                  <span className="font-bold text-white block truncate">{s.title}</span>
-                  <span className="text-[10px] text-[#8E9C93] block truncate">{s.subtitle}</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+      <section id="farm-gallery-section">
+        <ValueChainSlider onNavigate={onNavigate} />
       </section>
 
       {/* ============================================================
@@ -305,7 +160,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
           </div>
         </div>
 
-        <div className="relative rounded-2xl overflow-hidden bg-[#1A221E] border border-[#2B3731] aspect-video max-h-[380px] w-full">
+        <div className="relative rounded-2xl overflow-hidden bg-[#1A221E] border border-[#2B3731] aspect-video max-h-[380px] w-full shadow-lg">
           <video
             ref={journeyVideoRef}
             autoPlay
