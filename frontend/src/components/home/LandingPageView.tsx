@@ -62,7 +62,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
             <div className="space-y-4">
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold tracking-wide">
                 <Sprout className="w-3.5 h-3.5" />
-                <span>SIH Problem Statement 26033 • DoCA</span>
+                <span>Agricultural Commerce & Market Intelligence</span>
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-[1.1]">
