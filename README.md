@@ -1,25 +1,24 @@
 <p align="center">
-  <img src="assets/banner.jpg" alt="AgriDirect Banner" width="100%"/>
+  <img src="frontend needs/agridirect-farm-hero.webp.png" alt="AgriDirect Banner" width="100%"/>
 </p>
 
-<h1 align="center">🌾 AgriDirect — SIH26033</h1>
+<h1 align="center">🌾 AgriDirect — SIH Problem Statement 26033</h1>
 
 <p align="center">
-  <strong>Direct Farmer-to-Consumer Marketplace with AI Demand Forecasting & Smart Logistics</strong>
-</p>
-
-<p align="center">
-  <a href="#features"><img src="https://img.shields.io/badge/Features-4_Core_Modules-10B981?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Features"/></a>
-  <a href="#tech-stack"><img src="https://img.shields.io/badge/Stack-React_|_FastAPI_|_Supabase-3B82F6?style=for-the-badge&logo=react&logoColor=white" alt="Tech Stack"/></a>
-  <a href="#ai-engines"><img src="https://img.shields.io/badge/AI_Engines-3_Live-F59E0B?style=for-the-badge&logo=tensorflow&logoColor=white" alt="AI Engines"/></a>
-  <a href="#api-integrations"><img src="https://img.shields.io/badge/APIs-3_Live_Integrations-EF4444?style=for-the-badge&logo=fastapi&logoColor=white" alt="APIs"/></a>
+  <strong>Direct Farmer-to-Consumer Market Intelligence, AI Decision Optimizer, Smart Logistics & Price Stabilization Platform</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/python-3.14-blue?logo=python&logoColor=white" alt="Python"/>
+  <a href="#test-suite"><img src="https://img.shields.io/badge/Pytest_Suite-68%2F68_Passing_(100%25)-10B981?style=for-the-badge&logo=pytest&logoColor=white" alt="Pytest Status"/></a>
+  <a href="#architecture"><img src="https://img.shields.io/badge/Phases-16_Complete-3B82F6?style=for-the-badge&logo=checkmarx&logoColor=white" alt="16 Phases"/></a>
+  <a href="#docker"><img src="https://img.shields.io/badge/Docker-Multi--Stage_Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/></a>
+  <a href="#voice"><img src="https://img.shields.io/badge/Voice_AI-7_Indian_Languages-F59E0B?style=for-the-badge&logo=soundcharts&logoColor=white" alt="Bhashini Voice AI"/></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white" alt="Python"/>
   <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white" alt="React"/>
   <img src="https://img.shields.io/badge/FastAPI-0.109+-009688?logo=fastapi&logoColor=white" alt="FastAPI"/>
-  <img src="https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white" alt="Supabase"/>
   <img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white" alt="TypeScript"/>
   <img src="https://img.shields.io/badge/Vite-5.0-646CFF?logo=vite&logoColor=white" alt="Vite"/>
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License"/>
