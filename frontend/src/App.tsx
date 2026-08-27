@@ -8,12 +8,13 @@ import { DemandForecastView } from './components/forecasting/DemandForecastView'
 import { LogisticsRouteView } from './components/logistics/LogisticsRouteView';
 import { ColdStorageView } from './components/storage/ColdStorageView';
 import { BufferStockView } from './components/buffer/BufferStockView';
+import { LandingPageView } from './components/home/LandingPageView';
 import { DesignSystem } from './components/common/DesignSystem';
 import { VoiceKisanAssistant } from './components/voice/VoiceKisanAssistant';
 
 export const App: React.FC = () => {
   const [activeRole, setActiveRole] = useState<UserRole>('MINISTRY_ADMIN');
-  const [activeTab, setActiveTab] = useState<string>('ministry');
+  const [activeTab, setActiveTab] = useState<string>('home');
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
 
   useEffect(() => {
@@ -44,6 +45,14 @@ export const App: React.FC = () => {
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+        {activeTab === 'home' && (
+          <LandingPageView
+            onNavigate={(tab, role) => {
+              setActiveTab(tab);
+              if (role) setActiveRole(role as UserRole);
+            }}
+          />
+        )}
         {activeTab === 'design-system' && <DesignSystem />}
         {activeTab === 'ministry' && <MinistryAdminView />}
         {activeTab === 'marketplace' && <BuyerPortalView />}

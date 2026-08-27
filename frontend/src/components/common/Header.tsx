@@ -44,6 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
       case 'FPO':
       case 'FARMER':
         return [
+          { id: 'home', label: 'Overview', icon: Compass },
           { id: 'farmer', label: 'Farmer Decision Portal', icon: Sprout },
           { id: 'marketplace', label: 'Direct Marketplace', icon: ShoppingCart },
           { id: 'storage', label: 'Cold Storage IoT', icon: Snowflake },
@@ -53,6 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
         ];
       case 'BUYER':
         return [
+          { id: 'home', label: 'Overview', icon: Compass },
           { id: 'marketplace', label: 'Produce Sourcing & RFQs', icon: ShoppingCart },
           { id: 'forecasting', label: 'Price Outlook', icon: BarChart3 },
           { id: 'logistics', label: 'Logistics & Landed Cost', icon: Truck },
@@ -62,6 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
       case 'LOGISTICS':
       case 'TRANSPORTER':
         return [
+          { id: 'home', label: 'Overview', icon: Compass },
           { id: 'logistics', label: 'Smart Route Pooling', icon: Truck },
           { id: 'storage', label: 'Cold-Chain Hubs', icon: Snowflake },
           { id: 'marketplace', label: 'Available Loads', icon: ShoppingCart },
@@ -72,6 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
       case 'GOVT_AUDITOR':
       default:
         return [
+          { id: 'home', label: 'Overview', icon: Compass },
           { id: 'ministry', label: 'National Market Monitor', icon: Landmark },
           { id: 'buffer', label: 'Buffer Stock & MIS', icon: ShieldAlert },
           { id: 'forecasting', label: 'Forecasting & Shock Models', icon: BarChart3 },
