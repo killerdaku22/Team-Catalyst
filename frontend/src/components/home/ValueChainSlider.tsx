@@ -6,8 +6,7 @@ import {
   ArrowRight,
   Play,
   Pause,
-  Layers,
-  Sparkles
+  RotateCw
 } from 'lucide-react';
 
 interface StageData {
@@ -95,9 +94,9 @@ interface ValueChainSliderProps {
 
 const slideVariants: Variants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 60 : -60,
+    x: direction > 0 ? 80 : -80,
     opacity: 0,
-    scale: 0.98
+    scale: 0.97
   }),
   center: {
     zIndex: 1,
@@ -105,27 +104,28 @@ const slideVariants: Variants = {
     opacity: 1,
     scale: 1,
     transition: {
-      x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-      opacity: { duration: 0.25 },
-      scale: { duration: 0.25 }
+      x: { type: 'spring' as const, stiffness: 280, damping: 28 },
+      opacity: { duration: 0.3 },
+      scale: { duration: 0.3 }
     }
   },
   exit: (direction: number) => ({
     zIndex: 0,
-    x: direction < 0 ? 60 : -60,
+    x: direction < 0 ? 80 : -80,
     opacity: 0,
-    scale: 0.98,
+    scale: 0.97,
     transition: {
-      x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-      opacity: { duration: 0.2 }
+      x: { type: 'spring' as const, stiffness: 280, damping: 28 },
+      opacity: { duration: 0.25 }
     }
   })
 };
 
+const AUTO_ROTATE_INTERVAL_MS = 4500;
+
 export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }) => {
-  const [[currentStage, direction], setPage] = useState<[number, number]>([0, 0]);
+  const [[currentStage, direction], setPage] = useState<[number, number]>([0, 1]);
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
-  const [isHovered, setIsHovered] = useState<boolean>(false);
   const autoPlayTimerRef = useRef<any>(null);
 
   const stageCount = VALUE_CHAIN_STAGES.length;
@@ -140,44 +140,46 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
   };
 
   const goToStage = (index: number) => {
-    setPage(([prev]) => [index, index > prev ? 1 : -1]);
+    setPage(([prev]) => [index, index >= prev ? 1 : -1]);
   };
 
-  // Auto-play timer loop (6 seconds per slide)
+  // Continuous Auto-Rotation Loop
   useEffect(() => {
-    if (!isAutoPlaying || isHovered) {
+    if (!isAutoPlaying) {
       if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
       return;
     }
 
     autoPlayTimerRef.current = setInterval(() => {
       paginate(1);
-    }, 6000);
+    }, AUTO_ROTATE_INTERVAL_MS);
 
     return () => {
       if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
     };
-  }, [currentStage, isAutoPlaying, isHovered]);
+  }, [currentStage, isAutoPlaying]);
 
   const activeStageData = VALUE_CHAIN_STAGES[currentStage];
 
   return (
-    <div
-      className="space-y-4"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="space-y-4">
       {/* Top Bar: Section Title & Interactive Pill Tabs */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3">
         <div>
-          <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider block">
-            Connected Produce Ecosystem
-          </span>
+          <div className="flex items-center space-x-2">
+            <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider block">
+              Connected Produce Ecosystem
+            </span>
+            <span className="inline-flex items-center space-x-1 px-1.5 py-0.5 rounded bg-[#222C27] text-[10px] text-[#48BB78] border border-[#2B3731]">
+              <RotateCw className="w-2.5 h-2.5 animate-spin" />
+              <span>Auto-Looping</span>
+            </span>
+          </div>
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mt-0.5">
             The 5-Stage Agricultural Value Chain
           </h2>
           <p className="text-xs text-[#8E9C93]">
-            From harvest at the farm to multi-stop logistics and national trade stabilization.
+            Continuous automated lifecycle connecting harvest at the farm to national trade stabilization.
           </p>
         </div>
 
@@ -211,13 +213,13 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
 
       {/* Main Slide Card with Directional Framer Motion Animation */}
       <div className="relative bg-[#1A221E] border border-[#2B3731] rounded-2xl overflow-hidden shadow-xl min-h-[380px] lg:min-h-[400px]">
-        {/* Top Subtle Progress Indicator Bar */}
+        {/* Top Smooth Continuous Progress Indicator Bar */}
         <div className="absolute top-0 inset-x-0 h-1 bg-[#121815] z-30">
           <motion.div
             key={currentStage}
             initial={{ width: '0%' }}
-            animate={{ width: isHovered ? undefined : '100%' }}
-            transition={{ duration: 6, ease: 'linear' }}
+            animate={{ width: isAutoPlaying ? '100%' : '0%' }}
+            transition={{ duration: AUTO_ROTATE_INTERVAL_MS / 1000, ease: 'linear' }}
             className="h-full bg-[#2D6A4F]"
           />
         </div>
@@ -302,7 +304,7 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
           </motion.div>
         </AnimatePresence>
 
-        {/* Floating Slide Navigation Controls (Prev / Next & Pause) */}
+        {/* Floating Slide Navigation Controls (Prev / Next & Play/Pause) */}
         <div className="absolute bottom-4 left-5 sm:left-7 z-20 flex items-center space-x-2">
           <button
             onClick={() => paginate(-1)}
@@ -323,15 +325,15 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
           <button
             onClick={() => setIsAutoPlaying(!isAutoPlaying)}
             className="w-7 h-7 rounded-full bg-[#121815]/90 hover:bg-[#222C27] border border-[#2B3731] flex items-center justify-center text-[#8E9C93] hover:text-white transition-all shadow"
-            title={isAutoPlaying ? "Pause auto-slider" : "Resume auto-slider"}
-            aria-label={isAutoPlaying ? "Pause auto-slider" : "Resume auto-slider"}
+            title={isAutoPlaying ? "Pause auto-rotation" : "Resume auto-rotation"}
+            aria-label={isAutoPlaying ? "Pause auto-rotation" : "Resume auto-rotation"}
           >
-            {isAutoPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+            {isAutoPlaying ? <Pause className="w-3 h-3 text-[#48BB78]" /> : <Play className="w-3 h-3" />}
           </button>
         </div>
       </div>
 
-      {/* Interactive Bottom Thumbnail Gallery Bar */}
+      {/* Interactive Bottom Thumbnail Gallery Bar with Live Progress Indicators */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
         {VALUE_CHAIN_STAGES.map((s, idx) => {
           const isSelected = currentStage === idx;
@@ -341,7 +343,7 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
               onClick={() => goToStage(idx)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`cursor-pointer rounded-lg overflow-hidden border transition-all ${
+              className={`cursor-pointer rounded-lg overflow-hidden border transition-all relative ${
                 isSelected
                   ? 'border-[#2D6A4F] ring-2 ring-[#2D6A4F]/40 shadow-md'
                   : 'border-[#2B3731] opacity-70 hover:opacity-100 bg-[#1A221E]'
@@ -356,8 +358,21 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
                   className="w-full h-full object-cover"
                 />
                 {isSelected && (
-                  <div className="absolute top-1.5 left-1.5 bg-[#2D6A4F] text-white px-1.5 py-0.5 rounded text-[9px] font-bold">
+                  <div className="absolute top-1.5 left-1.5 bg-[#2D6A4F] text-white px-1.5 py-0.5 rounded text-[9px] font-bold shadow">
                     Active
+                  </div>
+                )}
+
+                {/* Thumbnail Progress Bar for Active Slide */}
+                {isSelected && isAutoPlaying && (
+                  <div className="absolute bottom-0 inset-x-0 h-1 bg-[#121815]/80">
+                    <motion.div
+                      key={`thumb-${currentStage}`}
+                      initial={{ width: '0%' }}
+                      animate={{ width: '100%' }}
+                      transition={{ duration: AUTO_ROTATE_INTERVAL_MS / 1000, ease: 'linear' }}
+                      className="h-full bg-[#48BB78]"
+                    />
                   </div>
                 )}
               </div>
