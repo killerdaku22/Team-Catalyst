@@ -15,8 +15,10 @@ import {
   Check,
   Split,
   MapPin,
-  Radio
+  Radio,
+  KeyRound
 } from 'lucide-react';
+import { AuthModal } from './AuthModal';
 
 interface HeaderProps {
   activeRole: UserRole;
@@ -41,6 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   // Role-adaptive Navigation Items
   const getNavItemsForRole = (role: UserRole): NavItemConfig[] => {
@@ -181,6 +184,16 @@ export const Header: React.FC<HeaderProps> = ({
               </select>
             </div>
 
+            {/* Quick Auth & Demo Switcher Button */}
+            <button
+              onClick={() => setAuthModalOpen(true)}
+              className="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shadow-sm"
+              title="Sign In with Seeded RBAC Accounts"
+            >
+              <KeyRound className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Sign In / Switch</span>
+            </button>
+
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -192,6 +205,15 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Authentication Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onLoginSuccess={(role, email) => {
+          handleRoleSelect(role);
+        }}
+      />
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
