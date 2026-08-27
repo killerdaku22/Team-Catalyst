@@ -1,14 +1,19 @@
 import enum
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Float, DateTime, Enum, ForeignKey, Text, Boolean
+from sqlalchemy import Column, Integer, String, Float, DateTime, Enum, ForeignKey, Text, Boolean, Index
 from sqlalchemy.orm import relationship
 from app.db.database import Base
 
 class UserRole(str, enum.Enum):
-    FPO = "FPO"
+    FARMER = "FARMER"
+    FPO_MANAGER = "FPO_MANAGER"
+    FPO = "FPO"  # Legacy alias for FPO_MANAGER
     BUYER = "BUYER"
     LOGISTICS = "LOGISTICS"
+    TRANSPORTER = "TRANSPORTER"  # Alias for LOGISTICS
     MINISTRY_ADMIN = "MINISTRY_ADMIN"
+    GOVT_AUDITOR = "GOVT_AUDITOR"  # Alias for policy/auditor
+    ADMIN = "ADMIN"
 
 class ListingStatus(str, enum.Enum):
     AVAILABLE = "AVAILABLE"
@@ -34,7 +39,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     full_name = Column(String, nullable=False)
-    role = Column(Enum(UserRole, native_enum=False), default=UserRole.FPO, nullable=False)
+    role = Column(Enum(UserRole, native_enum=False), default=UserRole.FPO_MANAGER, nullable=False)
     phone = Column(String, nullable=True)
     location_name = Column(String, nullable=True)
     latitude = Column(Float, nullable=True)
@@ -42,8 +47,42 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    listings = relationship("CropListing", back_populates="seller")
+    listings = relationship("CropListing", back_populates="seller", cascade="all, delete-orphan")
     orders = relationship("DirectOrder", back_populates="buyer")
+    refresh_sessions = relationship("RefreshSession", back_populates="user", cascade="all, delete-orphan")
+
+class RefreshSession(Base):
+    __tablename__ = "refresh_sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    token_hash = Column(String(64), unique=True, index=True, nullable=False)
+    is_revoked = Column(Boolean, default=False, nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    user_agent = Column(String, nullable=True)
+    ip_address = Column(String, nullable=True)
+
+    user = relationship("User", back_populates="refresh_sessions")
+
+class AuditEvent(Base):
+    __tablename__ = "audit_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    event_type = Column(String(64), index=True, nullable=False)
+    action = Column(String(32), nullable=False)
+    resource_type = Column(String(64), index=True, nullable=False)
+    resource_id = Column(String(64), nullable=True)
+    details_json = Column(Text, nullable=False, default="{}")
+    payload_hash = Column(String(64), nullable=False)
+    previous_hash = Column(String(64), nullable=False)
+    current_hash = Column(String(64), unique=True, index=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+    __table_args__ = (
+        Index("idx_audit_chain", "id", "previous_hash", "current_hash"),
+    )
 
 class FPOCluster(Base):
     __tablename__ = "fpo_clusters"
@@ -62,7 +101,7 @@ class CropListing(Base):
     __tablename__ = "crop_listings"
 
     id = Column(Integer, primary_key=True, index=True)
-    seller_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    seller_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     fpo_name = Column(String, nullable=False)
     crop_name = Column(String, index=True, nullable=False)
     category = Column(String, nullable=False) # Cereals, Vegetables, Pulses, Fruits
