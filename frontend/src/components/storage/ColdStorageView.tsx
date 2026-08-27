@@ -14,6 +14,7 @@ import {
   Sparkles,
   Zap
 } from 'lucide-react';
+import { DataProvenance } from '../ui/DataProvenance';
 
 interface StorageTelemetry {
   chamber_id: string;
@@ -123,12 +124,15 @@ export const ColdStorageView: React.FC = () => {
       {/* Top Banner */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 glass-panel p-6 rounded-2xl border border-slate-800">
         <div>
-          <span className="bg-cyan-500/20 text-cyan-300 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
-            WDRA Certified Cold Logistics & IoT Telemetry
-          </span>
+          <div className="flex items-center space-x-2">
+            <span className="bg-cyan-500/20 text-cyan-300 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
+              WDRA Certified Cold Logistics & IoT Telemetry
+            </span>
+            <DataProvenance source="WDRA / NCCD Real-Time Chamber Sensors" status="LIVE" />
+          </div>
           <h1 className="text-2xl font-extrabold text-white tracking-tight mt-1">Cold Storage IoT Telemetry & Spoilage Early Warning</h1>
           <p className="text-xs text-slate-300 mt-1">
-            Real-time IoT chamber telemetry stream ($T, RH, C_2H_4, CO_2$) with automated DoCA power tariff subsidies for FPOs.
+            Real-time IoT chamber telemetry stream (T, RH, Ethylene, CO2) with automated DoCA power tariff subsidies for FPOs.
           </p>
         </div>
 
