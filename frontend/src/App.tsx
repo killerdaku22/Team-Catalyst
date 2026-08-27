@@ -6,6 +6,8 @@ import { BuyerPortalView } from './components/marketplace/BuyerPortalView';
 import { FarmerPortalView } from './components/marketplace/FarmerPortalView';
 import { DemandForecastView } from './components/forecasting/DemandForecastView';
 import { LogisticsRouteView } from './components/logistics/LogisticsRouteView';
+import { ColdStorageView } from './components/storage/ColdStorageView';
+import { BufferStockView } from './components/buffer/BufferStockView';
 import { DesignSystem } from './components/common/DesignSystem';
 import { VoiceKisanAssistant } from './components/voice/VoiceKisanAssistant';
 
@@ -46,6 +48,8 @@ export const App: React.FC = () => {
         {activeTab === 'ministry' && <MinistryAdminView />}
         {activeTab === 'marketplace' && <BuyerPortalView />}
         {activeTab === 'farmer' && <FarmerPortalView onNavigateToMarketplace={() => setActiveTab('marketplace')} />}
+        {activeTab === 'storage' && <ColdStorageView />}
+        {activeTab === 'buffer' && <BufferStockView />}
         {activeTab === 'forecasting' && <DemandForecastView />}
         {activeTab === 'logistics' && <LogisticsRouteView />}
       </main>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserRole } from '../../types';
-import { Sprout, BarChart3, Truck, ShoppingCart, Landmark, UserCheck } from 'lucide-react';
+import { Sprout, BarChart3, Truck, ShoppingCart, Landmark, UserCheck, Snowflake, ShieldAlert } from 'lucide-react';
 
 interface HeaderProps {
   activeRole: UserRole;
@@ -20,6 +20,8 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'ministry', label: 'Overview', icon: Landmark, role: 'MINISTRY_ADMIN' as UserRole },
     { id: 'marketplace', label: 'Marketplace', icon: ShoppingCart, role: 'BUYER' as UserRole },
     { id: 'farmer', label: 'Farmer Portal', icon: Sprout, role: 'FPO' as UserRole },
+    { id: 'storage', label: 'Cold Storage IoT', icon: Snowflake, role: 'FPO' as UserRole },
+    { id: 'buffer', label: 'Buffer Stock & MIS', icon: ShieldAlert, role: 'MINISTRY_ADMIN' as UserRole },
     { id: 'forecasting', label: 'Market Outlook', icon: BarChart3, role: 'MINISTRY_ADMIN' as UserRole },
     { id: 'logistics', label: 'Transport', icon: Truck, role: 'LOGISTICS' as UserRole },
   ];
