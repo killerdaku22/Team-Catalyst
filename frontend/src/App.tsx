@@ -14,6 +14,7 @@ import { BestMarketView } from './components/marketplace/BestMarketView';
 import { MarketIntelligenceView } from './components/intelligence/MarketIntelligenceView';
 import { DesignSystem } from './components/common/DesignSystem';
 import { VoiceKisanAssistant } from './components/voice/VoiceKisanAssistant';
+import { Radio, AlertCircle } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeRole, setActiveRole] = useState<UserRole>('MINISTRY_ADMIN');
@@ -50,6 +51,16 @@ export const App: React.FC = () => {
         setActiveTab={setActiveTab}
         isBackendConnected={isBackendConnected}
       />
+
+      {/* Offline Resilient Telemetry Banner */}
+      {!isBackendConnected && (
+        <div className="bg-slate-900 border-b border-amber-500/30 px-4 py-1.5 text-center text-xs text-slate-400 flex items-center justify-center space-x-2 font-mono">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+          <span className="text-slate-300">
+            Operating in Calibrated Offline Mode • Deterministic economic models & historical AGMARKNET benchmarks active
+          </span>
+        </div>
+      )}
 
       {/* Main Container */}
       <main id="main-content" className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full" tabIndex={-1}>
@@ -90,18 +101,28 @@ export const App: React.FC = () => {
           <div className="flex items-center space-x-2">
             <span className="font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>AgriDirect</span>
             <span>•</span>
-            <span>Agricultural Commerce & Market Intelligence Platform</span>
+            <span>Smart Agricultural Decision & Direct Trade Platform</span>
           </div>
-          <div>
-            Department of Consumer Affairs (DoCA) Direct Farmer-to-Consumer Engine.
+          <div className="flex items-center space-x-4 font-mono text-xs">
+            <span>SIH26033</span>
+            <span>•</span>
+            <button
+              onClick={() => setActiveTab('design-system')}
+              className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors font-medium cursor-pointer"
+            >
+              Design System
+            </button>
+            <span>•</span>
+            <span className="text-ad-caption" style={{ color: 'var(--ad-text-tertiary)' }}>Ministry of Agriculture & Farmers Welfare (MoAFW) / DoCA</span>
           </div>
         </div>
       </footer>
 
-      {/* Multilingual Voice Assistant (Bhashini AI) */}
+      {/* Voice Kisan Assistant Widget */}
       <VoiceKisanAssistant />
     </div>
   );
 };
 
 export default App;
+
