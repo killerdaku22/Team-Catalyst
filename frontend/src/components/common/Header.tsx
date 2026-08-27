@@ -12,7 +12,8 @@ import {
   Menu,
   X,
   Compass,
-  Check
+  Check,
+  Split
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -45,21 +46,21 @@ export const Header: React.FC<HeaderProps> = ({
       case 'FARMER':
         return [
           { id: 'home', label: 'Overview', icon: Compass },
-          { id: 'farmer', label: 'Farmer Decision Portal', icon: Sprout },
+          { id: 'decision', label: 'My Decisions', icon: Split },
+          { id: 'farmer', label: 'Farmer Portal', icon: Sprout },
           { id: 'marketplace', label: 'Direct Marketplace', icon: ShoppingCart },
           { id: 'storage', label: 'Cold Storage IoT', icon: Snowflake },
           { id: 'logistics', label: 'Pooled Transport', icon: Truck },
           { id: 'forecasting', label: 'Market Outlook', icon: BarChart3 },
-          { id: 'ministry', label: 'National Monitor', icon: Landmark },
         ];
       case 'BUYER':
         return [
           { id: 'home', label: 'Overview', icon: Compass },
           { id: 'marketplace', label: 'Produce Sourcing & RFQs', icon: ShoppingCart },
+          { id: 'decision', label: 'Decision Engine', icon: Split },
           { id: 'forecasting', label: 'Price Outlook', icon: BarChart3 },
           { id: 'logistics', label: 'Logistics & Landed Cost', icon: Truck },
           { id: 'farmer', label: 'Farmer Origins', icon: Sprout },
-          { id: 'ministry', label: 'Market Intelligence', icon: Landmark },
         ];
       case 'LOGISTICS':
       case 'TRANSPORTER':
@@ -69,7 +70,6 @@ export const Header: React.FC<HeaderProps> = ({
           { id: 'storage', label: 'Cold-Chain Hubs', icon: Snowflake },
           { id: 'marketplace', label: 'Available Loads', icon: ShoppingCart },
           { id: 'forecasting', label: 'Freight Demand', icon: BarChart3 },
-          { id: 'ministry', label: 'National Corridors', icon: Landmark },
         ];
       case 'MINISTRY_ADMIN':
       case 'GOVT_AUDITOR':
@@ -78,11 +78,10 @@ export const Header: React.FC<HeaderProps> = ({
           { id: 'home', label: 'Overview', icon: Compass },
           { id: 'ministry', label: 'National Market Monitor', icon: Landmark },
           { id: 'buffer', label: 'Buffer Stock & MIS', icon: ShieldAlert },
+          { id: 'decision', label: 'Decision Engine', icon: Split },
           { id: 'forecasting', label: 'Forecasting & Shock Models', icon: BarChart3 },
           { id: 'storage', label: 'Cold Storage Infrastructure', icon: Snowflake },
           { id: 'logistics', label: 'Supply Corridors', icon: Truck },
-          { id: 'marketplace', label: 'Direct Marketplace', icon: ShoppingCart },
-          { id: 'farmer', label: 'Farmer Portal', icon: Sprout },
         ];
     }
   };

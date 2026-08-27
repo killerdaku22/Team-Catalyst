@@ -9,6 +9,7 @@ import { LogisticsRouteView } from './components/logistics/LogisticsRouteView';
 import { ColdStorageView } from './components/storage/ColdStorageView';
 import { BufferStockView } from './components/buffer/BufferStockView';
 import { LandingPageView } from './components/home/LandingPageView';
+import { DecisionCenterView } from './components/decision/DecisionCenterView';
 import { DesignSystem } from './components/common/DesignSystem';
 import { VoiceKisanAssistant } from './components/voice/VoiceKisanAssistant';
 
@@ -51,6 +52,13 @@ export const App: React.FC = () => {
               setActiveTab(tab);
               if (role) setActiveRole(role as UserRole);
             }}
+          />
+        )}
+        {activeTab === 'decision' && (
+          <DecisionCenterView
+            onNavigateToMarketplace={() => setActiveTab('marketplace')}
+            onNavigateToStorage={() => setActiveTab('storage')}
+            onNavigateToLogistics={() => setActiveTab('logistics')}
           />
         )}
         {activeTab === 'design-system' && <DesignSystem />}
