@@ -141,6 +141,7 @@ class AuditService:
         return {
             "is_valid": True,
             "total_events": len(events),
+            "total_events_checked": len(events),
             "chain_head": events[-1].current_hash,
             "status": "VERIFIED_INTEGRITY"
         }
