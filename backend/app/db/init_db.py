@@ -44,10 +44,10 @@ def seed_db():
                 longitude=76.7767
             )
             admin_user = User(
-                email="admin@doca.gov.in",
+                email="observer@doca.gov.in",
                 hashed_password=hash_password("password123"),
-                full_name="Department of Consumer Affairs Admin",
-                role=UserRole.MINISTRY_ADMIN,
+                full_name="DoCA Market Intelligence Observer",
+                role=UserRole.DOCA_OBSERVER,
                 phone="+91-1123380000",
                 location_name="Krishi Bhawan, New Delhi",
                 latitude=28.6184,

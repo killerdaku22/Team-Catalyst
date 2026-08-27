@@ -86,8 +86,8 @@ def require_roles(allowed_roles: List[Union[UserRole, str]]):
             normalized_allowed.update(["FPO", "FPO_MANAGER"])
         if val in ("LOGISTICS", "TRANSPORTER"):
             normalized_allowed.update(["LOGISTICS", "TRANSPORTER"])
-        if val in ("MINISTRY_ADMIN", "GOVT_AUDITOR", "ADMIN"):
-            normalized_allowed.update(["MINISTRY_ADMIN", "GOVT_AUDITOR", "ADMIN"])
+        if val in ("DOCA_OBSERVER", "MINISTRY_ADMIN", "GOVT_AUDITOR"):
+            normalized_allowed.update(["DOCA_OBSERVER", "MINISTRY_ADMIN", "GOVT_AUDITOR"])
 
     def role_checker(current_user: User = Depends(get_current_user)) -> User:
         user_role_val = current_user.role.value if hasattr(current_user.role, 'value') else str(current_user.role)

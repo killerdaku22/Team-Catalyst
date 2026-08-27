@@ -117,15 +117,15 @@ export const MinistryAdminView: React.FC = () => {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full font-mono font-semibold">
-                Official DoCA Monitoring Hub
+              <span className="bg-[#222C27] text-[#48BB78] border border-[#2B3731] text-xs px-3 py-1 rounded-full font-mono font-semibold">
+                DoCA Market Oversight & Intelligence
               </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-2 tracking-tight">
-              Department of Consumer Affairs (DoCA) National Executive Dashboard
+              Department of Consumer Affairs (DoCA) — Market Intelligence & Oversight
             </h1>
             <p className="text-slate-300 text-sm mt-1 max-w-3xl">
-              Real-time monitoring of agricultural disintermediation, price variance reduction, direct farmer payout uplift, and urban consumer price stabilization.
+              Read-only oversight of agricultural disintermediation, price variance reduction, direct farmer payout uplift, and urban consumer price stabilization.
             </p>
           </div>
 

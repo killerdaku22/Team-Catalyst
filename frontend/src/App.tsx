@@ -83,7 +83,7 @@ export const App: React.FC = () => {
           <LoginPageView
             onLoginSuccess={(role) => {
               setActiveRole(role);
-              if (role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') setActiveTab('ministry');
+              if (role === 'DOCA_OBSERVER' || role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') setActiveTab('ministry');
               else if (role === 'BUYER') setActiveTab('marketplace');
               else if (role === 'FPO' || role === 'FARMER') setActiveTab('farmer');
               else if (role === 'LOGISTICS' || role === 'TRANSPORTER') setActiveTab('logistics');

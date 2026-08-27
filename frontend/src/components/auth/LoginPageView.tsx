@@ -51,18 +51,18 @@ const DEMO_PRESETS: DemoRoleConfig[] = [
   },
   {
     role: 'LOGISTICS',
-    title: 'Logistics Transporter',
-    subtitle: 'Green Corridor Fleet',
+    title: 'Transport Operator',
+    subtitle: 'Kisan Express Cold Chain Logistics',
     email: 'transporter@agridirect.org',
     password: 'TransporterPass123!',
     icon: Truck
   },
   {
-    role: 'GOVT_AUDITOR',
-    title: 'Policy / DoCA Auditor',
-    subtitle: 'Dept of Consumer Affairs',
-    email: 'auditor@doca.gov.in',
-    password: 'AuditorPass123!',
+    role: 'DOCA_OBSERVER',
+    title: 'DoCA Market Observer',
+    subtitle: 'Dept of Consumer Affairs • Read-Only Intelligence',
+    email: 'observer@doca.gov.in',
+    password: 'ObserverPass123!',
     icon: Landmark
   }
 ];
