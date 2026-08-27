@@ -1,4 +1,4 @@
-export type UserRole = 'FPO' | 'BUYER' | 'LOGISTICS' | 'MINISTRY_ADMIN';
+export type UserRole = 'FPO' | 'FPO_MANAGER' | 'FARMER' | 'BUYER' | 'LOGISTICS' | 'TRANSPORTER' | 'MINISTRY_ADMIN' | 'GOVT_AUDITOR' | 'ADMIN';
 
 export interface User {
   id: number;
@@ -89,6 +89,104 @@ export interface DemandForecast {
   };
   data_provenance?: string;
   generated_at: string;
+}
+
+export interface OptionPayoff {
+  action: 'SELL_NOW' | 'STORE' | 'MOVE' | 'SPLIT';
+  expected_net_revenue: number;
+  expected_price_per_kg: number;
+  revenue_uplift_vs_sell_now: number;
+  revenue_uplift_pct: number;
+  costs_breakdown: {
+    storage_cost?: number;
+    transport_cost?: number;
+    spoilage_loss?: number;
+    handling_fee?: number;
+  };
+  risk_level: string;
+  feasibility: string;
+  details: Record<string, any>;
+}
+
+export interface BatchDecisionResult {
+  commodity: string;
+  quantity_kg: number;
+  optimal_action: 'SELL_NOW' | 'STORE' | 'MOVE' | 'SPLIT';
+  optimal_net_revenue: number;
+  net_uplift_vs_local_sell_now: number;
+  net_uplift_pct: number;
+  recommendation_summary: string;
+  key_decision_factors: string[];
+  options_comparison: OptionPayoff[];
+  split_allocation?: {
+    sell_now_kg: number;
+    optimized_rem_kg: number;
+    target: string;
+  } | null;
+}
+
+export interface MarketOpportunityItem {
+  rank: number;
+  destination_name: string;
+  destination_type: string;
+  state: string;
+  distance_km: number;
+  estimated_transit_hours: number;
+  gross_market_price_per_kg: number;
+  freight_cost_per_kg: number;
+  transit_spoilage_loss_per_kg: number;
+  mandi_handling_fee_per_kg: number;
+  net_realization_per_kg: number;
+  total_net_payout: number;
+  net_uplift_vs_local_per_kg: number;
+  net_uplift_amount_total: number;
+  net_uplift_percent: number;
+  recommendation_tier: 'TOP_OPPORTUNITY' | 'ATTRACTIVE' | 'MARGINAL' | 'UNFAVORABLE';
+}
+
+export interface OpportunityRankingResult {
+  commodity: string;
+  quantity_kg: number;
+  origin_location: string;
+  local_baseline_price_per_kg: number;
+  local_net_revenue: number;
+  top_recommended_destination: string;
+  top_destination_type: string;
+  top_net_realization_per_kg: number;
+  max_net_uplift_total: number;
+  max_net_uplift_pct: number;
+  ranked_opportunities: MarketOpportunityItem[];
+  insights: string[];
+}
+
+export interface MarketEvent {
+  id: string;
+  title: string;
+  category: string;
+  affected_region: string;
+  affected_commodities: string[];
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  supply_impact_pct: number;
+  price_shock_multiplier: number;
+  source: string;
+  confidence_score: number;
+  created_at: string;
+}
+
+export interface PolicyScenarioResult {
+  scenario_title: string;
+  policy_type: string;
+  target_commodity: string;
+  target_region: string;
+  farmer_earnings_uplift_total_inr: number;
+  consumer_savings_total_inr: number;
+  total_government_fiscal_outlay_inr: number;
+  benefit_cost_ratio: number;
+  projected_new_farmer_price_per_kg: number;
+  projected_new_retail_price_per_kg: number;
+  market_distortion_risk: 'LOW' | 'MODERATE' | 'HIGH';
+  tradeoff_analysis: string[];
+  implementation_recommendation: string;
 }
 
 export interface RouteWaypoint {

@@ -1,19 +1,94 @@
 import React, { useEffect, useState } from 'react';
-import { MinistrySummary } from '../../types';
-import { fetchMinistrySummary } from '../../services/api';
-import { TrendingUp, Users, ShieldCheck, DollarSign, Scale, Leaf, AlertCircle, ArrowUpRight, ArrowDownRight } from 'lucide-react';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, AreaChart, Area } from 'recharts';
+import { MinistrySummary, PolicyScenarioResult, MarketEvent } from '../../types';
+import { fetchMinistrySummary, simulatePolicyScenario, fetchActiveMarketEvents } from '../../services/api';
+import {
+  TrendingUp,
+  Users,
+  ShieldCheck,
+  DollarSign,
+  Scale,
+  Leaf,
+  AlertCircle,
+  ArrowUpRight,
+  ArrowDownRight,
+  Sliders,
+  Sparkles,
+  AlertTriangle,
+  FileText,
+  CheckCircle
+} from 'lucide-react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 
 export const MinistryAdminView: React.FC = () => {
   const [data, setData] = useState<MinistrySummary | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Policy Simulator State
+  const [scenarioTitle, setScenarioTitle] = useState('Monsoon Rail Freight Subsidy (Operation Greens)');
+  const [policyType, setPolicyType] = useState('FREIGHT_SUBSIDY');
+  const [targetCommodity, setTargetCommodity] = useState('Tomato');
+  const [targetRegion, setTargetRegion] = useState('Kolar to Delhi Corridor');
+  const [magnitudePct, setMagnitudePct] = useState(30);
+  const [volumeTonnes, setVolumeTonnes] = useState(8000);
+  const [farmerPrice, setFarmerPrice] = useState(24.0);
+  const [retailPrice, setRetailPrice] = useState(42.0);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [policyResult, setPolicyResult] = useState<PolicyScenarioResult | null>(null);
+
+  // Market Intelligence Shocks Feed
+  const [marketEvents, setMarketEvents] = useState<MarketEvent[]>([]);
+
   useEffect(() => {
-    fetchMinistrySummary().then(res => {
-      setData(res);
+    Promise.all([
+      fetchMinistrySummary(),
+      fetchActiveMarketEvents()
+    ]).then(([minData, events]) => {
+      setData(minData);
+      setMarketEvents(events);
       setLoading(false);
+      // Run initial baseline policy simulation
+      handleSimulatePolicy();
     });
   }, []);
+
+  const handleSimulatePolicy = async () => {
+    setIsSimulating(true);
+    try {
+      const res = await simulatePolicyScenario({
+        scenario_title: scenarioTitle,
+        policy_type: policyType,
+        target_commodity: targetCommodity,
+        target_region: targetRegion,
+        intervention_magnitude_pct: magnitudePct,
+        estimated_regional_volume_tonnes: volumeTonnes,
+        baseline_farmer_price_per_kg: farmerPrice,
+        baseline_retail_price_per_kg: retailPrice
+      });
+      setPolicyResult(res);
+    } finally {
+      setIsSimulating(false);
+    }
+  };
+
+  const applyPreset = (preset: {
+    title: string;
+    type: string;
+    commodity: string;
+    region: string;
+    mag: number;
+    vol: number;
+    fp: number;
+    rp: number;
+  }) => {
+    setScenarioTitle(preset.title);
+    setPolicyType(preset.type);
+    setTargetCommodity(preset.commodity);
+    setTargetRegion(preset.region);
+    setMagnitudePct(preset.mag);
+    setVolumeTonnes(preset.vol);
+    setFarmerPrice(preset.fp);
+    setRetailPrice(preset.rp);
+  };
 
   if (loading || !data) {
     return (
@@ -25,7 +100,6 @@ export const MinistryAdminView: React.FC = () => {
 
   const { macro_metrics, regional_breakdown } = data;
 
-  // Comparison Price Structure Chart Data (Rs per Quintal)
   const priceMarginComparisonData = [
     { crop: 'Wheat', farmer_direct: 2450, middleman_payout: 2100, retail_price: 3400, logistics_cost: 280 },
     { crop: 'Red Onion', farmer_direct: 2300, middleman_payout: 1750, retail_price: 3800, logistics_cost: 320 },
@@ -67,7 +141,6 @@ export const MinistryAdminView: React.FC = () => {
 
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Card 1: Farmer Earnings Uplift */}
         <div className="glass-card p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Farmer Earnings Uplift</span>
@@ -86,7 +159,6 @@ export const MinistryAdminView: React.FC = () => {
           </div>
         </div>
 
-        {/* Card 2: Consumer Savings */}
         <div className="glass-card p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Consumer Cost Savings</span>
@@ -105,7 +177,6 @@ export const MinistryAdminView: React.FC = () => {
           </div>
         </div>
 
-        {/* Card 3: Middleman Margin Eliminated */}
         <div className="glass-card p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Middleman Margin Cut</span>
@@ -123,7 +194,6 @@ export const MinistryAdminView: React.FC = () => {
           </div>
         </div>
 
-        {/* Card 4: Environmental & Efficiency */}
         <div className="glass-card p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Carbon Footprint Saved</span>
@@ -142,7 +212,7 @@ export const MinistryAdminView: React.FC = () => {
         </div>
       </div>
 
-      {/* Disintermediation Chart Section */}
+      {/* Disintermediation Chart & Regional Corridors */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 glass-panel p-6 rounded-2xl border border-slate-800">
           <div className="flex items-center justify-between mb-4">
@@ -199,10 +269,260 @@ export const MinistryAdminView: React.FC = () => {
           <div className="mt-5 p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start space-x-3 text-xs text-slate-300">
             <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white block font-semibold">Verified Provenance & Quality Standard</strong>
-              Every direct listing is batch-certified with legal metrology compliant packaging and digital quality seals.
+              <strong className="text-white block font-semibold">Verified Provenance & Metrology</strong>
+              Every direct listing is batch-certified with legal metrology packaging standards.
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* SECTION: DoCA POLICY WHAT-IF SCENARIO SIMULATOR */}
+      <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="bg-blue-500/20 text-blue-400 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
+                DoCA Macroeconomic Policy Simulator
+              </span>
+            </div>
+            <h2 className="text-xl font-extrabold text-white mt-1">
+              What-If Intervention & Benefit-to-Cost Welfare Modeler
+            </h2>
+            <p className="text-xs text-slate-400">
+              Evaluate fiscal budget outlays, farmer earnings uplift, and consumer price relief before enacting national price stabilization orders.
+            </p>
+          </div>
+
+          {/* Preset Buttons */}
+          <div className="flex flex-wrap gap-2 text-xs">
+            <button
+              onClick={() => {
+                applyPreset({
+                  title: "Monsoon Rail Freight Subsidy (Operation Greens)",
+                  type: "FREIGHT_SUBSIDY",
+                  commodity: "Tomato",
+                  region: "Kolar to Delhi Corridor",
+                  mag: 30,
+                  vol: 8000,
+                  fp: 24.0,
+                  rp: 42.0
+                });
+              }}
+              className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition-all font-medium"
+            >
+              Preset: Freight Subsidy
+            </button>
+            <button
+              onClick={() => {
+                applyPreset({
+                  title: "Strategic Buffer Stock Release (Onion Price Stabilization)",
+                  type: "BUFFER_STOCK_RELEASE",
+                  commodity: "Onion",
+                  region: "National Capital Region (NCR)",
+                  mag: 25,
+                  vol: 12000,
+                  fp: 20.0,
+                  rp: 38.0
+                });
+              }}
+              className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition-all font-medium"
+            >
+              Preset: Buffer Release
+            </button>
+            <button
+              onClick={() => {
+                applyPreset({
+                  title: "Cold Storage Power Assistance during Summer Glut",
+                  type: "STORAGE_SUBSIDY",
+                  commodity: "Potato",
+                  region: "Agra-Aligarh Belt",
+                  mag: 50,
+                  vol: 15000,
+                  fp: 12.0,
+                  rp: 22.0
+                });
+              }}
+              className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition-all font-medium"
+            >
+              Preset: Storage Subsidy
+            </button>
+          </div>
+        </div>
+
+        {/* Interactive Controls */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+          <div>
+            <label className="block text-slate-400 mb-1">Policy Intervention Type</label>
+            <select
+              value={policyType}
+              onChange={(e) => setPolicyType(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2"
+            >
+              <option value="FREIGHT_SUBSIDY">FREIGHT_SUBSIDY</option>
+              <option value="BUFFER_STOCK_RELEASE">BUFFER_STOCK_RELEASE</option>
+              <option value="STORAGE_SUBSIDY">STORAGE_SUBSIDY</option>
+              <option value="PRICE_CAP_STABILIZATION">PRICE_CAP_STABILIZATION</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-slate-400 mb-1">Target Commodity</label>
+            <input
+              type="text"
+              value={targetCommodity}
+              onChange={(e) => setTargetCommodity(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2"
+            />
+          </div>
+
+          <div>
+            <label className="block text-slate-400 mb-1">Intervention Magnitude (%)</label>
+            <input
+              type="number"
+              value={magnitudePct}
+              onChange={(e) => setMagnitudePct(Number(e.target.value))}
+              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2 font-mono"
+            />
+          </div>
+
+          <div>
+            <label className="block text-slate-400 mb-1">Volume (Tonnes)</label>
+            <input
+              type="number"
+              value={volumeTonnes}
+              onChange={(e) => setVolumeTonnes(Number(e.target.value))}
+              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2 font-mono"
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            onClick={handleSimulatePolicy}
+            disabled={isSimulating}
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20 flex items-center space-x-2"
+          >
+            <Sliders className="w-4 h-4" />
+            <span>{isSimulating ? 'Running Microeconomic Simulation...' : 'Simulate Policy Impact'}</span>
+          </button>
+        </div>
+
+        {/* Policy Simulation Results */}
+        {policyResult && (
+          <div className="space-y-4 pt-4 border-t border-slate-800/80">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+              <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
+                <span className="text-slate-400 font-mono text-[10px] uppercase">Farmer Income Uplift</span>
+                <div className="text-xl font-extrabold text-emerald-400 mt-1">
+                  ₹{policyResult.farmer_earnings_uplift_total_inr.toLocaleString()}
+                </div>
+                <div className="text-[11px] text-slate-400 mt-0.5">
+                  Farmgate Price: ₹{policyResult.projected_new_farmer_price_per_kg}/kg
+                </div>
+              </div>
+
+              <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
+                <span className="text-slate-400 font-mono text-[10px] uppercase">Consumer Welfare Savings</span>
+                <div className="text-xl font-extrabold text-cyan-400 mt-1">
+                  ₹{policyResult.consumer_savings_total_inr.toLocaleString()}
+                </div>
+                <div className="text-[11px] text-slate-400 mt-0.5">
+                  Retail Price: ₹{policyResult.projected_new_retail_price_per_kg}/kg
+                </div>
+              </div>
+
+              <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
+                <span className="text-slate-400 font-mono text-[10px] uppercase">Fiscal Outlay</span>
+                <div className="text-xl font-extrabold text-rose-400 mt-1">
+                  ₹{policyResult.total_government_fiscal_outlay_inr.toLocaleString()}
+                </div>
+                <div className="text-[11px] text-slate-400 mt-0.5">
+                  Government Budget Requirement
+                </div>
+              </div>
+
+              <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
+                <span className="text-slate-400 font-mono text-[10px] uppercase">Benefit-Cost Ratio (BCR)</span>
+                <div className="text-xl font-extrabold text-purple-400 mt-1">
+                  {policyResult.benefit_cost_ratio}×
+                </div>
+                <div className="text-[11px] text-emerald-400 font-semibold mt-0.5">
+                  Risk: {policyResult.market_distortion_risk}
+                </div>
+              </div>
+            </div>
+
+            {/* Tradeoff & Recommendation Card */}
+            <div className="p-4 rounded-xl bg-blue-950/20 border border-blue-500/30 text-xs space-y-2">
+              <div className="font-bold text-blue-300 flex items-center space-x-2">
+                <Sparkles className="w-4 h-4 text-blue-400" />
+                <span>Policy Evaluation & Economic Tradeoff Analysis:</span>
+              </div>
+              <ul className="list-disc list-inside text-slate-300 space-y-1 pl-1">
+                {policyResult.tradeoff_analysis.map((t, idx) => (
+                  <li key={idx}>{t}</li>
+                ))}
+              </ul>
+              <div className="pt-2 text-emerald-300 font-semibold flex items-center space-x-2">
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <span>{policyResult.implementation_recommendation}</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* SECTION: ACTIVE MARKET SHOCKS & DISRUPTION INTELLIGENCE */}
+      <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="bg-amber-500/20 text-amber-400 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
+                Real-Time Intelligence Network
+              </span>
+            </div>
+            <h2 className="text-lg font-bold text-white mt-1">
+              Active Regional Shocks & Supply Disruption Alerts
+            </h2>
+            <p className="text-xs text-slate-400">
+              Verified telemetry from Indian Meteorological Department (IMD), State APMCs, and Railways.
+            </p>
+          </div>
+          <span className="text-xs text-slate-400 font-mono">
+            {marketEvents.length} Active Events Monitored
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          {marketEvents.map((evt) => (
+            <div
+              key={evt.id}
+              className={`p-4 rounded-xl border transition-all ${
+                evt.severity === 'CRITICAL' || evt.severity === 'HIGH'
+                  ? 'border-amber-500/40 bg-amber-950/15'
+                  : 'border-slate-800 bg-slate-900/60'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="bg-slate-800 text-slate-300 font-mono text-[10px] px-2 py-0.5 rounded">
+                  {evt.id}
+                </span>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                  evt.severity === 'HIGH' ? 'bg-rose-500/20 text-rose-300' : 'bg-amber-500/20 text-amber-300'
+                }`}>
+                  {evt.severity}
+                </span>
+              </div>
+              <h4 className="font-bold text-white text-sm leading-snug">{evt.title}</h4>
+              <p className="text-slate-400 text-[11px] mt-1">Region: {evt.affected_region}</p>
+              
+              <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+                <span className="text-slate-400">Price Multiplier:</span>
+                <strong className="text-emerald-400">×{evt.price_shock_multiplier}</strong>
+              </div>
+              <div className="text-[10px] text-slate-500 mt-1">Source: {evt.source}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
