@@ -14,28 +14,27 @@ import {
 } from '../../services/api';
 import {
   Search,
-  Filter,
   ShoppingBag,
   ShieldCheck,
   MapPin,
   Calendar,
   Clock,
-  Calculator,
   ArrowRight,
   CheckCircle2,
-  ChevronRight,
   X,
   FileText,
   PlusCircle,
   Building2,
-  Sparkles,
-  Award,
-  Layers,
   Scale,
+  Sparkles,
+  Layers,
+  ChevronRight,
+  TrendingDown,
+  TrendingUp,
+  Sliders,
   DollarSign
 } from 'lucide-react';
 import { DataProvenance } from '../ui/DataProvenance';
-import { CardSkeleton, TableSkeleton } from '../ui/LoadingState';
 
 export const BuyerPortalView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'MARKETPLACE' | 'CONTRACTS'>('MARKETPLACE');
@@ -48,7 +47,7 @@ export const BuyerPortalView: React.FC = () => {
 
   // Interactive Calculator State
   const [orderQuantity, setOrderQuantity] = useState<number>(1000);
-  const [transitDistance, setTransitDistance] = useState<number>(140);
+  const [transitDistance, setTransitDistance] = useState<number>(120);
   const [breakdown, setBreakdown] = useState<PriceBreakdown | null>(null);
   const [orderConfirmed, setOrderConfirmed] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
@@ -78,13 +77,13 @@ export const BuyerPortalView: React.FC = () => {
     Promise.all([
       fetchListings(),
       fetchContracts()
-    ]).then(([listRes, ctrRes]) => {
+    ]).then(([listRes, contractsRes]) => {
       setListings(listRes);
       if (listRes.length > 0) {
         setSelectedListing(listRes[0]);
-        setOrderQuantity(listRes[0].quantity_kg);
+        setOrderQuantity(Math.min(1000, listRes[0].quantity_kg));
       }
-      setContracts(ctrRes);
+      setContracts(contractsRes);
       setLoading(false);
     });
   }, []);
@@ -97,55 +96,70 @@ export const BuyerPortalView: React.FC = () => {
         transitDistance,
         selectedListing.middleman_baseline_price,
         selectedListing.consumer_benchmark_price
-      ).then(res => setBreakdown(res));
+      )
+        .then(setBreakdown)
+        .catch(() => {});
     }
   }, [selectedListing, orderQuantity, transitDistance]);
 
   const filteredListings = listings.filter(item => {
+    const matchesCategory = selectedCategory === 'ALL' || item.category.toUpperCase() === selectedCategory;
     const matchesSearch = item.crop_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           item.fpo_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           item.location_name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'ALL' || item.category.toUpperCase() === selectedCategory.toUpperCase();
-    return matchesSearch && matchesCategory;
+    return matchesCategory && matchesSearch;
   });
 
-  const handleCreateContractSubmit = async (e: React.FormEvent) => {
+  const handleSelectListing = (item: CropListing) => {
+    setSelectedListing(item);
+    setOrderQuantity(Math.min(orderQuantity, item.quantity_kg));
+    setOrderConfirmed(false);
+  };
+
+  const handlePublishContract = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsPublishingContract(true);
     try {
       const newContract = await createContract({
-        buyer_organization: buyerOrg,
+        buyer_org: buyerOrg,
         buyer_type: buyerType,
         commodity: contractCommodity,
-        target_grade: "Grade A Institutional",
         required_quantity_kg: contractQuantity,
         offered_price_per_kg: offeredPrice,
-        delivery_destination_hub: deliveryHub,
+        delivery_location: deliveryHub,
         delivery_deadline: deliveryDeadline,
-        max_moisture_pct: maxMoisture
+        quality_parameters: {
+          max_moisture_pct: maxMoisture,
+          foreign_matter_max_pct: 1.5,
+          acceptable_grades: ["A", "B"]
+        }
       });
       setContracts([newContract, ...contracts]);
       setShowCreateModal(false);
+    } catch (e) {
+      console.error(e);
     } finally {
       setIsPublishingContract(false);
     }
   };
 
-  const handleSettleInspection = async (e: React.FormEvent) => {
+  const handleRunInspection = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedContractForInspection) return;
     setIsSettling(true);
     try {
-      const settlement = await inspectAndSettleContract(selectedContractForInspection.id, {
+      const res = await inspectAndSettleContract(selectedContractForInspection.id, {
+        inspector_id: "INSP-WDRA-904",
         measured_moisture_pct: measuredMoisture,
-        foreign_matter_pct: foreignMatter,
+        measured_foreign_matter_pct: foreignMatter,
         grade_conformance: gradeConformance,
-        damage_pct: 0.5,
-        inspection_notes: "Legal Metrology Digital Quality Ingest & Settlement."
+        delivered_quantity_kg: selectedContractForInspection.required_quantity_kg
       });
-      setInspectionSettlement(settlement);
-      // Refresh contracts
-      fetchContracts().then(data => setContracts(data));
+      setInspectionSettlement(res);
+      const updatedContracts = await fetchContracts();
+      setContracts(updatedContracts);
+    } catch (e) {
+      console.error(e);
     } finally {
       setIsSettling(false);
     }
@@ -153,91 +167,76 @@ export const BuyerPortalView: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      {/* Top Banner Header */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-4">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <span className="text-emerald-400 font-mono text-xs font-bold uppercase tracking-widest">
-              Direct Farmer-to-Institutional Sourcing
-            </span>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
-              DIRECT PRODUCE MARKET
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mt-1">
-              Buy directly from verified FPOs and agricultural producers with complete landed cost transparency and legal metrology quality inspection SLAs.
-            </p>
+      {/* Top Header: Commerce Identity & View Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2B3731]">
+        <div>
+          <div className="flex items-center space-x-2">
+            <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">Institutional Procurement</span>
+            <DataProvenance source="Verified FPO Registry & Legal Metrology" status="LIVE" />
           </div>
-
-          <DataProvenance source="Verified FPO Farmgate Listings" status="OBSERVED" />
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-0.5">
+            Direct Produce Marketplace
+          </h1>
+          <p className="text-xs text-[#8E9C93]">
+            Source produce directly from verified producer cooperatives with transparent landed cost math and zero broker cess.
+          </p>
         </div>
 
-        {/* View Mode Tabs: Spot Marketplace vs Bulk RFQ Offtake Contracts */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800/80">
-          <div className="flex items-center space-x-2 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
-            <button
-              onClick={() => setActiveTab('MARKETPLACE')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeTab === 'MARKETPLACE'
-                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-700/20'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <ShoppingBag className="w-3.5 h-3.5" />
-              <span>Direct Spot Marketplace ({listings.length})</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('CONTRACTS')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeTab === 'CONTRACTS'
-                  ? 'bg-cyan-600 text-white shadow-md shadow-cyan-700/20'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>Guaranteed Bulk Offtake RFQs ({contracts.length})</span>
-            </button>
-          </div>
-
-          {activeTab === 'CONTRACTS' && (
-            <button
-              onClick={() => {
-                setShowCreateModal(true);
-                setInspectionSettlement(null);
-              }}
-              className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center space-x-2 shadow-lg shadow-cyan-600/20 transition-all hover:scale-105"
-            >
-              <PlusCircle className="w-4 h-4" />
-              <span>Publish Institutional Offtake RFQ</span>
-            </button>
-          )}
+        {/* View Switcher */}
+        <div className="flex items-center space-x-1.5 bg-[#121815] p-1 rounded-lg border border-[#2B3731] shrink-0">
+          <button
+            onClick={() => setActiveTab('MARKETPLACE')}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1.5 ${
+              activeTab === 'MARKETPLACE'
+                ? 'bg-[#2D6A4F] text-white'
+                : 'text-[#C2CBC5] hover:text-white'
+            }`}
+          >
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span>Direct Spot Lots</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('CONTRACTS')}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1.5 ${
+              activeTab === 'CONTRACTS'
+                ? 'bg-[#2D6A4F] text-white'
+                : 'text-[#C2CBC5] hover:text-white'
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>Forward RFQ Contracts</span>
+          </button>
         </div>
       </div>
 
-      {activeTab === 'MARKETPLACE' ? (
-        <div className="space-y-6">
-          {/* Search & Category Filter Toolbar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 glass-panel p-4 rounded-2xl border border-slate-800">
-            <div className="relative flex-1 w-full">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+      {/* ============================================================
+          TAB 1: DIRECT SPOT MARKETPLACE (Split 7 / 5 Layout)
+          ============================================================ */}
+      {activeTab === 'MARKETPLACE' && (
+        <div className="space-y-4">
+          {/* Search & Filter Bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#1A221E] border border-[#2B3731] p-3 rounded-xl">
+            <div className="relative w-full sm:w-72">
+              <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-[#8E9C93]" />
               <input
                 type="text"
-                placeholder="Search by produce, FPO name, or origin district..."
+                placeholder="Search crop, FPO, or state..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 font-medium"
+                className="ad-input h-8 pl-8 text-xs w-full"
               />
             </div>
 
-            <div className="flex items-center space-x-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
-              {['ALL', 'VEGETABLES', 'CEREALS', 'PULSES'].map((cat) => (
+            {/* Category Filter Chips */}
+            <div className="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+              {['ALL', 'VEGETABLES', 'CEREALS', 'FRUITS', 'PULSES'].map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors ${
                     selectedCategory === cat
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+                      ? 'bg-[#2D6A4F] text-white'
+                      : 'bg-[#121815] text-[#8E9C93] hover:text-white border border-[#1F2723]'
                   }`}
                 >
                   {cat}
@@ -246,306 +245,474 @@ export const BuyerPortalView: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left Column: Direct Produce Listings Grid */}
-            <div className="lg:col-span-7 space-y-4">
-              {loading ? (
-                <CardSkeleton count={3} />
-              ) : filteredListings.length === 0 ? (
-                <div className="glass-panel p-12 rounded-3xl border border-slate-800 text-center space-y-2 text-slate-400 text-xs">
-                  <ShoppingBag className="w-8 h-8 mx-auto text-slate-600" />
-                  <p className="font-bold text-white text-sm">No produce batches found matching your search</p>
-                  <p>Try clearing filters or searching for Tomato, Onion, or Potato</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {filteredListings.map((item) => {
-                    const isSelected = selectedListing?.id === item.id;
-                    return (
-                      <div
-                        key={item.id}
-                        onClick={() => {
-                          setSelectedListing(item);
-                          setOrderQuantity(item.quantity_kg);
-                          setOrderConfirmed(false);
-                        }}
-                        className={`glass-panel p-5 rounded-2xl border transition-all cursor-pointer space-y-3 relative overflow-hidden ${
-                          isSelected
-                            ? 'border-emerald-500 bg-emerald-950/20 shadow-lg shadow-emerald-900/20'
-                            : 'border-slate-800 hover:border-slate-700 hover:bg-slate-800/40'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <span className="bg-emerald-500/10 text-emerald-400 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-emerald-500/20">
-                              {item.category} • {item.grade}
-                            </span>
-                            <h3 className="font-black text-white text-base mt-1.5">{item.crop_name}</h3>
-                            <p className="text-xs text-slate-400 flex items-center space-x-1 mt-0.5">
-                              <Building2 className="w-3 h-3 text-emerald-400 shrink-0" />
-                              <span className="truncate">{item.fpo_name}</span>
-                            </p>
-                          </div>
-
-                          <div className="text-right font-mono">
-                            <span className="text-[10px] text-slate-400">Farmgate Price</span>
-                            <div className="text-lg font-black text-emerald-400">₹{item.price_per_kg}/kg</div>
-                          </div>
-                        </div>
-
-                        <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                          <span className="flex items-center space-x-1">
-                            <MapPin className="w-3 h-3 text-slate-500" />
-                            <span>{item.location_name.split(',')[0]}</span>
-                          </span>
-                          <strong className="text-white">{item.quantity_kg.toLocaleString()} kg Available</strong>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Right Column: Landed Cost Calculator & Purchase Breakdown */}
-            <div className="lg:col-span-5 space-y-4">
-              {selectedListing ? (
-                <div className="glass-panel p-6 rounded-3xl border border-slate-800 space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                    <h3 className="font-bold text-white text-sm flex items-center space-x-2">
-                      <Calculator className="w-4 h-4 text-emerald-400" />
-                      <span>Landed Cost & Disintermediation Calculator</span>
-                    </h3>
-                    <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold px-2 py-0.5 rounded">
-                      VERIFIED FPO
-                    </span>
-                  </div>
-
-                  <div className="space-y-3 text-xs">
-                    <div>
-                      <span className="text-slate-400">Selected Produce Batch:</span>
-                      <div className="font-black text-white text-base mt-0.5">{selectedListing.crop_name}</div>
-                      <p className="text-[11px] text-emerald-400">{selectedListing.fpo_name} • {selectedListing.location_name}</p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-slate-400 mb-1">Order Quantity (kg):</label>
-                        <input
-                          type="number"
-                          value={orderQuantity}
-                          onChange={(e) => setOrderQuantity(Number(e.target.value))}
-                          max={selectedListing.quantity_kg}
-                          min="100"
-                          step="100"
-                          className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-2 font-mono"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-slate-400 mb-1">Transit Distance (km):</label>
-                        <input
-                          type="number"
-                          value={transitDistance}
-                          onChange={(e) => setTransitDistance(Number(e.target.value))}
-                          min="10"
-                          max="2000"
-                          step="10"
-                          className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-2 font-mono"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Landed Cost Itemization */}
-                    {breakdown && (
-                      <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-2 font-mono text-[11px]">
-                        <div className="flex justify-between text-slate-300">
-                          <span>1. Direct Farmer Farmgate Payout:</span>
-                          <strong className="text-white">₹{selectedListing.price_per_kg.toFixed(2)}/kg</strong>
-                        </div>
-                        <div className="flex justify-between text-slate-300">
-                          <span>2. Haversine Freight Transport ({transitDistance} km):</span>
-                          <span>+₹{breakdown.logistics_cost_per_kg.toFixed(2)}/kg</span>
-                        </div>
-                        <div className="flex justify-between text-slate-300">
-                          <span>3. Quality Assurance & Settlement Fee:</span>
-                          <span>+₹{breakdown.platform_fee_per_kg.toFixed(2)}/kg</span>
-                        </div>
-                        <div className="pt-2 border-t border-slate-800 flex justify-between font-bold text-white text-xs">
-                          <span>Expected Landed Price:</span>
-                          <span className="text-emerald-400">₹{breakdown.direct_consumer_price_per_kg.toFixed(2)}/kg</span>
-                        </div>
-                        <div className="flex justify-between text-slate-400 text-[10px]">
-                          <span>Urban Benchmark Retail Price:</span>
-                          <span>₹{selectedListing.consumer_benchmark_price.toFixed(2)}/kg</span>
-                        </div>
-
-                        <div className="mt-2 pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-2 text-center text-[10px]">
-                          <div className="bg-emerald-950/40 border border-emerald-500/30 p-2 rounded-xl">
-                            <span className="text-emerald-400 font-bold block">Buyer Savings</span>
-                            <span className="text-white font-bold">{breakdown.consumer_savings_percent.toFixed(1)}%</span>
-                          </div>
-                          <div className="bg-cyan-950/40 border border-cyan-500/30 p-2 rounded-xl">
-                            <span className="text-cyan-300 font-bold block">Farmer Uplift</span>
-                            <span className="text-white font-bold">+{breakdown.farmer_earnings_uplift_percent.toFixed(1)}%</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <button
-                      onClick={() => setOrderConfirmed(true)}
-                      className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-emerald-700/20 text-xs flex items-center justify-center space-x-2"
-                    >
-                      <ShoppingBag className="w-4 h-4" />
-                      <span>Confirm Direct Sourcing Order (₹{breakdown ? Math.round(breakdown.total_consumer_cost_direct).toLocaleString() : '...'})</span>
-                    </button>
-
-                    {orderConfirmed && (
-                      <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-emerald-300 text-xs space-y-1 animate-fadeIn">
-                        <div className="font-bold flex items-center space-x-1">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                          <span>Direct Order Placed & Escrow Allocated!</span>
-                        </div>
-                        <div className="text-[11px] text-slate-300">
-                          Dispatched order to {selectedListing.fpo_name}. Disintermediation savings of ₹{breakdown ? Math.round(breakdown.consumer_savings_amount).toLocaleString() : ''} secured.
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="glass-panel p-8 rounded-3xl border border-slate-800 text-center text-slate-500 text-xs">
-                  Select a produce batch to calculate landed cost
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* Contracts & Bulk Offtake Section */
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {contracts.map((ctr) => (
-              <div key={ctr.id} className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-3">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="bg-cyan-500/20 text-cyan-300 text-[10px] font-mono px-2 py-0.5 rounded font-bold">
-                      {ctr.buyer_type.replace('_', ' ')}
-                    </span>
-                    <h3 className="font-bold text-white text-base mt-1">{ctr.commodity} Offtake Agreement</h3>
-                    <p className="text-xs text-slate-400 flex items-center space-x-1 mt-0.5">
-                      <Building2 className="w-3 h-3 text-cyan-400 shrink-0" />
-                      <span>{ctr.buyer_organization}</span>
-                    </p>
-                  </div>
-                  <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold font-mono px-2 py-0.5 rounded-full">
-                    {ctr.status}
-                  </span>
-                </div>
-
-                <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-1 font-mono text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Target Volume:</span>
-                    <strong className="text-white">{ctr.required_quantity_kg.toLocaleString()} kg ({ctr.required_quantity_kg / 1000} T)</strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Guaranteed Price:</span>
-                    <strong className="text-emerald-400">₹{ctr.offered_price_per_kg.toFixed(2)}/kg</strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Delivery Hub:</span>
-                    <span className="text-slate-300 truncate max-w-[160px]">{ctr.delivery_destination_hub}</span>
-                  </div>
-                  <div className="flex justify-between text-[10px] text-cyan-400 pt-1 border-t border-slate-800">
-                    <span>Quality SLA:</span>
-                    <span>Max Moisture {ctr.max_moisture_pct}%</span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setSelectedContractForInspection(ctr);
-                    setInspectionSettlement(null);
-                  }}
-                  className="w-full py-2 rounded-xl bg-slate-900 hover:bg-cyan-600 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition-all flex items-center justify-center space-x-1.5"
-                >
-                  <Scale className="w-3.5 h-3.5" />
-                  <span>Inspect Quality & Settle</span>
-                </button>
+          {/* Split View: Left Listings (7 Cols) | Right Stable Order Workspace (5 Cols) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            {/* Left: Produce Listings Catalogue */}
+            <div className="lg:col-span-7 space-y-2.5">
+              <div className="flex items-center justify-between px-1 text-xs text-[#8E9C93]">
+                <span>Available Verified Batches ({filteredListings.length})</span>
+                <span>Click item to configure landed order</span>
               </div>
-            ))}
+
+              {filteredListings.length === 0 ? (
+                <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl p-8 text-center text-xs text-[#8E9C93]">
+                  No produce lots match your search query. Try resetting filters.
+                </div>
+              ) : (
+                filteredListings.map((item) => {
+                  const isSelected = selectedListing?.id === item.id;
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => handleSelectListing(item)}
+                      className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#222C27] border-[#2D6A4F] ring-1 ring-[#2D6A4F]/50 shadow-md'
+                          : 'bg-[#1A221E] border-[#2B3731] hover:border-[#3D4D45] hover:bg-[#1C2420]'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-2">
+                            <h3 className="text-sm font-bold text-white tracking-tight">{item.crop_name}</h3>
+                            <span className="ad-badge ad-badge-sage text-[10px]">{item.grade}</span>
+                            <span className="text-[10px] text-[#8E9C93]">• {item.shelf_life_days}d Shelf Life</span>
+                          </div>
+                          <div className="flex items-center space-x-1.5 text-xs text-[#C2CBC5]">
+                            <Building2 className="w-3.5 h-3.5 text-[#52796F] shrink-0" />
+                            <span className="font-semibold">{item.fpo_name}</span>
+                            <span className="text-[#8E9C93]">({item.location_name})</span>
+                          </div>
+                        </div>
+
+                        {/* Price & Quantity Tag */}
+                        <div className="text-right shrink-0">
+                          <strong className="text-base font-extrabold text-[#48BB78] block">
+                            ₹{item.price_per_kg.toFixed(2)}
+                            <span className="text-xs text-[#8E9C93] font-normal">/kg</span>
+                          </strong>
+                          <span className="text-[11px] text-[#C2CBC5] font-mono">
+                            {item.quantity_kg.toLocaleString()} kg available
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Bottom Micro Comparison Row */}
+                      <div className="mt-2.5 pt-2 border-t border-[#2B3731]/60 flex items-center justify-between text-[11px] text-[#8E9C93]">
+                        <div>
+                          <span>Retail Mandi: </span>
+                          <span className="line-through text-[#8E9C93]">₹{item.consumer_benchmark_price.toFixed(2)}/kg</span>
+                          <span className="text-[#48BB78] font-semibold ml-1.5">
+                            (-{Math.round(((item.consumer_benchmark_price - item.price_per_kg) / item.consumer_benchmark_price) * 100)}% Direct Sourcing Advantage)
+                          </span>
+                        </div>
+                        <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'text-[#48BB78] translate-x-1' : 'text-[#8E9C93]'}`} />
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Right: Sticky Selected Order & Landed Cost Breakdown Workspace */}
+            <div className="lg:col-span-5 lg:sticky lg:top-20 space-y-4">
+              {selectedListing ? (
+                <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 space-y-4 shadow-xl">
+                  {/* Workspace Header */}
+                  <div className="flex items-center justify-between pb-3 border-b border-[#2B3731]">
+                    <div>
+                      <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">Order Workspace</span>
+                      <h2 className="text-base font-bold text-white tracking-tight">{selectedListing.crop_name}</h2>
+                    </div>
+                    <span className="ad-badge ad-badge-success text-xs font-bold">
+                      {selectedListing.grade}
+                    </span>
+                  </div>
+
+                  {/* Lot Metadata Snapshot */}
+                  <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723] space-y-1.5 text-xs text-[#C2CBC5]">
+                    <div className="flex justify-between">
+                      <span className="text-[#8E9C93]">Producer FPO:</span>
+                      <strong className="text-white">{selectedListing.fpo_name}</strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#8E9C93]">Origin Location:</span>
+                      <span>{selectedListing.location_name}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#8E9C93]">Harvest Date:</span>
+                      <span>{selectedListing.harvest_date}</span>
+                    </div>
+                  </div>
+
+                  {/* Quantity & Distance Sliders */}
+                  <div className="space-y-3 pt-1">
+                    <div>
+                      <div className="flex justify-between text-xs mb-1.5">
+                        <label className="font-semibold text-white">Order Quantity (kg)</label>
+                        <span className="font-mono text-[#48BB78] font-bold">{orderQuantity.toLocaleString()} kg</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={100}
+                        max={selectedListing.quantity_kg}
+                        step={100}
+                        value={orderQuantity}
+                        onChange={(e) => setOrderQuantity(Number(e.target.value))}
+                        className="w-full h-1.5 bg-[#121815] rounded-lg appearance-none cursor-pointer accent-[#2D6A4F]"
+                      />
+                      <div className="flex justify-between text-[10px] text-[#8E9C93] mt-1">
+                        <span>Min: 100 kg</span>
+                        <span>Lot Total: {selectedListing.quantity_kg.toLocaleString()} kg</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-xs mb-1.5">
+                        <label className="font-semibold text-white">Transit Distance (km)</label>
+                        <span className="font-mono text-[#C2CBC5] font-bold">{transitDistance} km</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={10}
+                        max={800}
+                        step={10}
+                        value={transitDistance}
+                        onChange={(e) => setTransitDistance(Number(e.target.value))}
+                        className="w-full h-1.5 bg-[#121815] rounded-lg appearance-none cursor-pointer accent-[#52796F]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Deductive Landed Cost Itemization */}
+                  {breakdown && (
+                    <div className="space-y-2 pt-2 border-t border-[#2B3731]">
+                      <span className="text-[10px] font-bold text-[#8E9C93] uppercase tracking-wider block">
+                        Landed Cost Calculation
+                      </span>
+
+                      <div className="space-y-1.5 text-xs">
+                        <div className="flex justify-between text-[#C2CBC5]">
+                          <span>Farmgate Produce Amount:</span>
+                          <span className="font-mono">₹{breakdown.total_farmer_payout_direct.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-[#C2CBC5]">
+                          <span>Refrigerated Freight ({transitDistance} km):</span>
+                          <span className="font-mono text-[#8E9C93]">₹{(breakdown.logistics_cost_per_kg * orderQuantity).toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-[#C2CBC5]">
+                          <span>Legal Metrology & Assay Fee:</span>
+                          <span className="font-mono text-[#8E9C93]">₹{(breakdown.platform_fee_per_kg * orderQuantity).toLocaleString()}</span>
+                        </div>
+
+                        {/* Total Landed Cost */}
+                        <div className="pt-2 border-t border-[#2B3731] flex items-baseline justify-between">
+                          <div>
+                            <span className="text-xs font-bold text-white block">Total Landed Price</span>
+                            <span className="text-[10px] text-[#52796F]">₹{breakdown.direct_consumer_price_per_kg.toFixed(2)}/kg delivered</span>
+                          </div>
+                          <strong className="text-xl font-black text-white font-mono">
+                            ₹{breakdown.total_consumer_cost_direct.toLocaleString()}
+                          </strong>
+                        </div>
+
+                        {/* Direct Mutual Value Realization Box */}
+                        <div className="bg-[#222C27] border border-[#2D6A4F]/40 p-3 rounded-lg space-y-1 mt-2">
+                          <div className="flex justify-between text-xs">
+                            <span className="text-[#52796F] font-semibold">Your Net Procurement Savings:</span>
+                            <strong className="text-[#48BB78] font-mono">
+                              ₹{breakdown.consumer_savings_amount.toLocaleString()} ({Math.round(breakdown.consumer_savings_percent)}%)
+                            </strong>
+                          </div>
+                          <div className="flex justify-between text-[11px] text-[#C2CBC5]">
+                            <span>Farmer Net Uplift:</span>
+                            <span className="text-[#48BB78] font-semibold font-mono">
+                              +₹{breakdown.farmer_earnings_uplift_amount.toLocaleString()} (+{Math.round(breakdown.farmer_earnings_uplift_percent)}%)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Order Actions */}
+                  <div className="pt-1">
+                    {orderConfirmed ? (
+                      <div className="bg-[#121815] border border-[#2D6A4F] p-3 rounded-lg text-center space-y-1">
+                        <CheckCircle2 className="w-5 h-5 text-[#48BB78] mx-auto" />
+                        <span className="text-xs font-bold text-white block">Procurement Intent Locked</span>
+                        <span className="text-[10px] text-[#8E9C93] block">Contract drafted with WDRA inspection dispatch.</span>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setOrderConfirmed(true)}
+                        className="ad-btn-primary w-full text-xs font-bold py-2.5 shadow-lg"
+                      >
+                        <ShoppingBag className="w-3.5 h-3.5" />
+                        <span>Confirm Direct Purchase Intent</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl p-8 text-center text-xs text-[#8E9C93]">
+                  Select a produce lot from the catalogue to configure and price your order.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
 
-      {/* Quality Inspection & Payout Settlement Modal */}
-      {selectedContractForInspection && (
-        <div className="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="glass-panel p-6 rounded-3xl border border-cyan-500/40 max-w-lg w-full space-y-4 animate-fadeIn">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div className="flex items-center space-x-2">
-                <Scale className="w-5 h-5 text-cyan-400" />
-                <h3 className="font-bold text-white text-base">Legal Metrology Quality Inspection & Settlement</h3>
-              </div>
-              <button onClick={() => setSelectedContractForInspection(null)} className="text-slate-400 hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
+      {/* ============================================================
+          TAB 2: FORWARD RFQ CONTRACTS & QUALITY INSPECTION
+          ============================================================ */}
+      {activeTab === 'CONTRACTS' && (
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#1A221E] border border-[#2B3731] p-4 rounded-xl">
+            <div>
+              <h2 className="text-base font-bold text-white">Forward Procurement RFQ Contracts</h2>
+              <p className="text-xs text-[#8E9C93]">
+                Post binding institutional purchase contracts with moisture and grade specifications.
+              </p>
             </div>
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="ad-btn-primary text-xs shrink-0"
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>Create Forward RFQ</span>
+            </button>
+          </div>
 
-            <form onSubmit={handleSettleInspection} className="space-y-3 text-xs">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-400 mb-1">Delivered Moisture % (Limit: {selectedContractForInspection.max_moisture_pct}%):</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={measuredMoisture}
-                    onChange={(e) => setMeasuredMoisture(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg p-2 font-mono"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-slate-400 mb-1">Foreign Matter % (Limit: 1.0%):</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={foreignMatter}
-                    onChange={(e) => setForeignMatter(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg p-2 font-mono"
-                    required
-                  />
-                </div>
-              </div>
+          {/* Contracts Table */}
+          <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl overflow-x-auto">
+            <table className="ad-table">
+              <thead>
+                <tr>
+                  <th>Contract ID</th>
+                  <th>Buyer Organization</th>
+                  <th>Commodity</th>
+                  <th>Target Qty</th>
+                  <th>Offered Price</th>
+                  <th>Committed FPO</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {contracts.map((c) => (
+                  <tr key={c.id}>
+                    <td className="font-mono text-white text-xs">{c.id}</td>
+                    <td>{c.buyer_organization}</td>
+                    <td className="font-semibold text-white">{c.commodity}</td>
+                    <td>{c.required_quantity_kg.toLocaleString()} kg</td>
+                    <td className="font-bold text-[#48BB78]">₹{c.offered_price_per_kg.toFixed(2)}/kg</td>
+                    <td>{c.assigned_fpo_id ? `FPO #${c.assigned_fpo_id}` : 'Awaiting Commitment'}</td>
+                    <td>
+                      <span className={`ad-badge ${
+                        c.status === 'SETTLED' ? 'ad-badge-success' :
+                        c.status === 'FPO_COMMITTED' ? 'ad-badge-warning' : 'ad-badge-sage'
+                      }`}>
+                        {c.status}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => setSelectedContractForInspection(c)}
+                        className="ad-btn-secondary text-[11px] h-7 px-2.5"
+                      >
+                        Inspect / Settle
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-              <button
-                type="submit"
-                disabled={isSettling}
-                className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-cyan-600/20 text-xs"
-              >
-                {isSettling ? 'Computing Settlement...' : 'Submit Quality Audit & Calculate Final Payout'}
-              </button>
-
-              {inspectionSettlement && (
-                <div className="p-3.5 bg-emerald-950/30 border border-emerald-500/40 rounded-xl space-y-2 text-xs font-mono animate-fadeIn">
-                  <div className="flex justify-between items-center font-bold text-emerald-300">
-                    <span>✓ Settlement Status: {inspectionSettlement.status}</span>
-                    <span className="text-[10px] bg-emerald-500/20 px-2 py-0.5 rounded-full">
-                      Disintermediation: ₹{inspectionSettlement.disintermediation_savings_vs_mandi_inr.toLocaleString()}
-                    </span>
+          {/* Quality Inspection Drawer Modal */}
+          {selectedContractForInspection && (
+            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-[#1A221E] border border-[#2B3731] rounded-2xl max-w-lg w-full p-6 space-y-4 text-xs shadow-2xl">
+                <div className="flex items-center justify-between pb-3 border-b border-[#2B3731]">
+                  <div>
+                    <span className="text-[10px] font-bold text-[#52796F] uppercase">Legal Metrology Audit</span>
+                    <h3 className="text-base font-bold text-white">Quality Inspection & Settlement</h3>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
-                    <div>Gross Value: <strong className="text-white">₹{inspectionSettlement.gross_payout_inr.toLocaleString()}</strong></div>
-                    <div>Moisture Deduction: <strong className="text-rose-400">-₹{inspectionSettlement.quality_deductions_inr.toLocaleString()}</strong></div>
-                    <div className="col-span-2 pt-1 border-t border-slate-800 text-emerald-400 font-bold text-xs flex justify-between">
-                      <span>Final Net Payout to FPO:</span>
-                      <span>₹{inspectionSettlement.net_fpo_payout_inr.toLocaleString()}</span>
+                  <button
+                    onClick={() => {
+                      setSelectedContractForInspection(null);
+                      setInspectionSettlement(null);
+                    }}
+                    className="text-[#8E9C93] hover:text-white"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleRunInspection} className="space-y-3">
+                  <div>
+                    <label className="ad-label">Measured Moisture Content (%)</label>
+                    <input
+                      type="number"
+                      step={0.1}
+                      value={measuredMoisture}
+                      onChange={(e) => setMeasuredMoisture(Number(e.target.value))}
+                      className="ad-input"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="ad-label">Foreign Matter & Refraction (%)</label>
+                    <input
+                      type="number"
+                      step={0.1}
+                      value={foreignMatter}
+                      onChange={(e) => setForeignMatter(Number(e.target.value))}
+                      className="ad-input"
+                      required
+                    />
+                  </div>
+
+                  <div className="pt-1">
+                    <label className="flex items-center space-x-2 cursor-pointer text-xs text-[#C2CBC5]">
+                      <input
+                        type="checkbox"
+                        checked={gradeConformance}
+                        onChange={(e) => setGradeConformance(e.target.checked)}
+                        className="rounded border-[#2B3731] bg-[#121815] text-[#2D6A4F] focus:ring-0"
+                      />
+                      <span>Grade Conformance Verified by WDRA Field Assayer</span>
+                    </label>
+                  </div>
+
+                  <div className="pt-2 flex justify-end space-x-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedContractForInspection(null)}
+                      className="ad-btn-secondary text-xs"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSettling}
+                      className="ad-btn-primary text-xs font-bold"
+                    >
+                      {isSettling ? 'Computing Settlement...' : 'Submit Inspection & Release Payout'}
+                    </button>
+                  </div>
+                </form>
+
+                {inspectionSettlement && (
+                  <div className="bg-[#121815] border border-[#2D6A4F] p-4 rounded-xl space-y-2 mt-3">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-bold text-[#48BB78]">Settlement Result: {inspectionSettlement.status}</span>
+                      <span className="font-mono text-white text-[11px]">Contract: {inspectionSettlement.contract_id}</span>
+                    </div>
+                    <div className="flex justify-between text-xs text-[#C2CBC5]">
+                      <span>Final Net Payout Released to FPO:</span>
+                      <strong className="text-white font-mono">₹{inspectionSettlement.net_fpo_payout_inr.toLocaleString()}</strong>
                     </div>
                   </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Create Forward RFQ Modal */}
+          {showCreateModal && (
+            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-[#1A221E] border border-[#2B3731] rounded-2xl max-w-lg w-full p-6 space-y-4 text-xs shadow-2xl">
+                <div className="flex items-center justify-between pb-3 border-b border-[#2B3731]">
+                  <h3 className="text-base font-bold text-white">Create Forward Procurement Contract</h3>
+                  <button onClick={() => setShowCreateModal(false)} className="text-[#8E9C93] hover:text-white">
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
-              )}
-            </form>
-          </div>
+
+                <form onSubmit={handlePublishContract} className="space-y-3">
+                  <div>
+                    <label className="ad-label">Buyer Entity Name</label>
+                    <input
+                      type="text"
+                      value={buyerOrg}
+                      onChange={(e) => setBuyerOrg(e.target.value)}
+                      className="ad-input"
+                      required
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="ad-label">Commodity</label>
+                      <input
+                        type="text"
+                        value={contractCommodity}
+                        onChange={(e) => setContractCommodity(e.target.value)}
+                        className="ad-input"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="ad-label">Target Quantity (kg)</label>
+                      <input
+                        type="number"
+                        value={contractQuantity}
+                        onChange={(e) => setContractQuantity(Number(e.target.value))}
+                        className="ad-input"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="ad-label">Offered Ask Price (₹/kg)</label>
+                      <input
+                        type="number"
+                        step={0.5}
+                        value={offeredPrice}
+                        onChange={(e) => setOfferedPrice(Number(e.target.value))}
+                        className="ad-input"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="ad-label">Delivery Deadline</label>
+                      <input
+                        type="date"
+                        value={deliveryDeadline}
+                        onChange={(e) => setDeliveryDeadline(e.target.value)}
+                        className="ad-input"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex justify-end space-x-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowCreateModal(false)}
+                      className="ad-btn-secondary text-xs"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isPublishingContract}
+                      className="ad-btn-primary text-xs font-bold"
+                    >
+                      {isPublishingContract ? 'Publishing...' : 'Publish Contract to Board'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
