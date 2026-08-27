@@ -134,30 +134,47 @@ export const BufferStockView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 glass-panel p-6 rounded-2xl border border-slate-800">
-        <div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#161E1A] p-6 rounded-2xl border border-[#26332C] items-center shadow-lg">
+        <div className="lg:col-span-8 space-y-3">
           <div className="flex items-center space-x-2">
-            <span className="bg-amber-500/20 text-amber-300 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
+            <span className="bg-[#222C27] text-[#D97706] text-xs px-2.5 py-1 rounded-full font-mono font-semibold border border-[#2B3731]">
               DoCA National Food Security & Market Intervention Scheme (MIS)
             </span>
             <DataProvenance source="NAFED / FCI Strategic Silo Registry" status="LIVE" />
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight mt-1">Strategic Buffer Stock & Market Price Stabilization</h1>
-          <p className="text-xs text-slate-300 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Strategic Buffer Stock & Price Stabilization</h1>
+          <p className="text-xs text-[#8E9C93] leading-relaxed max-w-xl">
             Real-time tracking of NAFED and NCCF strategic reserves with automated convoy dispatches to cool inflationary retail price spikes.
           </p>
+
+          <div>
+            <button
+              onClick={() => {
+                setShowInterventionModal(true);
+                setInterventionResult(null);
+              }}
+              className="bg-[#D97706] hover:bg-[#B45309] text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-lg transition-all"
+            >
+              <ShieldAlert className="w-4 h-4 text-white stroke-[2.5]" />
+              <span>Trigger MIS Market Intervention</span>
+            </button>
+          </div>
         </div>
 
-        <button
-          onClick={() => {
-            setShowInterventionModal(true);
-            setInterventionResult(null);
-          }}
-          className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-lg shadow-amber-500/20 transition-all hover:scale-105"
-        >
-          <ShieldAlert className="w-4 h-4 text-slate-950 stroke-[2.5]" />
-          <span>Trigger MIS Market Intervention</span>
-        </button>
+        {/* Contextual Grain Silo Image */}
+        <div className="lg:col-span-4 relative rounded-xl overflow-hidden border border-[#26332C] bg-[#101513] aspect-[16/10] shadow-md group">
+          <img
+            src="/assets/agridirect-grain-buffer-silo.jpg"
+            alt="National Strategic Buffer Silo"
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0C100E]/80 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute bottom-2 left-2 right-2 bg-[#121815]/90 border border-[#26332C] px-2.5 py-1 rounded text-[10px] text-[#C2CBC5] flex justify-between">
+            <span className="font-bold text-white">NAFED Silo Complex</span>
+            <span className="text-[#D97706] font-mono">180,000 MT Reserve</span>
+          </div>
+        </div>
       </div>
 
       {/* Strategic Silos Inventory Grid */}

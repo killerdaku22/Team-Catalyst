@@ -35,7 +35,7 @@ interface DecisionCenterViewProps {
 }
 
 const COMMODITY_PRESETS: Record<string, { price: number; shelfLife: number; location: string; image: string }> = {
-  'Tomato': { price: 26.0, shelfLife: 10, location: 'Kolar Agri Hub, Karnataka', image: '/assets/agridirect-farmer-harvest.webp.png' },
+  'Tomato': { price: 26.0, shelfLife: 10, location: 'Kolar Agri Hub, Karnataka', image: '/assets/agridirect-harvest-assessment.jpg' },
   'Onion': { price: 24.5, shelfLife: 45, location: 'Pimpalgaon, Nashik, Maharashtra', image: '/assets/agridirect-fpo-collection.webp.png' },
   'Potato': { price: 16.0, shelfLife: 60, location: 'Khandari, Agra, Uttar Pradesh', image: '/assets/agridirect-market-arrival.webp.png' },
   'Wheat': { price: 24.0, shelfLife: 180, location: 'Khanna Mandi, Ludhiana, Punjab', image: '/assets/agridirect-farm-hero.webp.png' },

@@ -122,35 +122,50 @@ export const ColdStorageView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 glass-panel p-6 rounded-2xl border border-slate-800">
-        <div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#161E1A] p-6 rounded-2xl border border-[#26332C] items-center shadow-lg">
+        <div className="lg:col-span-8 space-y-3">
           <div className="flex items-center space-x-2">
-            <span className="bg-cyan-500/20 text-cyan-300 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
+            <span className="bg-[#222C27] text-[#48BB78] text-xs px-2.5 py-1 rounded-full font-mono font-semibold border border-[#2B3731]">
               WDRA Certified Cold Logistics & IoT Telemetry
             </span>
             <DataProvenance source="WDRA / NCCD Real-Time Chamber Sensors" status="LIVE" />
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight mt-1">Cold Storage IoT Telemetry & Spoilage Early Warning</h1>
-          <p className="text-xs text-slate-300 mt-1">
-            Real-time IoT chamber telemetry stream (T, RH, Ethylene, CO2) with automated DoCA power tariff subsidies for FPOs.
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Cold Storage IoT Telemetry & Early Warning</h1>
+          <p className="text-xs text-[#8E9C93] leading-relaxed max-w-xl">
+            Real-time IoT chamber telemetry stream (Temperature, Humidity, Ethylene, CO₂) with automated DoCA power tariff subsidies for FPOs.
           </p>
+
+          {/* State Filter Buttons */}
+          <div className="flex items-center space-x-1.5 bg-[#101513] p-1.5 rounded-xl border border-[#26332C] text-xs w-fit">
+            {['ALL', 'KARNATAKA', 'MAHARASHTRA', 'UTTAR PRADESH'].map(st => (
+              <button
+                key={st}
+                onClick={() => setFilterState(st)}
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                  filterState === st
+                    ? 'bg-[#2D6A4F] text-white shadow-md'
+                    : 'text-[#8E9C93] hover:text-white'
+                }`}
+              >
+                {st}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* State Filter Buttons */}
-        <div className="flex items-center space-x-1.5 bg-slate-900/90 p-1.5 rounded-xl border border-slate-800 text-xs">
-          {['ALL', 'KARNATAKA', 'MAHARASHTRA', 'UTTAR PRADESH'].map(st => (
-            <button
-              key={st}
-              onClick={() => setFilterState(st)}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                filterState === st
-                  ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/20'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {st}
-            </button>
-          ))}
+        {/* Contextual Facility Image */}
+        <div className="lg:col-span-4 relative rounded-xl overflow-hidden border border-[#26332C] bg-[#101513] aspect-[16/10] shadow-md group">
+          <img
+            src="/assets/agridirect-cold-storage-facility.jpg"
+            alt="Cold Storage Facility"
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0C100E]/80 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute bottom-2 left-2 right-2 bg-[#121815]/90 border border-[#26332C] px-2.5 py-1 rounded text-[10px] text-[#C2CBC5] flex justify-between">
+            <span className="font-bold text-white">WDRA Chamber #3</span>
+            <span className="text-[#48BB78] font-mono">2.4°C • 91% RH</span>
+          </div>
         </div>
       </div>
 
