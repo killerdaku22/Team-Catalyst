@@ -26,7 +26,7 @@ auth_rate_limiter = RateLimiter(times=10, seconds=60)
 refresh_rate_limiter = RateLimiter(times=20, seconds=60)
 
 class UserCreateSchema(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     full_name: str
     role: UserRole = UserRole.FPO_MANAGER
