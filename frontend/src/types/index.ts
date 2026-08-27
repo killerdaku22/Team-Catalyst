@@ -51,15 +51,43 @@ export interface ForecastPoint {
   predicted_demand_tonnes: number;
   price_confidence_low: number;
   price_confidence_high: number;
+  uncertainty_interval_pct?: number;
+}
+
+export interface ModelBenchmarkItem {
+  model_id: string;
+  model_name: string;
+  mae: number;
+  rmse: number;
+  mape: number;
 }
 
 export interface DemandForecast {
   commodity: string;
   region: string;
   current_modal_price: number;
+  historical_mean_price?: number;
   price_volatility_percent: number;
+  forecast_horizon_days?: number;
+  active_model?: string;
+  model_metrics?: {
+    mae: number;
+    rmse: number;
+    mape: number;
+    test_horizon_samples: number;
+    total_training_samples: number;
+  };
+  baseline_comparison?: ModelBenchmarkItem[];
   demand_forecast: ForecastPoint[];
   key_drivers: string[];
+  weather_telemetry?: {
+    temperature_celsius: number;
+    relative_humidity_percent: number;
+    rainfall_mm: number;
+    spoilage_risk_index: number;
+    status: string;
+  };
+  data_provenance?: string;
   generated_at: string;
 }
 
