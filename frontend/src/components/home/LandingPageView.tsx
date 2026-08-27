@@ -1,21 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Sprout,
   ArrowRight,
-  TrendingUp,
-  Truck,
   ShieldCheck,
-  Building,
-  Layers,
-  MapPin,
   CheckCircle2,
-  Calendar,
   AlertTriangle,
   Play,
-  Pause,
-  Warehouse,
-  ShoppingBag,
-  Globe2
+  Pause
 } from 'lucide-react';
 import { ValueChainSlider } from './ValueChainSlider';
 
@@ -29,19 +20,39 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const journeyVideoRef = useRef<HTMLVideoElement>(null);
 
+  // Guarantee browser muted autoplay compliance
+  useEffect(() => {
+    if (heroVideoRef.current) {
+      heroVideoRef.current.muted = true;
+      heroVideoRef.current.play().catch(() => setHeroVideoPlaying(false));
+    }
+    if (journeyVideoRef.current) {
+      journeyVideoRef.current.muted = true;
+      journeyVideoRef.current.play().catch(() => setJourneyVideoPlaying(false));
+    }
+  }, []);
+
   const toggleHeroVideo = () => {
     if (heroVideoRef.current) {
-      if (heroVideoPlaying) heroVideoRef.current.pause();
-      else heroVideoRef.current.play();
-      setHeroVideoPlaying(!heroVideoPlaying);
+      if (heroVideoPlaying) {
+        heroVideoRef.current.pause();
+        setHeroVideoPlaying(false);
+      } else {
+        heroVideoRef.current.play();
+        setHeroVideoPlaying(true);
+      }
     }
   };
 
   const toggleJourneyVideo = () => {
     if (journeyVideoRef.current) {
-      if (journeyVideoPlaying) journeyVideoRef.current.pause();
-      else journeyVideoRef.current.play();
-      setJourneyVideoPlaying(!journeyVideoPlaying);
+      if (journeyVideoPlaying) {
+        journeyVideoRef.current.pause();
+        setJourneyVideoPlaying(false);
+      } else {
+        journeyVideoRef.current.play();
+        setJourneyVideoPlaying(true);
+      }
     }
   };
 
@@ -110,17 +121,21 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
           </div>
 
           {/* Right Hero Video (Video A) */}
-          <div className="lg:col-span-5 relative min-h-[260px] lg:min-h-full overflow-hidden bg-[#121815] flex items-center justify-center">
+          <div
+            className="lg:col-span-5 relative min-h-[260px] lg:min-h-full overflow-hidden bg-[#121815] flex items-center justify-center cursor-pointer group"
+            onClick={toggleHeroVideo}
+          >
             <video
               ref={heroVideoRef}
               autoPlay
               loop
               muted
               playsInline
-              preload="metadata"
+              preload="auto"
               poster="/assets/agridirect-farm-hero.webp.png"
               className="absolute inset-0 w-full h-full object-cover opacity-80"
             >
+              <source src="/assets/agridirect-farm-hero-video.mp4" type="video/mp4" />
               <source src="/assets/Wheat_and_vegetable_fields_moving_202608280019.mp4" type="video/mp4" />
             </video>
 
@@ -128,8 +143,11 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
             <div className="absolute inset-0 bg-gradient-to-t from-[#1A221E] via-transparent to-transparent lg:hidden block" />
 
             <button
-              onClick={toggleHeroVideo}
-              className="absolute bottom-3 right-3 z-20 bg-[#121815]/80 hover:bg-[#1A221E] border border-[#2B3731] p-1.5 rounded-full text-white transition-all shadow"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleHeroVideo();
+              }}
+              className="absolute bottom-3 right-3 z-20 bg-[#121815]/90 hover:bg-[#1A221E] border border-[#2B3731] p-1.5 rounded-full text-white transition-all shadow"
               aria-label={heroVideoPlaying ? "Pause video" : "Play video"}
             >
               {heroVideoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
@@ -160,24 +178,28 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
           </div>
         </div>
 
-        <div className="relative rounded-2xl overflow-hidden bg-[#1A221E] border border-[#2B3731] aspect-video max-h-[380px] w-full shadow-lg">
+        <div
+          className="relative rounded-2xl overflow-hidden bg-[#1A221E] border border-[#2B3731] aspect-video max-h-[380px] w-full shadow-lg cursor-pointer group"
+          onClick={toggleJourneyVideo}
+        >
           <video
             ref={journeyVideoRef}
             autoPlay
             loop
             muted
             playsInline
-            preload="metadata"
+            preload="auto"
             poster="/assets/agridirect-farmer-harvest.webp.png"
             className="w-full h-full object-cover"
           >
+            <source src="/assets/agridirect-supply-chain-journey.mp4" type="video/mp4" />
             <source src="/assets/AgriDirect_supply_chain_video_pr._202608280027.mp4" type="video/mp4" />
           </video>
 
           <div className="absolute inset-0 bg-gradient-to-t from-[#0F1412] via-transparent to-transparent" />
 
           {/* Overlay Step Badges */}
-          <div className="absolute bottom-3 inset-x-3 sm:inset-x-6 z-10 flex items-center justify-between overflow-x-auto pb-1 text-[10px] font-mono text-[#C2CBC5] gap-1.5">
+          <div className="absolute bottom-3 inset-x-3 sm:inset-x-6 z-10 flex items-center justify-between overflow-x-auto pb-1 text-[10px] font-mono text-[#C2CBC5] gap-1.5 pointer-events-none">
             {['01. GROW', '02. HARVEST', '03. COLLECT', '04. PREDICT', '05. DECIDE', '06. MOVE', '07. SETTLE'].map((st) => (
               <div key={st} className="bg-[#121815]/90 px-2.5 py-1 rounded-md border border-[#2B3731] shrink-0">
                 <span className="text-[#48BB78] font-bold">{st}</span>
@@ -186,8 +208,11 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
           </div>
 
           <button
-            onClick={toggleJourneyVideo}
-            className="absolute top-3 right-3 z-20 bg-[#121815]/80 hover:bg-[#1A221E] border border-[#2B3731] p-1.5 rounded-full text-white transition-all shadow"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleJourneyVideo();
+            }}
+            className="absolute top-3 right-3 z-20 bg-[#121815]/90 hover:bg-[#1A221E] border border-[#2B3731] p-1.5 rounded-full text-white transition-all shadow"
             aria-label={journeyVideoPlaying ? "Pause video" : "Play video"}
           >
             {journeyVideoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
