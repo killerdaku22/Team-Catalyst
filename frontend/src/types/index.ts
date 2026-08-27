@@ -213,6 +213,47 @@ export interface VRPResult {
   osrm_geometry?: any;
 }
 
+export interface QualityInspectionReport {
+  contract_id: string;
+  measured_moisture_pct: number;
+  grade_conformance: boolean;
+  foreign_matter_pct: number;
+  damage_pct: number;
+  inspector_id?: string;
+  inspection_notes: string;
+}
+
+export interface SettlementBreakdown {
+  contract_id: string;
+  gross_payout_inr: number;
+  quality_deductions_inr: number;
+  transit_delay_penalty_inr: number;
+  net_fpo_payout_inr: number;
+  disintermediation_savings_vs_mandi_inr: number;
+  status: string;
+}
+
+export interface ProcurementContract {
+  id: string;
+  buyer_organization: string;
+  buyer_type: string;
+  commodity: string;
+  target_grade: string;
+  required_quantity_kg: number;
+  offered_price_per_kg: number;
+  delivery_destination_hub: string;
+  destination_latitude: number;
+  destination_longitude: number;
+  delivery_deadline: string;
+  max_moisture_pct: number;
+  status: 'OPEN_FOR_BIDDING' | 'FPO_COMMITTED' | 'IN_TRANSIT' | 'DELIVERED_PENDING_INSPECTION' | 'SETTLED' | 'CANCELLED';
+  assigned_fpo_id?: number | null;
+  assigned_fpo_name?: string | null;
+  created_at: string;
+  inspection_report?: QualityInspectionReport | null;
+  settlement?: SettlementBreakdown | null;
+}
+
 export interface MinistrySummary {
   ministry: string;
   department: string;

@@ -7,7 +7,9 @@ import {
   BatchDecisionResult,
   OpportunityRankingResult,
   MarketEvent,
-  PolicyScenarioResult
+  PolicyScenarioResult,
+  ProcurementContract,
+  SettlementBreakdown
 } from '../types';
 
 const API_BASE = ((import.meta as any).env?.VITE_API_BASE as string) || 'http://localhost:8000/api/v1';
@@ -506,5 +508,158 @@ export async function fetchMinistrySummary(): Promise<MinistrySummary> {
       { region: "Agra-NCR Corridor", primary_crop: "Potato", active_routes: 11, price_variance_reduction: "24%" },
       { region: "Kolar-Bengaluru Corridor", primary_crop: "Tomato", active_routes: 16, price_variance_reduction: "35%" }
     ]
+  };
+}
+
+export async function fetchContracts(commodity?: string): Promise<ProcurementContract[]> {
+  try {
+    let url = `${API_BASE}/contracts?`;
+    if (commodity) url += `commodity=${encodeURIComponent(commodity)}&`;
+    const res = await fetch(url);
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    console.warn("Fallback contracts:", e);
+  }
+
+  return [
+    {
+      id: "CTR-2026-DEL-001",
+      buyer_organization: "BigBasket North Regional Sourcing",
+      buyer_type: "INSTITUTIONAL_BUYER",
+      commodity: "Tomato",
+      target_grade: "Grade A Fresh",
+      required_quantity_kg: 5000.0,
+      offered_price_per_kg: 34.0,
+      delivery_destination_hub: "BigBasket Manesar Central Hub",
+      destination_latitude: 28.3512,
+      destination_longitude: 76.9415,
+      delivery_deadline: "2026-09-05",
+      max_moisture_pct: 14.0,
+      status: "OPEN_FOR_BIDDING",
+      created_at: "2026-08-27 08:30:00"
+    },
+    {
+      id: "CTR-2026-MUM-002",
+      buyer_organization: "Reliance Fresh Maharashtra Sourcing",
+      buyer_type: "INSTITUTIONAL_BUYER",
+      commodity: "Onion",
+      target_grade: "Grade A Red",
+      required_quantity_kg: 8000.0,
+      offered_price_per_kg: 26.5,
+      delivery_destination_hub: "Reliance Vashi Distribution Center",
+      destination_latitude: 19.0760,
+      destination_longitude: 72.9986,
+      delivery_deadline: "2026-09-08",
+      max_moisture_pct: 11.0,
+      status: "OPEN_FOR_BIDDING",
+      created_at: "2026-08-27 09:15:00"
+    },
+    {
+      id: "CTR-2026-SAF-003",
+      buyer_organization: "Safal Mother Dairy Processing Unit",
+      buyer_type: "FOOD_PROCESSOR",
+      commodity: "Potato",
+      target_grade: "Processing Grade",
+      required_quantity_kg: 12000.0,
+      offered_price_per_kg: 18.2,
+      delivery_destination_hub: "Mother Dairy Mangolpuri Plant",
+      destination_latitude: 28.6922,
+      destination_longitude: 77.0855,
+      delivery_deadline: "2026-09-12",
+      max_moisture_pct: 12.0,
+      status: "OPEN_FOR_BIDDING",
+      created_at: "2026-08-27 11:00:00"
+    }
+  ];
+}
+
+export async function createContract(payload: any): Promise<ProcurementContract> {
+  try {
+    const res = await fetch(`${API_BASE}/contracts/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    console.warn("Fallback create contract:", e);
+  }
+
+  return {
+    id: `CTR-2026-${Math.floor(100 + Math.random() * 900)}`,
+    buyer_organization: payload.buyer_organization,
+    buyer_type: payload.buyer_type,
+    commodity: payload.commodity,
+    target_grade: payload.target_grade || "Grade A",
+    required_quantity_kg: payload.required_quantity_kg,
+    offered_price_per_kg: payload.offered_price_per_kg,
+    delivery_destination_hub: payload.delivery_destination_hub,
+    destination_latitude: payload.destination_latitude || 28.6139,
+    destination_longitude: payload.destination_longitude || 77.2090,
+    delivery_deadline: payload.delivery_deadline || "2026-09-15",
+    max_moisture_pct: payload.max_moisture_pct || 12.0,
+    status: "OPEN_FOR_BIDDING",
+    created_at: new Date().toISOString().replace('T', ' ').substring(0, 19)
+  };
+}
+
+export async function acceptContract(contractId: string): Promise<ProcurementContract> {
+  try {
+    const res = await fetch(`${API_BASE}/contracts/${contractId}/accept`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    console.warn("Fallback accept contract:", e);
+  }
+
+  return {
+    id: contractId,
+    buyer_organization: "Institutional Partner",
+    buyer_type: "INSTITUTIONAL_BUYER",
+    commodity: "Produce",
+    target_grade: "Grade A",
+    required_quantity_kg: 5000,
+    offered_price_per_kg: 32.0,
+    delivery_destination_hub: "Central Hub",
+    destination_latitude: 28.6139,
+    destination_longitude: 77.2090,
+    delivery_deadline: "2026-09-20",
+    max_moisture_pct: 12.0,
+    status: "FPO_COMMITTED",
+    assigned_fpo_name: "Local Producer FPO",
+    created_at: new Date().toISOString()
+  };
+}
+
+export async function inspectAndSettleContract(contractId: string, report: any): Promise<SettlementBreakdown> {
+  try {
+    const res = await fetch(`${API_BASE}/contracts/${contractId}/inspect-quality`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(report)
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    console.warn("Fallback inspect contract:", e);
+  }
+
+  return {
+    contract_id: contractId,
+    gross_payout_inr: 160000.0,
+    quality_deductions_inr: 0.0,
+    transit_delay_penalty_inr: 0.0,
+    net_fpo_payout_inr: 160000.0,
+    disintermediation_savings_vs_mandi_inr: 12800.0,
+    status: "PAID_OUT"
   };
 }
