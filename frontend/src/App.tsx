@@ -12,6 +12,7 @@ import { LandingPageView } from './components/home/LandingPageView';
 import { DecisionCenterView } from './components/decision/DecisionCenterView';
 import { BestMarketView } from './components/marketplace/BestMarketView';
 import { MarketIntelligenceView } from './components/intelligence/MarketIntelligenceView';
+import { LoginPageView } from './components/auth/LoginPageView';
 import { DesignSystem } from './components/common/DesignSystem';
 import { VoiceKisanAssistant } from './components/voice/VoiceKisanAssistant';
 import { Radio, AlertCircle } from 'lucide-react';
@@ -90,6 +91,18 @@ export const App: React.FC = () => {
         {activeTab === 'farmer' && <FarmerPortalView onNavigateToMarketplace={() => setActiveTab('marketplace')} />}
         {activeTab === 'storage' && <ColdStorageView />}
         {activeTab === 'buffer' && <BufferStockView />}
+        {activeTab === 'login' && (
+          <LoginPageView
+            onLoginSuccess={(role, email) => {
+              setActiveRole(role);
+              if (role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') setActiveTab('ministry');
+              else if (role === 'BUYER') setActiveTab('marketplace');
+              else if (role === 'FPO' || role === 'FARMER') setActiveTab('decision');
+              else if (role === 'LOGISTICS' || role === 'TRANSPORTER') setActiveTab('logistics');
+            }}
+            onNavigateHome={() => setActiveTab('home')}
+          />
+        )}
         {activeTab === 'intelligence' && <MarketIntelligenceView />}
         {activeTab === 'forecasting' && <DemandForecastView />}
         {activeTab === 'logistics' && <LogisticsRouteView />}
