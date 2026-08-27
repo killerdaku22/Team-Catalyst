@@ -170,8 +170,13 @@ class MandiPriceRecord(Base):
     min_price = Column(Float, nullable=False)
     max_price = Column(Float, nullable=False)
     modal_price = Column(Float, nullable=False)
-    arrival_tonnes = Column(Float, nullable=False)
+    price_per_kg = Column(Float, nullable=False, default=25.0)
+    arrival_tonnes = Column(Float, nullable=False, default=10.0)
     record_date = Column(String, index=True, nullable=False)
+    source = Column(String(64), default="HISTORICAL_CSV", nullable=False)
+    quality_flags_json = Column(Text, default="[]", nullable=False)
+    is_validated = Column(Boolean, default=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 class DemandForecastRecord(Base):
     __tablename__ = "demand_forecast_records"
