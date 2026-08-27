@@ -250,3 +250,78 @@ def test_rate_limiter_rejection(client: TestClient):
     ]
     status_codes = [r.status_code for r in responses]
     assert 429 in status_codes
+
+def test_doca_market_observer_read_only_and_rbac_enforcement(client: TestClient):
+    """
+    Verify DoCA Market Observer role:
+    1. Can view read-only monitoring and analytical endpoints (200).
+    2. Strictly CANNOT call operational write endpoints (403 Forbidden).
+    3. Tampered JWT role claims are rejected (401 Unauthorized).
+    """
+    # 1. Register a verified DoCA Market Observer
+    doca_res = client.post("/api/v1/auth/register", json={
+        "email": "observer_security_test@doca.gov.in",
+        "password": "ObserverPass@123",
+        "full_name": "Dr. Sunita Sharma (DoCA Market Observer)",
+        "role": "DOCA_OBSERVER"
+    })
+    assert doca_res.status_code == 200
+    doca_token = doca_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {doca_token}"}
+
+    # 2. DoCA Observer CAN access read-only market monitor endpoints (200 OK)
+    summary_res = client.get("/api/v1/analytics/ministry-summary", headers=headers)
+    assert summary_res.status_code == 200
+    assert "macro_metrics" in summary_res.json()
+
+    buffer_res = client.get("/api/v1/buffer/inventory", headers=headers)
+    assert buffer_res.status_code == 200
+
+    # 3. DoCA Observer CANNOT create a produce listing (403 Forbidden)
+    listing_payload = {
+        "fpo_name": "Ludhiana Agri Co-op",
+        "crop_name": "Tomato (Hybrid)",
+        "category": "Vegetables",
+        "quantity_kg": 1500.0,
+        "price_per_kg": 28.0,
+        "middleman_baseline_price": 20.0,
+        "consumer_benchmark_price": 40.0,
+        "harvest_date": "2026-08-25",
+        "shelf_life_days": 10,
+        "latitude": 30.9010,
+        "longitude": 75.8573,
+        "location_name": "Ludhiana, Punjab"
+    }
+    create_listing_res = client.post(
+        "/api/v1/marketplace/listings",
+        json=listing_payload,
+        headers=headers
+    )
+    assert create_listing_res.status_code == 403
+    assert "Access denied" in create_listing_res.json()["detail"]
+
+    # 4. DoCA Observer CANNOT create institutional procurement contracts (403 Forbidden)
+    contract_res = client.post(
+        "/api/v1/contracts/create",
+        json={
+            "buyer_organization": "DoCA Observer Unauthorized",
+            "commodity": "Tomato",
+            "required_quantity_kg": 5000.0,
+            "offered_price_per_kg": 30.0,
+            "delivery_deadline": "2026-09-15",
+            "delivery_hub_location": "Delhi NCR Hub",
+            "legal_metrology_standards": {}
+        },
+        headers=headers
+    )
+    assert contract_res.status_code == 403
+    assert "Access denied" in contract_res.json()["detail"]
+
+    # 5. Tampered JWT signature rejection
+    tampered_token = doca_token[:-5] + "XXXXX"
+    tampered_res = client.get(
+        "/api/v1/auth/me",
+        headers={"Authorization": f"Bearer {tampered_token}"}
+    )
+    assert tampered_res.status_code == 401
+

@@ -50,10 +50,17 @@ def seed_database():
                 is_active=True
             ),
             User(
-                email="auditor@doca.gov.in",
-                hashed_password=hash_password("AuditorPass@123"),
-                full_name="Dr. Sunita Sharma (DoCA Price Stabilization Director)",
-                role=UserRole.GOVT_AUDITOR,
+                email="transporter@agridirect.org",
+                hashed_password=hash_password("TransporterPass@123"),
+                full_name="Kisan Express Cold Chain Logistics",
+                role=UserRole.LOGISTICS,
+                is_active=True
+            ),
+            User(
+                email="observer@doca.gov.in",
+                hashed_password=hash_password("ObserverPass@123"),
+                full_name="Dr. Sunita Sharma (DoCA Market Observer)",
+                role=UserRole.DOCA_OBSERVER,
                 is_active=True
             ),
             User(

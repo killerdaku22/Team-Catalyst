@@ -70,14 +70,15 @@ export const Header: React.FC<HeaderProps> = ({
           { id: 'marketplace', label: 'Available Loads', icon: ShoppingCart },
           { id: 'intelligence', label: 'Disruptions', icon: Radio },
         ];
-      case 'MINISTRY_ADMIN':
+      case 'DOCA_OBSERVER':
       case 'GOVT_AUDITOR':
+      case 'MINISTRY_ADMIN':
       default:
         return [
           { id: 'ministry', label: 'Market Monitor', icon: Landmark },
           { id: 'intelligence', label: 'Intelligence', icon: Radio },
           { id: 'buffer', label: 'Supply & Buffer', icon: Layers },
-          { id: 'forecasting', label: 'Forecasts', icon: TrendingUp },
+          { id: 'forecasting', label: 'Price Trends', icon: TrendingUp },
           { id: 'decision', label: 'Decision Engine', icon: Scale },
         ];
     }
@@ -87,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleRoleSelect = (role: UserRole) => {
     setActiveRole(role);
-    if (role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') {
+    if (role === 'DOCA_OBSERVER' || role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') {
       setActiveTab('ministry');
     } else if (role === 'BUYER') {
       setActiveTab('marketplace');
@@ -149,19 +150,20 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-[#8E9C93]">{isBackendConnected ? 'Online' : 'Calibrated'}</span>
             </div>
 
-            {/* Compact Role Selector */}
-            <div className="flex items-center space-x-1 bg-[#1A221E] border border-[#2B3731] px-2 py-1 rounded-md text-xs">
+            {/* Compact Demo Role Selector */}
+            <div className="flex items-center space-x-1.5 bg-[#1A221E] border border-[#2B3731] px-2.5 py-1 rounded-md text-xs" title="Demo role simulation">
+              <span className="text-[10px] text-[#52796F] font-bold uppercase tracking-wider hidden xl:inline">Demo Role:</span>
               <UserCheck className="w-3.5 h-3.5 text-[#52796F] shrink-0" />
               <select
                 value={activeRole}
                 onChange={(e) => handleRoleSelect(e.target.value as UserRole)}
                 className="bg-transparent text-[#F5F7F5] font-semibold text-xs focus:outline-none cursor-pointer pr-1"
-                aria-label="Active workspace role"
+                aria-label="Demo active role"
               >
                 <option value="FARMER" className="bg-[#1A221E] text-white">Farmer / FPO</option>
-                <option value="BUYER" className="bg-[#1A221E] text-white">Buyer</option>
-                <option value="LOGISTICS" className="bg-[#1A221E] text-white">Transporter</option>
-                <option value="MINISTRY_ADMIN" className="bg-[#1A221E] text-white">Policy Workspace</option>
+                <option value="BUYER" className="bg-[#1A221E] text-white">Institutional Buyer</option>
+                <option value="LOGISTICS" className="bg-[#1A221E] text-white">Transport Operator</option>
+                <option value="DOCA_OBSERVER" className="bg-[#1A221E] text-white">DoCA Market Observer</option>
               </select>
             </div>
 

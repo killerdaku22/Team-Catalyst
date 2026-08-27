@@ -11,7 +11,8 @@ class UserRole(str, enum.Enum):
     BUYER = "BUYER"
     LOGISTICS = "LOGISTICS"
     TRANSPORTER = "TRANSPORTER"  # Alias for LOGISTICS
-    MINISTRY_ADMIN = "MINISTRY_ADMIN"
+    DOCA_OBSERVER = "DOCA_OBSERVER"  # Primary read-only government oversight role
+    MINISTRY_ADMIN = "MINISTRY_ADMIN"  # Legacy alias mapping to DOCA_OBSERVER
     GOVT_AUDITOR = "GOVT_AUDITOR"  # Alias for policy/auditor
     ADMIN = "ADMIN"
 

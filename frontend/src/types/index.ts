@@ -1,4 +1,4 @@
-export type UserRole = 'FPO' | 'FPO_MANAGER' | 'FARMER' | 'BUYER' | 'LOGISTICS' | 'TRANSPORTER' | 'MINISTRY_ADMIN' | 'GOVT_AUDITOR' | 'ADMIN';
+export type UserRole = 'FPO' | 'FPO_MANAGER' | 'FARMER' | 'BUYER' | 'LOGISTICS' | 'TRANSPORTER' | 'DOCA_OBSERVER' | 'GOVT_AUDITOR' | 'MINISTRY_ADMIN' | 'ADMIN';
 
 export interface User {
   id: number;

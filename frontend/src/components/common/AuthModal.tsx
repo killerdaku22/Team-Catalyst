@@ -11,6 +11,7 @@ import {
   ShoppingCart,
   Landmark,
   ShieldCheck,
+  Truck,
   ArrowRight
 } from 'lucide-react';
 
@@ -28,16 +29,7 @@ const SEEDED_ACCOUNTS = [
     email: 'farmer@agridirect.org',
     password: 'FarmerPass123!',
     icon: Sprout,
-    badgeColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-  },
-  {
-    role: 'FPO' as UserRole,
-    title: 'FPO Co-op Manager',
-    name: 'Kolar Farmers Co-op',
-    email: 'fpo_manager@agridirect.org',
-    password: 'FpoPass123!',
-    icon: Building2,
-    badgeColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+    badgeColor: 'bg-[#222C27] text-[#48BB78] border-[#2B3731]'
   },
   {
     role: 'BUYER' as UserRole,
@@ -46,25 +38,25 @@ const SEEDED_ACCOUNTS = [
     email: 'buyer@bigbasket.com',
     password: 'BuyerPass123!',
     icon: ShoppingCart,
-    badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'
+    badgeColor: 'bg-[#222C27] text-[#48BB78] border-[#2B3731]'
   },
   {
-    role: 'GOVT_AUDITOR' as UserRole,
-    title: 'DoCA Price Auditor',
-    name: 'Dept of Consumer Affairs',
-    email: 'auditor@doca.gov.in',
-    password: 'AuditorPass123!',
+    role: 'LOGISTICS' as UserRole,
+    title: 'Transport Operator',
+    name: 'Kisan Express Cold Chain Logistics',
+    email: 'transporter@agridirect.org',
+    password: 'TransporterPass123!',
+    icon: Truck,
+    badgeColor: 'bg-[#222C27] text-[#48BB78] border-[#2B3731]'
+  },
+  {
+    role: 'DOCA_OBSERVER' as UserRole,
+    title: 'DoCA Market Observer',
+    name: 'Dept of Consumer Affairs (Read-Only)',
+    email: 'observer@doca.gov.in',
+    password: 'ObserverPass123!',
     icon: Landmark,
-    badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30'
-  },
-  {
-    role: 'MINISTRY_ADMIN' as UserRole,
-    title: 'Ministry Administrator',
-    name: 'MoAFW Superadmin',
-    email: 'admin@agridirect.org',
-    password: 'AdminPass123!',
-    icon: ShieldCheck,
-    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+    badgeColor: 'bg-[#222C27] text-[#D97706] border-[#2B3731]'
   }
 ];
 
