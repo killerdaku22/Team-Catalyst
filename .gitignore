@@ -45,3 +45,5 @@ implementation_plan.md
 # Logs
 *.log
 npm-debug.log*
+
+.github/
