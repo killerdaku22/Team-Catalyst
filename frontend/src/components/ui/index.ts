@@ -21,6 +21,9 @@ export type { AlertVariant } from './Alert';
 
 export { EmptyState } from './EmptyState';
 
+export { ErrorState } from './ErrorState';
+export type { ErrorStateProps } from './ErrorState';
+
 export { LoadingSpinner, Skeleton, CardSkeleton, TableSkeleton, LoadingPage } from './LoadingState';
 
 export { Input, Select } from './Input';

@@ -28,6 +28,7 @@ import {
 } from 'recharts';
 import { DataProvenance } from '../ui/DataProvenance';
 import { CardSkeleton } from '../ui/LoadingState';
+import { ErrorState } from '../ui/ErrorState';
 
 export const DemandForecastView: React.FC = () => {
   const [commodity, setCommodity] = useState('Tomato');
@@ -126,8 +127,15 @@ export const DemandForecastView: React.FC = () => {
         </div>
       </div>
 
-      {loading || !forecast ? (
+      {loading ? (
         <CardSkeleton count={4} />
+      ) : !forecast ? (
+        <ErrorState
+          title="Market Forecast Temporarily Unavailable"
+          message={errorMsg || "Unable to retrieve the 14-day price forecasting projection for this commodity."}
+          onRetry={loadForecast}
+          lastSyncedTimestamp="Recently calibrated"
+        />
       ) : (
         <div className="space-y-6">
           {/* Top 4 Primary KPI Cards */}
