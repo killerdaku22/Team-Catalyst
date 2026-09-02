@@ -63,7 +63,9 @@ BUFFER_RESERVES_STORE: List[Dict[str, Any]] = [
         "reserved_minimum_tonnes": 15000.0,
         "available_for_release_tonnes": 50000.0,
         "procurement_vintage": "Rabi 2026 Procurement",
-        "condition_grade": "Grade A Sound"
+        "condition_grade": "Grade A Sound",
+        "data_classification": "SEEDED_REFERENCE",
+        "provenance_source": "DoCA Strategic Buffer Reference (NAFED Guidelines)"
     },
     {
         "silo_id": "NCCF-DEL-SILO-02",
@@ -77,7 +79,9 @@ BUFFER_RESERVES_STORE: List[Dict[str, Any]] = [
         "reserved_minimum_tonnes": 5000.0,
         "available_for_release_tonnes": 20000.0,
         "procurement_vintage": "Summer 2026 Batch",
-        "condition_grade": "Grade A Controlled Atmosphere"
+        "condition_grade": "Grade A Controlled Atmosphere",
+        "data_classification": "SEEDED_REFERENCE",
+        "provenance_source": "DoCA Strategic Buffer Reference (NCCF Guidelines)"
     },
     {
         "silo_id": "NAFED-AGR-SILO-03",
@@ -91,7 +95,9 @@ BUFFER_RESERVES_STORE: List[Dict[str, Any]] = [
         "reserved_minimum_tonnes": 20000.0,
         "available_for_release_tonnes": 70000.0,
         "procurement_vintage": "Cold Storage 2026",
-        "condition_grade": "Grade A Table"
+        "condition_grade": "Grade A Table",
+        "data_classification": "SEEDED_REFERENCE",
+        "provenance_source": "DoCA Strategic Buffer Reference (NAFED Guidelines)"
     }
 ]
 
@@ -107,7 +113,9 @@ ACTIVE_DISPATCHES_STORE: List[Dict[str, Any]] = [
         "market_price_before_release": 58.0,
         "projected_price_cooling_pct": 28.5,
         "convoy_status": "DISTRIBUTING_AT_CENTERS",
-        "timestamp": "2026-08-28 00:15:00"
+        "timestamp": "2026-08-28 00:15:00",
+        "data_classification": "DERIVED_SIMULATION",
+        "provenance_source": "DoCA MIS Convoy Dispatch Simulation"
     }
 ]
 

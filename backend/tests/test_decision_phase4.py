@@ -141,3 +141,69 @@ def test_api_decision_evaluate_endpoint(client: TestClient):
     assert data["optimal_action"] in ["SELL_NOW", "STORE", "MOVE", "SPLIT"]
     assert len(data["options_comparison"]) == 4
     assert len(data["key_decision_factors"]) >= 2
+
+def test_decision_engine_freight_sensitivity():
+    """Verify that increasing transport distance/freight reduces MOVE payoff and flips recommendation."""
+    # Near market with low freight -> MOVE is optimal
+    req_near = BatchDecisionRequestSchema(
+        commodity="Onion",
+        quantity_kg=4000.0,
+        current_local_price_per_kg=20.0,
+        shelf_life_days=20,
+        forecasted_prices=[20.0] * 14,
+        alternative_markets=[
+            {"market_name": "Near Mandi", "price_per_kg": 30.0, "distance_km": 50.0, "transit_hours": 1.5}
+        ]
+    )
+    res_near = AgriculturalDecisionEngine.evaluate_batch_decision(req_near)
+    assert res_near.optimal_action == "MOVE"
+    
+    # Same price but distant market with massive freight -> MOVE payoff plummets, flips to SELL_NOW
+    req_far = BatchDecisionRequestSchema(
+        commodity="Onion",
+        quantity_kg=4000.0,
+        current_local_price_per_kg=20.0,
+        shelf_life_days=20,
+        forecasted_prices=[20.0] * 14,
+        alternative_markets=[
+            {"market_name": "Extreme Distant Mandi", "price_per_kg": 30.0, "distance_km": 2500.0, "transit_hours": 72.0}
+        ]
+    )
+    res_far = AgriculturalDecisionEngine.evaluate_batch_decision(req_far)
+    assert res_far.optimal_action == "SELL_NOW"
+
+def test_decision_engine_spoilage_and_storage_sensitivity():
+    """Verify that high spoilage degradation or exorbitant storage fees erode STORE expected revenue."""
+    # Low spoilage (0.1%/day), cheap storage (0.02/kg/day) -> STORE is optimal
+    req_optimal_store = BatchDecisionRequestSchema(
+        commodity="Potato",
+        quantity_kg=5000.0,
+        current_local_price_per_kg=15.0,
+        shelf_life_days=60,
+        storage_cost_per_kg_day=0.02,
+        daily_spoilage_rate=0.001,
+        forecasted_prices=[15.0, 16.0, 18.0, 22.0, 26.0, 30.0],
+        alternative_markets=[]
+    )
+    res_store = AgriculturalDecisionEngine.evaluate_batch_decision(req_optimal_store)
+    assert res_store.optimal_action == "STORE"
+
+    # Same price forecast but massive spoilage (10%/day) and high storage (1.50/kg/day) -> STORE payoff severely degrades
+    req_decayed = BatchDecisionRequestSchema(
+        commodity="Potato",
+        quantity_kg=5000.0,
+        current_local_price_per_kg=15.0,
+        shelf_life_days=60,
+        storage_cost_per_kg_day=1.50,
+        daily_spoilage_rate=0.10,
+        forecasted_prices=[15.0, 16.0, 18.0, 22.0, 26.0, 30.0],
+        alternative_markets=[]
+    )
+    res_decayed = AgriculturalDecisionEngine.evaluate_batch_decision(req_decayed)
+    store_opt = next(o for o in res_store.options_comparison if o.action == "STORE")
+    store_dec = next(o for o in res_decayed.options_comparison if o.action == "STORE")
+    
+    assert store_dec.expected_net_revenue < store_opt.expected_net_revenue
+    assert res_decayed.optimal_action != "STORE"
+
+

@@ -30,6 +30,8 @@ class OSRMRoutingService:
         coord_str = ";".join([f"{round(lon, 4)},{round(lat, 4)}" for lon, lat in coordinates])
         cache_key = coord_str
         now_ts = time.time()
+        fetched_at_iso = datetime.now(timezone.utc).isoformat()
+        cached_at_iso = datetime.fromtimestamp(now_ts, timezone.utc).isoformat()
 
         if cache_key in cls._CACHE:
             cached_entry = cls._CACHE[cache_key]
@@ -54,8 +56,11 @@ class OSRMRoutingService:
                             "distance_km": round(dist_meters / 1000.0, 2),
                             "duration_minutes": round(dur_seconds / 60.0, 1),
                             "geometry": geometry,
-                            "provenance_source": "OSRM OpenStreetMap Engine",
+                            "provenance_source": "OSRM OpenStreetMap Highway Engine",
                             "provenance_status": "REAL_ROAD_NETWORK",
+                            "data_classification": "LIVE_OBSERVED",
+                            "fetched_at": fetched_at_iso,
+                            "cached_at": cached_at_iso,
                             "status": "OSRM_LIVE"
                         }
                         cls._CACHE[cache_key] = {"timestamp": now_ts, "data": route_result}
@@ -77,6 +82,9 @@ class OSRMRoutingService:
             "geometry": {"type": "LineString", "coordinates": coordinates},
             "provenance_source": "Great-Circle Haversine Geodesic Model",
             "provenance_status": "ESTIMATED_HAVERSINE",
+            "data_classification": "MODEL_OUTPUT",
+            "fetched_at": fetched_at_iso,
+            "cached_at": cached_at_iso,
             "status": "ESTIMATED_HAVERSINE"
         }
         cls._CACHE[cache_key] = {"timestamp": now_ts, "data": fallback_result}

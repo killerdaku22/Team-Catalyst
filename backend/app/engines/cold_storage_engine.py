@@ -62,6 +62,7 @@ STORAGE_FACILITIES_STORE: List[Dict[str, Any]] = [
         "base_rate_per_kg_day": 0.08,
         "doca_subsidized_rate_per_kg_day": 0.045,
         "certifications": ["WDRA_REGISTERED", "SOLAR_ASSISTED", "FSSAI_GRADE_A"],
+        "data_classification": "SEEDED_FACILITY_REFERENCE",
         "telemetry": {
             "chamber_id": "CH-KOL-01A",
             "temperature_celsius": 4.2,
@@ -72,7 +73,9 @@ STORAGE_FACILITIES_STORE: List[Dict[str, Any]] = [
             "co2_ppm": 620.0,
             "spoilage_risk_index_percent": 3.8,
             "chamber_status": "OPTIMAL",
-            "last_sensor_ping": "2026-08-28 00:30:00"
+            "last_sensor_ping": "2026-08-28 00:30:00",
+            "data_classification": "SIMULATED_IOT_TELEMETRY",
+            "telemetry_source": "WDRA Environmental Chamber Simulator"
         }
     },
     {
@@ -87,6 +90,7 @@ STORAGE_FACILITIES_STORE: List[Dict[str, Any]] = [
         "base_rate_per_kg_day": 0.075,
         "doca_subsidized_rate_per_kg_day": 0.042,
         "certifications": ["WDRA_REGISTERED", "NCDC_ASSISTED"],
+        "data_classification": "SEEDED_FACILITY_REFERENCE",
         "telemetry": {
             "chamber_id": "CH-NSK-04B",
             "temperature_celsius": 2.1,
@@ -97,7 +101,9 @@ STORAGE_FACILITIES_STORE: List[Dict[str, Any]] = [
             "co2_ppm": 890.0,
             "spoilage_risk_index_percent": 8.4,
             "chamber_status": "OPTIMAL",
-            "last_sensor_ping": "2026-08-28 00:31:00"
+            "last_sensor_ping": "2026-08-28 00:31:00",
+            "data_classification": "SIMULATED_IOT_TELEMETRY",
+            "telemetry_source": "WDRA Environmental Chamber Simulator"
         }
     },
     {
@@ -112,6 +118,7 @@ STORAGE_FACILITIES_STORE: List[Dict[str, Any]] = [
         "base_rate_per_kg_day": 0.065,
         "doca_subsidized_rate_per_kg_day": 0.038,
         "certifications": ["WDRA_REGISTERED", "FSSAI_GRADE_A"],
+        "data_classification": "SEEDED_FACILITY_REFERENCE",
         "telemetry": {
             "chamber_id": "CH-AGR-02C",
             "temperature_celsius": 7.8,
@@ -122,7 +129,9 @@ STORAGE_FACILITIES_STORE: List[Dict[str, Any]] = [
             "co2_ppm": 1420.0,
             "spoilage_risk_index_percent": 24.5,
             "chamber_status": "WARNING_ELEVATED_ETHYLENE",
-            "last_sensor_ping": "2026-08-28 00:32:00"
+            "last_sensor_ping": "2026-08-28 00:32:00",
+            "data_classification": "SIMULATED_IOT_TELEMETRY",
+            "telemetry_source": "WDRA Environmental Chamber Simulator"
         }
     }
 ]

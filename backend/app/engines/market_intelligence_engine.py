@@ -47,9 +47,11 @@ ACTIVE_INTELLIGENCE_EVENTS: List[Dict[str, Any]] = [
         "severity": "HIGH",
         "supply_impact_pct": -28.0,
         "price_shock_multiplier": 1.34,
-        "source": "IMD Agrometeorological Advisory",
+        "source": "IMD Agrometeorological Advisory (Simulation Baseline)",
         "confidence_score": 0.94,
-        "created_at": "2026-08-25 09:30:00"
+        "created_at": "2026-08-25 09:30:00",
+        "data_classification": "SEEDED_SIMULATION_SCENARIO",
+        "provenance_source": "DoCA Market Shock Scenario Planning"
     },
     {
         "id": "EVT-2026-0802",
@@ -60,9 +62,11 @@ ACTIVE_INTELLIGENCE_EVENTS: List[Dict[str, Any]] = [
         "severity": "MEDIUM",
         "supply_impact_pct": -20.0,
         "price_shock_multiplier": 1.22,
-        "source": "State APMC Logistics Directorate",
+        "source": "State APMC Logistics Directorate (Simulation Baseline)",
         "confidence_score": 0.88,
-        "created_at": "2026-08-26 14:15:00"
+        "created_at": "2026-08-26 14:15:00",
+        "data_classification": "SEEDED_SIMULATION_SCENARIO",
+        "provenance_source": "DoCA Market Shock Scenario Planning"
     },
     {
         "id": "EVT-2026-0803",
@@ -73,9 +77,11 @@ ACTIVE_INTELLIGENCE_EVENTS: List[Dict[str, Any]] = [
         "severity": "LOW",
         "supply_impact_pct": 35.0,
         "price_shock_multiplier": 0.92,
-        "source": "Punjab Mandi Board Statistics",
+        "source": "Punjab Mandi Board Statistics (Simulation Baseline)",
         "confidence_score": 0.91,
-        "created_at": "2026-08-27 10:00:00"
+        "created_at": "2026-08-27 10:00:00",
+        "data_classification": "SEEDED_SIMULATION_SCENARIO",
+        "provenance_source": "DoCA Market Shock Scenario Planning"
     }
 ]
 

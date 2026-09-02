@@ -160,7 +160,9 @@ class DemandForecastingEngine:
         """
         Execute full train/test validation, benchmark models, and return optimal 14-day projection.
         """
+        is_cold_start = False
         if not historical_records or len(historical_records) < 7:
+            is_cold_start = True
             # Domain baseline series generation for cold start
             baseline_map = {
                 "Tomato": 32.0, "Onion": 28.0, "Potato": 22.0,
@@ -314,6 +316,13 @@ class DemandForecastingEngine:
         key_drivers.append(weather_driver)
         key_drivers.append(f"Optimal Model Selected: {best_model_meta['model_name']} (Test RMSE: ₹{best_model_meta['rmse']}/qtl, MAPE: {best_model_meta['mape']}%).")
 
+        prov_text = (
+            "SYNTHETIC_COLD_START (Insufficient historical records < 7; baseline trajectory simulated)"
+            if is_cold_start
+            else "MODEL_OUTPUT (Trained on Canonical Mandi Telemetry & Evaluated via Chronological Train/Test Split)"
+        )
+        data_class = "SYNTHETIC_COLD_START_BASELINE" if is_cold_start else "HISTORICAL_BACKTESTED_INFERENCE"
+
         return {
             "commodity": commodity_name,
             "region": region,
@@ -322,6 +331,8 @@ class DemandForecastingEngine:
             "price_volatility_percent": volatility_pct,
             "forecast_horizon_days": days_ahead,
             "active_model": best_model_meta["model_name"],
+            "is_cold_start": is_cold_start,
+            "data_classification": data_class,
             "model_metrics": {
                 "mae": best_model_meta["mae"],
                 "rmse": best_model_meta["rmse"],
@@ -332,6 +343,6 @@ class DemandForecastingEngine:
             "baseline_comparison": models_benchmark,
             "demand_forecast": forecast_series,
             "key_drivers": key_drivers,
-            "data_provenance": "MODEL_OUTPUT (Trained on Normalized Mandi Telemetry & Evaluated via Backtest Split)",
+            "data_provenance": prov_text,
             "generated_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
         }
