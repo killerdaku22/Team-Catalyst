@@ -14,13 +14,13 @@ class AgmarknetService:
     CACHE_TTL_SECONDS = 300  # 5-minute cache
 
     FALLBACK_DATA: List[Dict[str, Any]] = [
-        {"state": "Punjab", "district": "Ludhiana", "mandi_name": "Ludhiana Central", "commodity": "Wheat", "variety": "Kalyan", "min_price": 2250, "max_price": 2480, "modal_price": 2380, "arrival_tonnes": 450, "record_date": "2026-08-28"},
-        {"state": "Maharashtra", "district": "Nashik", "mandi_name": "Lasalgaon Mandi", "commodity": "Onion", "variety": "Red Nashik", "min_price": 1800, "max_price": 2600, "modal_price": 2250, "arrival_tonnes": 1200, "record_date": "2026-08-28"},
-        {"state": "Uttar Pradesh", "district": "Agra", "mandi_name": "Agra Fruit & Veg Mandi", "commodity": "Potato", "variety": "Desi White", "min_price": 1400, "max_price": 1850, "modal_price": 1650, "arrival_tonnes": 800, "record_date": "2026-08-28"},
-        {"state": "Karnataka", "district": "Kolar", "mandi_name": "Kolar Tomato Market", "commodity": "Tomato", "variety": "Hybrid Red", "min_price": 2800, "max_price": 3900, "modal_price": 3400, "arrival_tonnes": 950, "record_date": "2026-08-28"},
-        {"state": "Haryana", "district": "Karnal", "mandi_name": "Karnal Grain Market", "commodity": "Rice", "variety": "Basmati 1121", "min_price": 3800, "max_price": 4600, "modal_price": 4250, "arrival_tonnes": 320, "record_date": "2026-08-28"},
-        {"state": "Delhi", "district": "Delhi", "mandi_name": "Azadpur Mandi", "commodity": "Tomato", "variety": "Local Red", "min_price": 3000, "max_price": 4200, "modal_price": 3600, "arrival_tonnes": 1100, "record_date": "2026-08-28"},
-        {"state": "Delhi", "district": "Delhi", "mandi_name": "Azadpur Mandi", "commodity": "Onion", "variety": "Nasik", "min_price": 2100, "max_price": 2800, "modal_price": 2450, "arrival_tonnes": 1500, "record_date": "2026-08-28"},
+        {"state": "Punjab", "district": "Ludhiana", "mandi_name": "Ludhiana Central", "commodity": "Wheat", "variety": "Kalyan", "min_price": 2250, "max_price": 2480, "modal_price": 2380, "arrival_tonnes": 450},
+        {"state": "Maharashtra", "district": "Nashik", "mandi_name": "Lasalgaon Mandi", "commodity": "Onion", "variety": "Red Nashik", "min_price": 1800, "max_price": 2600, "modal_price": 2250, "arrival_tonnes": 1200},
+        {"state": "Uttar Pradesh", "district": "Agra", "mandi_name": "Agra Fruit & Veg Mandi", "commodity": "Potato", "variety": "Desi White", "min_price": 1400, "max_price": 1850, "modal_price": 1650, "arrival_tonnes": 800},
+        {"state": "Karnataka", "district": "Kolar", "mandi_name": "Kolar Tomato Market", "commodity": "Tomato", "variety": "Hybrid Red", "min_price": 2800, "max_price": 3900, "modal_price": 3400, "arrival_tonnes": 950},
+        {"state": "Haryana", "district": "Karnal", "mandi_name": "Karnal Grain Market", "commodity": "Rice", "variety": "Basmati 1121", "min_price": 3800, "max_price": 4600, "modal_price": 4250, "arrival_tonnes": 320},
+        {"state": "Delhi", "district": "Delhi", "mandi_name": "Azadpur Mandi", "commodity": "Tomato", "variety": "Local Red", "min_price": 3000, "max_price": 4200, "modal_price": 3600, "arrival_tonnes": 1100},
+        {"state": "Delhi", "district": "Delhi", "mandi_name": "Azadpur Mandi", "commodity": "Onion", "variety": "Nasik", "min_price": 2100, "max_price": 2800, "modal_price": 2450, "arrival_tonnes": 1500},
     ]
 
     @classmethod
@@ -88,7 +88,7 @@ class AgmarknetService:
                 "max_price": r["max_price"] / 100.0,
                 "modal_price": r["modal_price"] / 100.0,
                 "arrival_tonnes": r["arrival_tonnes"],
-                "record_date": r["record_date"],
+                "record_date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
                 "provenance_source": "Agmarknet Historical Modal Cache",
                 "provenance_status": "CACHED_BENCHMARK",
                 "price_unit": "INR/kg"

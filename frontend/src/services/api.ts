@@ -44,8 +44,11 @@ export async function fetchListings(crop?: string, category?: string): Promise<C
   const cached = await cachedFetch<CropListing[]>(url, 15000);
   if (cached) return cached;
 
-  // Fallback Listings Data
+  // Fallback Listings Data — tagged with provenance
   return [
+    // @ts-ignore _provenance added for data lineage tracking
+    { _provenance: "OFFLINE_FALLBACK" } as any,
+  ].slice(0, 0).concat([
     {
       id: 1,
       fpo_name: "Ludhiana Agri Cooperative",
@@ -114,7 +117,7 @@ export async function fetchListings(crop?: string, category?: string): Promise<C
       location_name: "Agra Farm Hub, Uttar Pradesh",
       status: "AVAILABLE"
     }
-  ];
+  ].map(item => ({ ...item, _provenance: "OFFLINE_FALLBACK" })) as any);
 }
 
 export async function fetchPriceBreakdown(
@@ -159,6 +162,7 @@ export async function fetchPriceBreakdown(
   const consumer_savings_percent = total_consumer_cost_retail > 0 ? (consumer_savings_amount / total_consumer_cost_retail) * 100 : 0;
   
   return {
+    _provenance: "OFFLINE_FALLBACK",
     farmer_price_per_kg: Number(farmer_price.toFixed(2)),
     logistics_cost_per_kg: Number(logistics_cost.toFixed(2)),
     platform_fee_per_kg: Number(platform_fee.toFixed(2)),
@@ -197,6 +201,7 @@ export async function fetchDemandForecast(commodity: string = 'Tomato', region: 
   });
 
   return {
+    _provenance: "OFFLINE_FALLBACK",
     commodity,
     region,
     current_modal_price: base_p,
@@ -274,6 +279,7 @@ export async function evaluateBatchDecision(params: {
   const move_rev = Q * (P * 1.32) - (Q * 3.2);
 
   return {
+    _provenance: "OFFLINE_FALLBACK",
     commodity: params.commodity,
     quantity_kg: Q,
     optimal_action: store_rev > move_rev ? 'STORE' : 'MOVE',
@@ -321,6 +327,7 @@ export async function fetchBestMarketOpportunities(params: {
   const P = params.local_baseline_price_per_kg;
   const Q = params.quantity_kg;
   return {
+    _provenance: "OFFLINE_FALLBACK",
     commodity: params.commodity,
     quantity_kg: Q,
     origin_location: params.origin_location,
@@ -358,6 +365,7 @@ export async function fetchActiveMarketEvents(commodity?: string, region?: strin
 
   return [
     {
+      _provenance: "OFFLINE_FALLBACK",
       id: "EVT-2026-0801",
       title: "Unseasonal Heavy Monsoon Deluge across Nashik Onion Belt",
       category: "WEATHER_SHOCK",
@@ -371,6 +379,7 @@ export async function fetchActiveMarketEvents(commodity?: string, region?: strin
       created_at: "2026-08-25 09:30:00"
     },
     {
+      _provenance: "OFFLINE_FALLBACK",
       id: "EVT-2026-0802",
       title: "Kolar Tomato APMC Truckers Strike & Transit Blockade",
       category: "SUPPLY_DISRUPTION",
@@ -384,6 +393,7 @@ export async function fetchActiveMarketEvents(commodity?: string, region?: strin
       created_at: "2026-08-26 14:15:00"
     },
     {
+      _provenance: "OFFLINE_FALLBACK",
       id: "EVT-2026-0803",
       title: "Punjab Early Wheat Bumper Harvest Arrival Surge",
       category: "HARVEST_GLUT",
@@ -428,6 +438,7 @@ export async function simulatePolicyScenario(params: {
   const savings = outlay * 0.35;
 
   return {
+    _provenance: "OFFLINE_FALLBACK",
     scenario_title: params.scenario_title,
     policy_type: params.policy_type,
     target_commodity: params.target_commodity,
@@ -478,6 +489,7 @@ export async function optimizeRoute(
 
   // Deterministic fallback
   return {
+    _provenance: "OFFLINE_FALLBACK",
     route_waypoints: [
       { name: "Start Hub", latitude: selectedListings[0]?.latitude || 30.9010, longitude: selectedListings[0]?.longitude || 75.8573, type: "HUB" },
       ...selectedListings.map(l => ({ name: l.fpo_name, crop_name: l.crop_name, quantity_kg: l.quantity_kg, latitude: l.latitude, longitude: l.longitude, type: "PICKUP" })),
@@ -505,6 +517,7 @@ export async function fetchMinistrySummary(): Promise<MinistrySummary> {
   }
 
   return {
+    _provenance: "OFFLINE_FALLBACK",
     ministry: "Ministry of Consumer Affairs, Food & Public Distribution",
     department: "Department of Consumer Affairs (DoCA)",
     problem_statement_id: "SIH26033",
@@ -542,6 +555,7 @@ export async function fetchContracts(commodity?: string): Promise<ProcurementCon
 
   return [
     {
+      _provenance: "OFFLINE_FALLBACK",
       id: "CTR-2026-DEL-001",
       buyer_organization: "BigBasket North Regional Sourcing",
       buyer_type: "INSTITUTIONAL_BUYER",
@@ -558,6 +572,7 @@ export async function fetchContracts(commodity?: string): Promise<ProcurementCon
       created_at: "2026-08-27 08:30:00"
     },
     {
+      _provenance: "OFFLINE_FALLBACK",
       id: "CTR-2026-MUM-002",
       buyer_organization: "Reliance Fresh Maharashtra Sourcing",
       buyer_type: "INSTITUTIONAL_BUYER",
@@ -574,6 +589,7 @@ export async function fetchContracts(commodity?: string): Promise<ProcurementCon
       created_at: "2026-08-27 09:15:00"
     },
     {
+      _provenance: "OFFLINE_FALLBACK",
       id: "CTR-2026-SAF-003",
       buyer_organization: "Safal Mother Dairy Processing Unit",
       buyer_type: "FOOD_PROCESSOR",
@@ -607,6 +623,7 @@ export async function createContract(payload: any): Promise<ProcurementContract>
   }
 
   return {
+    _provenance: "OFFLINE_FALLBACK",
     id: `CTR-2026-${Math.floor(100 + Math.random() * 900)}`,
     buyer_organization: payload.buyer_organization,
     buyer_type: payload.buyer_type,
@@ -638,6 +655,7 @@ export async function acceptContract(contractId: string): Promise<ProcurementCon
   }
 
   return {
+    _provenance: "OFFLINE_FALLBACK",
     id: contractId,
     buyer_organization: "Institutional Partner",
     buyer_type: "INSTITUTIONAL_BUYER",
@@ -671,6 +689,7 @@ export async function inspectAndSettleContract(contractId: string, report: any):
   }
 
   return {
+    _provenance: "OFFLINE_FALLBACK",
     contract_id: contractId,
     gross_payout_inr: 160000.0,
     quality_deductions_inr: 0.0,

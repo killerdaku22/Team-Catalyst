@@ -24,6 +24,7 @@ export interface CropListing {
   longitude: number;
   location_name: string;
   status: 'AVAILABLE' | 'POOLED' | 'SOLD';
+  _provenance?: string;
 }
 
 export interface PriceBreakdown {
@@ -43,6 +44,7 @@ export interface PriceBreakdown {
   consumer_savings_percent: number;
   eliminated_middleman_margin_per_kg: number;
   disintermediation_efficiency_score: number;
+  _provenance?: string;
 }
 
 export interface ForecastPoint {
@@ -89,6 +91,7 @@ export interface DemandForecast {
   };
   data_provenance?: string;
   generated_at: string;
+  _provenance?: string;
 }
 
 export interface OptionPayoff {
@@ -123,6 +126,7 @@ export interface BatchDecisionResult {
     optimized_rem_kg: number;
     target: string;
   } | null;
+  _provenance?: string;
 }
 
 export interface MarketOpportunityItem {
@@ -157,6 +161,7 @@ export interface OpportunityRankingResult {
   max_net_uplift_pct: number;
   ranked_opportunities: MarketOpportunityItem[];
   insights: string[];
+  _provenance?: string;
 }
 
 export interface MarketEvent {
@@ -171,6 +176,7 @@ export interface MarketEvent {
   source: string;
   confidence_score: number;
   created_at: string;
+  _provenance?: string;
 }
 
 export interface PolicyScenarioResult {
@@ -187,6 +193,7 @@ export interface PolicyScenarioResult {
   market_distortion_risk: 'LOW' | 'MODERATE' | 'HIGH';
   tradeoff_analysis: string[];
   implementation_recommendation: string;
+  _provenance?: string;
 }
 
 export interface RouteWaypoint {
@@ -211,6 +218,7 @@ export interface VRPResult {
   co2_saved_kg: number;
   spoilage_risk_percent: number;
   osrm_geometry?: any;
+  _provenance?: string;
 }
 
 export interface QualityInspectionReport {
@@ -231,6 +239,7 @@ export interface SettlementBreakdown {
   net_fpo_payout_inr: number;
   disintermediation_savings_vs_mandi_inr: number;
   status: string;
+  _provenance?: string;
 }
 
 export interface ProcurementContract {
@@ -252,12 +261,14 @@ export interface ProcurementContract {
   created_at: string;
   inspection_report?: QualityInspectionReport | null;
   settlement?: SettlementBreakdown | null;
+  _provenance?: string;
 }
 
 export interface MinistrySummary {
   ministry: string;
   department: string;
   problem_statement_id: string;
+  data_provenance?: string;
   macro_metrics: {
     total_farmer_earnings_uplift_inr: number;
     total_consumer_savings_inr: number;
@@ -275,4 +286,5 @@ export interface MinistrySummary {
     active_routes: number;
     price_variance_reduction: string;
   }>;
+  _provenance?: string;
 }
