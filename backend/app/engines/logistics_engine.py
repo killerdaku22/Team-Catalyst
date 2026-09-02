@@ -43,15 +43,48 @@ class OptimizedRouteResult(BaseModel):
     spoilage_risk_percent: float
     total_trip_freight_cost_inr: float
     fpo_cost_allocations: List[FPOCostAllocation]
+    # PR-15 Load Consolidation & Dynamic Dispatch Fields
+    vehicle_id: Optional[str] = "VEH-01"
+    dispatch_status: Optional[str] = "DISPATCH_NOW"
+    total_input_kg: Optional[float] = None
+    total_dispatched_kg: Optional[float] = None
+    total_unassigned_kg: Optional[float] = 0.0
+    unassigned_pickups: Optional[List[Dict[str, Any]]] = []
+    dispatch_viability: Optional[Dict[str, Any]] = None
+    fleet_vehicles_required: Optional[int] = 1
 
     def __getitem__(self, item):
         return getattr(self, item)
 
+# Commodity temperature and handling compatibility groupings
+CROP_COMPATIBILITY_CATEGORIES: Dict[str, str] = {
+    "Tomato": "CHILLED_PERISHABLE",
+    "Capsicum": "CHILLED_PERISHABLE",
+    "Spinach": "CHILLED_PERISHABLE",
+    "Strawberry": "CHILLED_PERISHABLE",
+    "Potato": "AMBIENT_ROOT",
+    "Onion": "AMBIENT_ROOT",
+    "Wheat": "DRY_GRAIN",
+    "Rice": "DRY_GRAIN",
+    "Paddy": "DRY_GRAIN",
+    "Produce": "GENERAL_AGRI"
+}
+
 class LogisticsOptimizationEngine:
     """
     Smart Multi-Stop Logistics & Pooling Engine for SIH26033.
-    Solves Capacitated Vehicle Routing Problem (CVRP) with Nearest-Neighbor + 2-Opt heuristic.
+    Solves Capacitated Vehicle Routing Problem (CVRP) with Nearest-Neighbor + 2-Opt heuristic,
+    multi-vehicle fleet sizing, and dynamic dispatch viability evaluation.
     """
+
+    @classmethod
+    def check_crop_compatibility(cls, crop_a: str, crop_b: str) -> bool:
+        """Determines if two produce types can share an unpartitioned cargo chamber."""
+        cat_a = CROP_COMPATIBILITY_CATEGORIES.get(crop_a, "GENERAL_AGRI")
+        cat_b = CROP_COMPATIBILITY_CATEGORIES.get(crop_b, "GENERAL_AGRI")
+        if cat_a == "GENERAL_AGRI" or cat_b == "GENERAL_AGRI":
+            return True
+        return cat_a == cat_b
 
     @staticmethod
     def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -139,20 +172,79 @@ class LogisticsOptimizationEngine:
             }
             return OptimizedRouteResult(**empty_res) if is_pydantic_req else empty_res
 
-        # Capacity Bounding: Filter pickups that fit within maximum truck payload
+        # Total Input Quantity Calculation for Strict Conservation Auditing
+        total_input_kg = round(sum(
+            float(p.get("quantity_kg", 500.0) if isinstance(p, dict) else getattr(p, "quantity_kg", 500.0))
+            for p in pickups_in
+        ), 1)
+
+        # Capacity Bounding & Detour Economic Filter
         current_load = 0.0
         selected_pickups: List[Dict[str, Any]] = []
+        unassigned_pickups: List[Dict[str, Any]] = []
+
         for p in pickups_in:
             p_dict = p.dict() if hasattr(p, 'dict') else dict(p)
             p_weight = float(p_dict.get("quantity_kg", 500.0))
+
+            # Detour Economic Validation
+            if selected_pickups and p_weight < 1500.0:
+                prev_stop = selected_pickups[-1]
+                direct_km = cls.haversine_distance(prev_stop["latitude"], prev_stop["longitude"], dest_in["latitude"], dest_in["longitude"])
+                detour_km = (cls.haversine_distance(prev_stop["latitude"], prev_stop["longitude"], p_dict["latitude"], p_dict["longitude"]) +
+                             cls.haversine_distance(p_dict["latitude"], p_dict["longitude"], dest_in["latitude"], dest_in["longitude"]))
+                added_km = max(0.0, detour_km - direct_km)
+                incremental_cost = added_km * rate_per_km
+                cost_per_kg_detour = incremental_cost / p_weight if p_weight > 0 else 0.0
+                
+                # If detour freight cost > ₹6.0/kg and added distance > 50km, detour is economically prohibitive
+                if added_km > 50.0 and cost_per_kg_detour > 6.0:
+                    unassigned_copy = dict(p_dict)
+                    unassigned_copy["reason"] = "DETOUR_FREIGHT_EXCEEDS_ECONOMIC_TOLERANCE"
+                    unassigned_pickups.append(unassigned_copy)
+                    continue
+
+            # Capacity Invariant Check: Never exceed max_cap
             if current_load + p_weight <= max_cap:
                 current_load += p_weight
                 selected_pickups.append(p_dict)
+            elif current_load < max_cap:
+                # Partial allocation: Fill vehicle to 100% and preserve remainder
+                available_space = round(max_cap - current_load, 1)
+                if available_space > 0:
+                    accepted_part = dict(p_dict)
+                    accepted_part["quantity_kg"] = available_space
+                    selected_pickups.append(accepted_part)
 
-        if not selected_pickups:
+                    remainder_part = dict(p_dict)
+                    remainder_part["quantity_kg"] = round(p_weight - available_space, 1)
+                    remainder_part["reason"] = "PARTIAL_DISPATCH_REMAINDER_QUEUED"
+                    unassigned_pickups.append(remainder_part)
+                    current_load = max_cap
+            else:
+                # Vehicle full: queue remaining shipment without dropping
+                unassigned_copy = dict(p_dict)
+                unassigned_copy["reason"] = "EXCEEDS_SINGLE_VEHICLE_CAPACITY_QUEUED"
+                unassigned_pickups.append(unassigned_copy)
+
+        # Fallback safety: If single stop is submitted, bound it to max_cap
+        if not selected_pickups and pickups_in:
             first_p = pickups_in[0]
-            selected_pickups.append(first_p.dict() if hasattr(first_p, 'dict') else dict(first_p))
-            current_load = selected_pickups[0].get("quantity_kg", 500.0)
+            first_dict = first_p.dict() if hasattr(first_p, 'dict') else dict(first_p)
+            first_weight = float(first_dict.get("quantity_kg", 500.0))
+            if first_weight > max_cap:
+                first_copy = dict(first_dict)
+                first_copy["quantity_kg"] = max_cap
+                selected_pickups.append(first_copy)
+                current_load = max_cap
+
+                rem_copy = dict(first_dict)
+                rem_copy["quantity_kg"] = round(first_weight - max_cap, 1)
+                rem_copy["reason"] = "OVERSIZED_BATCH_SPLIT_FOR_SECONDARY_VEHICLE"
+                unassigned_pickups.append(rem_copy)
+            else:
+                selected_pickups.append(first_dict)
+                current_load = first_weight
 
         # Nearest-Neighbor Initial Route
         unvisited = list(selected_pickups)
@@ -238,6 +330,22 @@ class LogisticsOptimizationEngine:
                 savings_percent=savings_pct
             ))
 
+        # Integrated Dispatch Viability Evaluation
+        viability = cls.evaluate_dispatch_timing(
+            current_load_kg=current_load,
+            max_capacity_kg=max_cap,
+            total_trip_cost_inr=total_trip_cost,
+            crop_price_per_kg=25.0,
+            daily_spoilage_rate=0.005,
+            storage_rate_per_day=0.08,
+            expected_wait_days=2,
+            expected_additional_volume_kg=max(0.0, max_cap - current_load)
+        )
+        dispatch_status = viability.get("recommended_action", "DISPATCH_NOW")
+
+        total_unassigned = round(sum(float(u.get("quantity_kg", 0.0)) for u in unassigned_pickups), 1)
+        fleet_req = max(1, math.ceil(total_input_kg / max_cap)) if max_cap > 0 else 1
+
         res = OptimizedRouteResult(
             route_waypoints=optimized_waypoints,
             stops_count=len(optimized_waypoints),
@@ -249,7 +357,15 @@ class LogisticsOptimizationEngine:
             co2_saved_kg=co2_saved,
             spoilage_risk_percent=spoilage_risk_pct,
             total_trip_freight_cost_inr=total_trip_cost,
-            fpo_cost_allocations=allocations
+            fpo_cost_allocations=allocations,
+            vehicle_id="VEH-01",
+            dispatch_status=dispatch_status,
+            total_input_kg=total_input_kg,
+            total_dispatched_kg=round(current_load, 1),
+            total_unassigned_kg=total_unassigned,
+            unassigned_pickups=unassigned_pickups,
+            dispatch_viability=viability,
+            fleet_vehicles_required=fleet_req
         )
         return res if is_pydantic_req else res.dict()
 
@@ -305,4 +421,88 @@ class LogisticsOptimizationEngine:
                 if dispatch_now_optimal else
                 f"Waiting {expected_wait_days} days for +{expected_additional_volume_kg}kg saves ₹{round(total_freight_savings_waiting, 2)} in freight, exceeding holding costs."
             )
+        }
+
+    @classmethod
+    def plan_multi_vehicle_fleet(
+        cls,
+        pickups: List[Dict[str, Any]],
+        destination: Dict[str, Any],
+        max_vehicle_capacity_kg: float = 10000.0,
+        cost_per_km_freight_inr: float = 28.0
+    ) -> Dict[str, Any]:
+        """
+        Solves multi-vehicle CVRP bin-packing across a fleet when total pooled
+        supply exceeds single-vehicle payload, guaranteeing 100% quantity conservation.
+        """
+        if not pickups:
+            return {"fleet_size": 0, "total_input_kg": 0.0, "total_dispatched_kg": 0.0, "quantity_conservation_verified": True, "fleet_vehicles": []}
+
+        total_input_kg = sum(float(p.get("quantity_kg", 500.0)) for p in pickups)
+        remaining_pool = [dict(p) for p in pickups]
+        fleet_routes: List[Any] = []
+        veh_counter = 1
+
+        while remaining_pool:
+            current_bin: List[Dict[str, Any]] = []
+            bin_weight = 0.0
+            unpacked: List[Dict[str, Any]] = []
+
+            for p in remaining_pool:
+                p_weight = float(p.get("quantity_kg", 500.0))
+                if bin_weight + p_weight <= max_vehicle_capacity_kg:
+                    bin_weight += p_weight
+                    current_bin.append(p)
+                elif bin_weight < max_vehicle_capacity_kg:
+                    available = round(max_vehicle_capacity_kg - bin_weight, 1)
+                    if available > 0:
+                        part_a = dict(p)
+                        part_a["quantity_kg"] = available
+                        current_bin.append(part_a)
+
+                        part_b = dict(p)
+                        part_b["quantity_kg"] = round(p_weight - available, 1)
+                        unpacked.append(part_b)
+                        bin_weight = max_vehicle_capacity_kg
+                else:
+                    unpacked.append(p)
+
+            if not current_bin and unpacked:
+                first = unpacked.pop(0)
+                first_wt = float(first.get("quantity_kg", 500.0))
+                if first_wt > max_vehicle_capacity_kg:
+                    part_a = dict(first)
+                    part_a["quantity_kg"] = max_vehicle_capacity_kg
+                    current_bin.append(part_a)
+
+                    part_b = dict(first)
+                    part_b["quantity_kg"] = round(first_wt - max_vehicle_capacity_kg, 1)
+                    unpacked.insert(0, part_b)
+                else:
+                    current_bin.append(first)
+
+            route_res = cls.optimize_pooled_route(
+                pickups=current_bin,
+                destination=destination,
+                max_vehicle_capacity_kg=max_vehicle_capacity_kg,
+                cost_per_km_freight_inr=cost_per_km_freight_inr
+            )
+            if hasattr(route_res, "vehicle_id"):
+                route_res.vehicle_id = f"VEH-{veh_counter:02d}"
+            fleet_routes.append(route_res)
+            veh_counter += 1
+            remaining_pool = unpacked
+
+        total_dispatched = sum(r.total_weight_kg if hasattr(r, "total_weight_kg") else r["total_weight_kg"] for r in fleet_routes)
+        total_fleet_cost = sum(r.total_trip_freight_cost_inr if hasattr(r, "total_trip_freight_cost_inr") else r["total_trip_freight_cost_inr"] for r in fleet_routes)
+        total_co2_saved = sum(r.co2_saved_kg if hasattr(r, "co2_saved_kg") else r["co2_saved_kg"] for r in fleet_routes)
+
+        return {
+            "fleet_size": len(fleet_routes),
+            "total_input_kg": round(total_input_kg, 1),
+            "total_dispatched_kg": round(total_dispatched, 1),
+            "quantity_conservation_verified": round(total_dispatched, 1) == round(total_input_kg, 1),
+            "total_fleet_freight_cost_inr": round(total_fleet_cost, 2),
+            "total_fleet_co2_saved_kg": round(total_co2_saved, 2),
+            "fleet_vehicles": fleet_routes
         }
