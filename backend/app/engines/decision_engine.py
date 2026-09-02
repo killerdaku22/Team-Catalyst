@@ -34,7 +34,7 @@ class DecisionRecommendationResult(BaseModel):
     recommendation_summary: str
     key_decision_factors: List[str]
     options_comparison: List[OptionPayoff]
-    split_allocation: Optional[Dict[str, float]] = None
+    split_allocation: Optional[Dict[str, Any]] = None
 
 class AgriculturalDecisionEngine:
     """
@@ -206,9 +206,14 @@ class AgriculturalDecisionEngine:
 
         all_options = [sell_now_payoff, store_payoff, move_payoff, split_payoff]
 
-        # Determine Winner based on maximum net revenue with feasibility filter
+        # Determine Winner based on maximum net revenue with feasibility and liquidity constraints
         feasible_options = [o for o in all_options if o.feasibility == "FEASIBLE"]
-        winner = max(feasible_options, key=lambda o: o.expected_net_revenue)
+        if req.min_cash_need_pct >= 90.0:
+            winner = sell_now_payoff
+        elif req.min_cash_need_pct > 0.0 and split_payoff.revenue_uplift_vs_sell_now > 0.0 and split_payoff.feasibility == "FEASIBLE":
+            winner = split_payoff
+        else:
+            winner = max(feasible_options, key=lambda o: o.expected_net_revenue)
 
         # Generate Explainable Recommendation Drivers
         factors = []

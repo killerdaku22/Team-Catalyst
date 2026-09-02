@@ -252,3 +252,57 @@ class LogisticsOptimizationEngine:
             fpo_cost_allocations=allocations
         )
         return res if is_pydantic_req else res.dict()
+
+    @classmethod
+    def evaluate_dispatch_timing(
+        cls,
+        current_load_kg: float,
+        max_capacity_kg: float,
+        total_trip_cost_inr: float,
+        crop_price_per_kg: float,
+        daily_spoilage_rate: float = 0.005,
+        storage_rate_per_day: float = 0.08,
+        expected_wait_days: int = 2,
+        expected_additional_volume_kg: float = 2000.0
+    ) -> Dict[str, Any]:
+        """
+        Evaluates whether immediate partial-load dispatch is economically superior
+        to waiting for additional pooled volume, balancing freight reduction against
+        holding spoilage and storage degradation.
+        """
+        if current_load_kg <= 0:
+            return {"recommended_action": "HOLD_EMPTY", "is_viable_to_dispatch_now": False}
+
+        current_freight_per_kg = total_trip_cost_inr / current_load_kg
+        projected_total_load = min(max_capacity_kg, current_load_kg + expected_additional_volume_kg)
+        projected_freight_per_kg = total_trip_cost_inr / projected_total_load if projected_total_load > 0 else current_freight_per_kg
+
+        # Marginal freight savings if waiting
+        marginal_freight_savings_per_kg = max(0.0, current_freight_per_kg - projected_freight_per_kg)
+        total_freight_savings_waiting = current_load_kg * marginal_freight_savings_per_kg
+
+        # Marginal degradation and holding cost if waiting
+        spoilage_loss_waiting = current_load_kg * crop_price_per_kg * (daily_spoilage_rate * expected_wait_days)
+        storage_cost_waiting = current_load_kg * storage_rate_per_day * expected_wait_days
+        total_degradation_loss_waiting = spoilage_loss_waiting + storage_cost_waiting
+
+        net_waiting_benefit = total_freight_savings_waiting - total_degradation_loss_waiting
+        dispatch_now_optimal = net_waiting_benefit <= 0.0 or (current_load_kg / max_capacity_kg) >= 0.85
+
+        action = "DISPATCH_NOW" if dispatch_now_optimal else "WAIT_FOR_POOLING"
+        
+        return {
+            "recommended_action": action,
+            "is_viable_to_dispatch_now": dispatch_now_optimal,
+            "current_capacity_utilization_pct": round((current_load_kg / max_capacity_kg) * 100.0, 1),
+            "current_freight_per_kg": round(current_freight_per_kg, 2),
+            "projected_freight_if_waiting_per_kg": round(projected_freight_per_kg, 2),
+            "projected_freight_savings_waiting_inr": round(total_freight_savings_waiting, 2),
+            "projected_spoilage_and_storage_cost_waiting_inr": round(total_degradation_loss_waiting, 2),
+            "net_waiting_payoff_inr": round(net_waiting_benefit, 2),
+            "economic_rationale": (
+                f"Immediate dispatch optimal: Spoilage & holding loss (₹{round(total_degradation_loss_waiting, 2)}) exceeds freight savings from waiting."
+                if dispatch_now_optimal else
+                f"Waiting {expected_wait_days} days for +{expected_additional_volume_kg}kg saves ₹{round(total_freight_savings_waiting, 2)} in freight, exceeding holding costs."
+            )
+        }

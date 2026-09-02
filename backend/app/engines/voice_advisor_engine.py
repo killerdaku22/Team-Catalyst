@@ -35,20 +35,21 @@ SUPPORTED_LANGUAGES = [
 ]
 
 COMMODITY_ALIASES = {
-    "tomato": ["tomato", "tamatar", "टमाटर", "टोमॅटो", "ਟਮਾਟਰ", "టమాట", "தக்காளி", "ಟೊಮೆಟೊ"],
-    "onion": ["onion", "pyaz", "pyaaz", "kanda", "कांदा", "कांद", "प्याज", "ਗੰਢਾ", "ఉల్లిపాయ", "வெங்காயம்", "ಈರುಳ್ಳಿ"],
-    "potato": ["potato", "aloo", "alu", "बटाटा", "आलू", "ਆਲੂ", "బంగాళాదుంప", "உருளைக்கிழங்கு", "ಆಲೂಗಡ್ಡೆ"],
-    "wheat": ["wheat", "gehun", "gehu", "गहू", "गेहूं", "ਕਣਕ", "గోధుమలు", "கோதுமை", "ಗೋಧಿ"]
+    "tomato": ["tomato", "tamatar", "tamata", "thakkali", "टमाटर", "टोमॅटो", "ਟਮਾਟਰ", "టమాట", "தக்காளி", "ಟೊಮೆಟೊ"],
+    "onion": ["onion", "pyaz", "pyaaz", "kanda", "vengayam", "vengaya", "eerulli", "कांदा", "कांद", "प्याज", "ਗੰਢਾ", "ఉల్లిపాయ", "வெங்காயம்", "வெங்காய", "ಈರುಳ್ಳಿ"],
+    "potato": ["potato", "aloo", "alu", "batata", "urulaikizhangu", "aloogadde", "बटाटा", "आलू", "ਆਲੂ", "బంగాళాదుంప", "உருளைக்கிழங்கு", "ಆಲೂಗಡ್ಡೆ"],
+    "wheat": ["wheat", "gehun", "gehu", "kanak", "godhumai", "godhumalu", "godhi", "गहू", "गेहूं", "ਕਣਕ", "గోధుమలు", "கோதுமை", "ಗೋಧಿ"],
+    "rice": ["rice", "chawal", "arisi", "vari", "akki", "bhaat", "चावल", "भात", "ਚੌਲ", "బియ్యం", "அரிசி", "ಅಕ್ಕಿ"]
 }
 
 VERNACULAR_COMMODITY_NAMES = {
-    "hi": {"Tomato": "टमाटर", "Onion": "प्याज", "Potato": "आलू", "Wheat": "गेहूं"},
-    "mr": {"Tomato": "टोमॅटो", "Onion": "कांदा", "Potato": "बटाटा", "Wheat": "गहू"},
-    "pa": {"Tomato": "ਟਮਾਟਰ", "Onion": "ਗੰਢਾ", "Potato": "ਆਲੂ", "Wheat": "ਕਣਕ"},
-    "te": {"Tomato": "టమాట", "Onion": "ఉల్లిపాయ", "Potato": "బంగాళాదుంప", "Wheat": "గోధుమలు"},
-    "ta": {"Tomato": "தக்காளி", "Onion": "வெங்காயம்", "Potato": "உருளைக்கிழங்கு", "Wheat": "கோதுமை"},
-    "kn": {"Tomato": "ಟೊಮೆಟೊ", "Onion": "ಈರುಳ್ಳಿ", "Potato": "ಆಲೂಗಡ್ಡೆ", "Wheat": "ಗೋಧಿ"},
-    "en": {"Tomato": "Tomato", "Onion": "Onion", "Potato": "Potato", "Wheat": "Wheat"}
+    "hi": {"Tomato": "टमाटर", "Onion": "प्याज", "Potato": "आलू", "Wheat": "गेहूं", "Rice": "चावल"},
+    "mr": {"Tomato": "टोमॅटो", "Onion": "कांदा", "Potato": "बटाटा", "Wheat": "गहू", "Rice": "भात"},
+    "pa": {"Tomato": "ਟਮਾਟਰ", "Onion": "ਗੰਢਾ", "Potato": "ਆਲੂ", "Wheat": "ਕਣਕ", "Rice": "ਚੌਲ"},
+    "te": {"Tomato": "టమాట", "Onion": "ఉల్లిపాయ", "Potato": "బంగాళాదుంప", "Wheat": "గోధుమలు", "Rice": "బియ్యం"},
+    "ta": {"Tomato": "தக்காளி", "Onion": "வெங்காயம்", "Potato": "உருளைக்கிழங்கு", "Wheat": "கோதுமை", "Rice": "அரிசி"},
+    "kn": {"Tomato": "ಟೊಮೆಟೊ", "Onion": "ಈರುಳ್ಳಿ", "Potato": "ಆಲೂಗಡ್ಡೆ", "Wheat": "ಗೋಧಿ", "Rice": "ಅಕ್ಕಿ"},
+    "en": {"Tomato": "Tomato", "Onion": "Onion", "Potato": "Potato", "Wheat": "Wheat", "Rice": "Rice"}
 }
 
 class VoiceAdvisorEngine:
