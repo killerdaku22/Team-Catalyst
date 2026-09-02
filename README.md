@@ -25,6 +25,19 @@
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License"/>
 </p>
 
+<div align="center">
+
+### 🌐 Live Production Deployments & Links
+
+| Service | Environment | Live URL |
+|:---|:---:|:---|
+| **Frontend Web Application** | Vercel (Production) | [**https://team-catalyst-mu.vercel.app**](https://team-catalyst-mu.vercel.app/) |
+| **Backend REST Engine** | Render (Production) | [**https://agridirect-backend-ogxs.onrender.com**](https://agridirect-backend-ogxs.onrender.com) |
+| **Interactive OpenAPI Docs** | Swagger UI | [**https://agridirect-backend-ogxs.onrender.com/docs**](https://agridirect-backend-ogxs.onrender.com/docs) |
+| **Source Repository** | GitHub | [**killerdaku22/Team-Catalyst**](https://github.com/killerdaku22/Team-Catalyst) |
+
+</div>
+
 ---
 
 ## 📋 Table of Contents
