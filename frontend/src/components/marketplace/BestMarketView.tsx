@@ -95,7 +95,7 @@ export const BestMarketView: React.FC<BestMarketViewProps> = ({
             <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
               Spatial Price Arbitrage Engine
             </span>
-            <DataProvenance source="Verified Agmarknet Real-time Feeds & GIS Matrices" status="MODEL_OUTPUT" />
+            <DataProvenance source="Agmarknet Benchmark Data & OSRM Logistics" status="MODEL_OUTPUT" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
             Market Destination Optimizer

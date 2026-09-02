@@ -374,7 +374,7 @@ export async function fetchActiveMarketEvents(commodity?: string, region?: strin
       severity: "HIGH",
       supply_impact_pct: -28.0,
       price_shock_multiplier: 1.34,
-      source: "IMD Agrometeorological Advisory",
+      source: "Agrometeorological Advisory (Simulation Scenario)",
       confidence_score: 0.94,
       created_at: "2026-08-25 09:30:00"
     },

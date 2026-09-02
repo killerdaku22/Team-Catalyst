@@ -87,8 +87,8 @@ export const MarketIntelligenceView: React.FC = () => {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <span className="text-amber-400 font-mono text-xs font-bold uppercase tracking-widest flex items-center space-x-1.5">
-              <Radio className="w-3.5 h-3.5 animate-pulse" />
-              <span>Real-Time Market Intelligence & Shock Multipliers</span>
+              <Radio className="w-3.5 h-3.5" />
+              <span>Regional Market Shocks & Disruption Simulation</span>
             </span>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
               MARKET INTELLIGENCE
@@ -98,7 +98,7 @@ export const MarketIntelligenceView: React.FC = () => {
             </p>
           </div>
 
-          <DataProvenance source="IMD + DoCA Price Monitoring Cell" status="OBSERVED" />
+          <DataProvenance source="Open-Meteo + DoCA Scenario Intelligence" status="MODEL_OUTPUT" />
         </div>
 
         {/* Filters and Search Toolbar */}

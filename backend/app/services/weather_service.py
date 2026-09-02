@@ -70,14 +70,14 @@ class WeatherService:
         except Exception:
             pass
 
-        # Robust Regional Meteorological Fallback (Climatological Normal)
+        # Robust Regional Meteorological Fallback (Climatological Normal Reference)
         fallback_result = {
             "temperature_celsius": 29.2,
             "relative_humidity_percent": 68.0,
             "rainfall_mm": 0.0,
             "spoilage_risk_index": 1.25,
             "recommended_cold_chain": True,
-            "provenance_source": "IMD Agro-Climatic Normal Benchmark",
+            "provenance_source": "Climatological Reference Benchmark",
             "provenance_status": "CACHED_BENCHMARK",
             "data_classification": "REFERENCE",
             "observed_at": "CLIMATOLOGICAL_NORMAL_REFERENCE",

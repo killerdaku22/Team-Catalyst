@@ -40,10 +40,10 @@ const statusConfig: Record<ProvenanceStatus, {
     defaultMethod: 'Trimmed modal price with IQR outlier filtering across verified APMC arrivals.'
   },
   LIVE: { 
-    label: 'Live Mandi Stream', 
+    label: 'Verified Mandi Stream', 
     colorClass: 'text-emerald-300 bg-emerald-950/40 border-emerald-700/60',
     dotColor: 'bg-emerald-400',
-    defaultMethod: 'Real-time Agmarknet commodity arrival feed with band validation.'
+    defaultMethod: 'Agmarknet commodity arrival benchmark feed with band validation.'
   },
   HISTORICAL: { 
     label: 'Historical Benchmark', 

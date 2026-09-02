@@ -140,11 +140,11 @@ export const BufferStockView: React.FC = () => {
             <span className="bg-[#222C27] text-[#D97706] text-xs px-2.5 py-1 rounded-full font-mono font-semibold border border-[#2B3731]">
               DoCA National Food Security & Market Intervention Scheme (MIS)
             </span>
-            <DataProvenance source="NAFED / FCI Strategic Silo Registry" status="LIVE" />
+            <DataProvenance source="DoCA Strategic Buffer Reference (NAFED/NCCF Guidelines)" status="HISTORICAL" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Strategic Buffer Stock & Price Stabilization</h1>
           <p className="text-xs text-[#8E9C93] leading-relaxed max-w-xl">
-            Real-time tracking of NAFED and NCCF strategic reserves with automated convoy dispatches to cool inflationary retail price spikes.
+            Monitoring of NAFED and NCCF strategic buffer stock with automated convoy dispatch simulation to evaluate market cooling interventions.
           </p>
 
           <div>

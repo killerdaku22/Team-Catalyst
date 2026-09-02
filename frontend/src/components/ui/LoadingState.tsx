@@ -112,7 +112,7 @@ interface LoadingPageProps {
 
 export const LoadingPage: React.FC<LoadingPageProps> = ({
   message = 'Loading agricultural market data...',
-  submessage = 'Connecting to real-time mandi feeds & analytics engine'
+  submessage = 'Connecting to mandi market intelligence & analytics engine'
 }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[360px] gap-3 glass-panel rounded-3xl p-8 border border-slate-800 animate-fadeIn">

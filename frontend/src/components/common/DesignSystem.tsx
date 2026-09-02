@@ -301,7 +301,7 @@ export const DesignSystem: React.FC = () => {
             <DataProvenance source="AGMARKNET / CEDA" updatedAt="2026-08-23 14:30 IST" />
           </div>
           <div>
-            <DataProvenance source="IMD / Open-Meteo" updatedAt="2026-08-23 12:00 IST" />
+            <DataProvenance source="Open-Meteo Weather" updatedAt="2026-08-23 12:00 IST" />
           </div>
           <div>
             <DataProvenance source="Synthetic simulation" simulated />
@@ -478,7 +478,7 @@ export const DesignSystem: React.FC = () => {
               <ul className="text-ad-body-sm space-y-2" style={{ color: 'var(--ad-text-secondary)' }}>
                 <li>• <strong>Arrivals:</strong> Below-average mandi arrivals in Delhi-NCR over the past 7 days.</li>
                 <li>• <strong>Historical trend:</strong> Tomato prices typically rise 8–12% in late August.</li>
-                <li>• <strong>Weather:</strong> IMD forecasts above-average rainfall in Karnataka, potentially disrupting supply.</li>
+                <li>• <strong>Weather:</strong> High ambient moisture and humidity in southern belts, accelerating perishability.</li>
                 <li>• <strong>Demand:</strong> Festive season demand surge expected in metro markets.</li>
               </ul>
             </div>

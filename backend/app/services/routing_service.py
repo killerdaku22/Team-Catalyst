@@ -57,8 +57,8 @@ class OSRMRoutingService:
                             "duration_minutes": round(dur_seconds / 60.0, 1),
                             "geometry": geometry,
                             "provenance_source": "OSRM OpenStreetMap Highway Engine",
-                            "provenance_status": "REAL_ROAD_NETWORK",
-                            "data_classification": "LIVE_OBSERVED",
+                            "provenance_status": "LIVE_ROAD_NETWORK",
+                            "data_classification": "LIVE_ROUTING",
                             "fetched_at": fetched_at_iso,
                             "cached_at": cached_at_iso,
                             "status": "OSRM_LIVE"

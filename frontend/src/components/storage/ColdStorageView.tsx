@@ -126,13 +126,13 @@ export const ColdStorageView: React.FC = () => {
         <div className="lg:col-span-8 space-y-3">
           <div className="flex items-center space-x-2">
             <span className="bg-[#222C27] text-[#48BB78] text-xs px-2.5 py-1 rounded-full font-mono font-semibold border border-[#2B3731]">
-              WDRA Certified Cold Logistics & IoT Telemetry
+              WDRA Standard Cold Logistics & IoT Simulation
             </span>
-            <DataProvenance source="WDRA / NCCD Real-Time Chamber Sensors" status="LIVE" />
+            <DataProvenance source="WDRA Environmental Chamber Simulator" status="MODEL_OUTPUT" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Cold Storage IoT Telemetry & Early Warning</h1>
           <p className="text-xs text-[#8E9C93] leading-relaxed max-w-xl">
-            Real-time IoT chamber telemetry stream (Temperature, Humidity, Ethylene, CO₂) with automated DoCA power tariff subsidies for FPOs.
+            Chamber environmental telemetry simulation (Temperature, Humidity, Ethylene, CO₂) with automated DoCA power tariff subsidies for FPOs.
           </p>
 
           {/* State Filter Buttons */}

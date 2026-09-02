@@ -482,14 +482,14 @@ export const MinistryAdminView: React.FC = () => {
           <div>
             <div className="flex items-center space-x-2">
               <span className="bg-amber-500/20 text-amber-400 text-xs px-2.5 py-1 rounded-full font-mono font-semibold">
-                Real-Time Intelligence Network
+                Market Shock Simulation & Intelligence Network
               </span>
             </div>
             <h2 className="text-lg font-bold text-white mt-1">
               Active Regional Shocks & Supply Disruption Alerts
             </h2>
             <p className="text-xs text-slate-400">
-              Verified telemetry from Indian Meteorological Department (IMD), State APMCs, and Railways.
+              Scenario-based disruption modeling and risk impact analysis across regional APMC production belts.
             </p>
           </div>
           <span className="text-xs text-slate-400 font-mono">
