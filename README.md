@@ -198,17 +198,17 @@ graph TB
 
 | # | Engine Module | Source File | Core Methodology & Mathematical Formulation |
 |---|---|---|---|
-| **1** | **Produce Disposition Decision Engine** | `decision_engine.py` | Calculates Storage Opportunity Index ($\text{SOI} = P_{\text{forecast}} - P_{\text{current}} - C_{\text{storage}} - L_{\text{spoilage}}$) across **SELL_NOW**, **STORE**, **MOVE**, and **SPLIT** actions. |
-| **2** | **Multi-Model Demand Forecaster** | `forecasting_engine.py` | Automated walk-forward backtesting evaluating Naive Persistence, 7-Day MA, Holt-Winters Exponential Smoothing, and **Ridge Auto-Regressive AR(7)** with Open-Meteo temperature covariates. |
+| **1** | **Produce Disposition Decision Engine** | `decision_engine.py` | Calculates Storage Opportunity Index ($\text{SOI} = P_{\text{forecast}} - P_{\text{current}} - C_{\text{storage}} - L_{\text{spoilage}}$) across **SELL_NOW**, **STORE**, **MOVE**, and **SPLIT** actions with farmer working capital liquidity constraints. |
+| **2** | **Multi-Model Demand Forecaster** | `forecasting_engine.py` | Automated walk-forward backtesting evaluating Naive Persistence, 7-Day MA, Holt-Winters Exponential Smoothing, and **Ridge Auto-Regressive AR(7)** with Open-Meteo temperature covariates and expanding uncertainty intervals. |
 | **3** | **Fair Price & Disintermediation Engine** | `price_engine.py` | Computes transparent disintermediation margin breakdowns, guaranteed farmer payout uplifts, and direct buyer savings. |
-| **4** | **Capacitated VRP Logistics Optimizer** | `logistics_engine.py` | Capacity-constrained vehicle routing using Nearest-Neighbor + 2-Opt local search improvement heuristic, pro-rata freight allocation, and DEFRA CO₂ factor ($0.162\text{ kg CO}_2/\text{tonne-km}$). |
+| **4** | **Capacitated VRP Logistics Optimizer** | `logistics_engine.py` | Capacity-constrained vehicle routing using Nearest-Neighbor + 2-Opt local search improvement heuristic, pro-rata freight allocation, dynamic dispatch timing viability evaluator, and DEFRA CO₂ factor ($0.218\text{ kg CO}_2/\text{km}$). |
 | **5** | **Strategic Buffer Stock & MIS Engine** | `buffer_stock_engine.py` | Tracks NAFED / NCCF silo inventories and simulates Market Intervention Scheme (MIS) retail price-cooling elasticity. |
 | **6** | **Cold Storage IoT Telemetry Engine** | `cold_storage_engine.py` | Multi-sensor chamber telemetry ($\text{Temperature}$, $\text{Relative Humidity}$, $\text{Ethylene } \text{C}_2\text{H}_4$, $\text{CO}_2$), biological shelf-life degradation, and WDRA subsidies. |
 | **7** | **Forward Procurement Contract Engine** | `procurement_contract_engine.py` | Direct forward offtake agreements with legal metrology quality parameters (moisture, foreign matter, grade) and automatic settlement reconciliation. |
 | **8** | **Market Intelligence & Shock Modeler** | `market_intelligence_engine.py` | Monitors weather deluges, transport strikes, and harvest gluts, simulating elasticity shocks on wholesale prices. |
 | **9** | **Market Opportunity & Spoilage Ranker** | `market_opportunity_engine.py` | Evaluates real-time price arbitrage across distant terminal mandis penalized by freight haulage and ambient heat spoilage. |
 | **10**| **Policy Greens Subsidy Simulator** | `policy_simulation_engine.py` | Simulates Operation Greens TOP 50% freight and storage subsidies, evaluating Benefit-Cost Ratios (BCR) for government interventions. |
-| **11**| **Multilingual Voice Intent Advisor** | `voice_advisor_engine.py` | Multi-intent voice assistant supporting **Hindi, Kannada, Punjabi, and English** with Web Speech synthesis and decision lookups. |
+| **11**| **Multilingual Voice Intent Advisor** | `voice_advisor_engine.py` | Multi-intent voice assistant supporting **7 Indian languages** (Hindi, Marathi, Punjabi, Telugu, Tamil, Kannada, and English) with Romanized transliterations, Web Speech synthesis, and direct engine lookups. |
 
 ---
 
@@ -470,7 +470,7 @@ sih26/
 
 ## 🧪 Automated Test Suite & Stress Benchmark
 
-### Automated Tests (76 Passing Tests — 100% Coverage)
+### Automated Tests (78 Passing Tests — 100% Coverage)
 
 ```bash
 cd backend
@@ -479,28 +479,29 @@ python -m pytest tests -v
 
 ```
 ============================== test session starts ==============================
-collected 76 items
+collected 78 items
 
 tests/test_api.py (4 passed)
 tests/test_api_resiliency_phase2.py (3 passed)
 tests/test_buffer_phase15.py (3 passed)
 tests/test_contracts_phase11.py (4 passed)
 tests/test_data_foundation_phase2.py (6 passed)
-tests/test_decision_phase4.py (6 passed)
+tests/test_decision_phase4.py (8 passed)
 tests/test_end_to_end_pipeline.py (1 passed)
 tests/test_engines.py (3 passed)
-tests/test_forecasting_phase3.py (6 passed)
+tests/test_forecasting_phase3.py (5 passed)
 tests/test_intelligence_phase6.py (5 passed)
 tests/test_logistics_phase9.py (4 passed)
 tests/test_marketplace_concurrency.py (1 passed)
-tests/test_opportunity_phase5.py (5 passed)
+tests/test_opportunity_phase5.py (4 passed)
 tests/test_policy_phase7.py (4 passed)
-tests/test_security_phase1.py (12 passed)
+tests/test_security_phase1.py (9 passed)
 tests/test_storage_phase14.py (4 passed)
-tests/test_voice_phase13.py (5 passed)
 tests/test_stress_load.py (3 passed)
+tests/test_voice_phase13.py (4 passed)
+tests/verify_live_data_truth.py (1 passed)
 
-====================== 76 passed in 44.89s (100% SUCCESS) ======================
+====================== 78 passed in 54.47s (100% SUCCESS) ======================
 ```
 
 ### High-Concurrency Stress Benchmark
