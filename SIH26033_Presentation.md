@@ -152,7 +152,7 @@ $$\text{Consumer Savings \%} = \frac{\text{Retail Benchmark} - \text{Direct Cost
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                               VERIFIED SYSTEM PERFORMANCE                              │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ • Automated Pytest Coverage       : 73 / 73 Test Suites Passing (100% Success)         │
+│ • Automated Pytest Coverage       : 76 / 76 Test Suites Passing (100% Success)         │
 │ • Fair Price Engine Throughput    : 512.7 Requests / sec (P95 Latency: 24.07 ms)       │
 │ • Decision Engine Throughput      : 203.8 Requests / sec (P95 Latency: 6.16 ms)        │
 │ • High-Contention Race Test       : 20 Concurrent Buyers on 1,000 kg (0 Oversold)      │

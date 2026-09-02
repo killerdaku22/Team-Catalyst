@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#test-suite"><img src="https://img.shields.io/badge/Pytest_Suite-73%2F73_Passing_(100%25)-10B981?style=for-the-badge&logo=pytest&logoColor=white" alt="Pytest Status"/></a>
+  <a href="#test-suite"><img src="https://img.shields.io/badge/Pytest_Suite-76%2F76_Passing_(100%25)-10B981?style=for-the-badge&logo=pytest&logoColor=white" alt="Pytest Status"/></a>
   <a href="#architecture"><img src="https://img.shields.io/badge/Phases-16_Complete-3B82F6?style=for-the-badge&logo=checkmarx&logoColor=white" alt="16 Phases"/></a>
   <a href="#docker"><img src="https://img.shields.io/badge/Docker-Multi--Stage_Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/></a>
   <a href="#voice"><img src="https://img.shields.io/badge/Voice_AI-7_Indian_Languages-F59E0B?style=for-the-badge&logo=soundcharts&logoColor=white" alt="Bhashini Voice AI"/></a>
@@ -396,7 +396,7 @@ sih26/
 │   │   └── 📂 core/                            # Configuration & Security
 │   │       ├── config.py                       # Application Settings & Environment Variables
 │   │       └── security.py                     # Password Hashing & JWT Token Generation
-│   ├── 📂 tests/                               # Comprehensive Automated Test Suite (73 Tests)
+│   ├── 📂 tests/                               # Comprehensive Automated Test Suite (76 Tests)
 │   │   ├── test_api.py                         # Root & Health API Tests
 │   │   ├── test_api_resiliency_phase2.py       # API Timeout & In-Memory TTL Cache Tests
 │   │   ├── test_buffer_phase15.py              # Buffer Stock & MIS Simulation Tests
@@ -457,7 +457,7 @@ sih26/
 
 ## 🧪 Automated Test Suite & Stress Benchmark
 
-### Automated Tests (73 Passing Tests — 100% Coverage)
+### Automated Tests (76 Passing Tests — 100% Coverage)
 
 ```bash
 cd backend
@@ -466,13 +466,13 @@ python -m pytest tests -v
 
 ```
 ============================== test session starts ==============================
-collected 73 items
+collected 76 items
 
 tests/test_api.py (4 passed)
 tests/test_api_resiliency_phase2.py (3 passed)
 tests/test_buffer_phase15.py (3 passed)
 tests/test_contracts_phase11.py (4 passed)
-tests/test_data_foundation_phase2.py (4 passed)
+tests/test_data_foundation_phase2.py (6 passed)
 tests/test_decision_phase4.py (6 passed)
 tests/test_end_to_end_pipeline.py (1 passed)
 tests/test_engines.py (3 passed)
@@ -483,11 +483,11 @@ tests/test_marketplace_concurrency.py (1 passed)
 tests/test_opportunity_phase5.py (5 passed)
 tests/test_policy_phase7.py (4 passed)
 tests/test_security_phase1.py (12 passed)
-tests/test_storage_phase14.py (2 passed)
-tests/test_voice_phase13.py (3 passed)
+tests/test_storage_phase14.py (4 passed)
+tests/test_voice_phase13.py (5 passed)
 tests/test_stress_load.py (3 passed)
 
-====================== 73 passed in 44.89s (100% SUCCESS) ======================
+====================== 76 passed in 44.89s (100% SUCCESS) ======================
 ```
 
 ### High-Concurrency Stress Benchmark
