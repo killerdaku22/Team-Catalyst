@@ -137,6 +137,40 @@ def seed_db():
                     longitude=78.0081,
                     location_name="Agra Farm Hub, Uttar Pradesh",
                     status=ListingStatus.AVAILABLE
+                ),
+                CropListing(
+                    seller_id=fpo_user.id,
+                    fpo_name="Karnal Basmati Growers Federation",
+                    crop_name="Basmati Rice (Pusa 1121)",
+                    category="Cereals",
+                    grade="Grade A Export",
+                    quantity_kg=3500.0,
+                    price_per_kg=34.50,
+                    middleman_baseline_price=27.00,
+                    consumer_benchmark_price=54.00,
+                    harvest_date="2026-08-18",
+                    shelf_life_days=180,
+                    latitude=29.6857,
+                    longitude=76.9905,
+                    location_name="Taraori Mandi Cluster, Karnal, Haryana",
+                    status=ListingStatus.AVAILABLE
+                ),
+                CropListing(
+                    seller_id=fpo_user.id,
+                    fpo_name="Hosur Polyhouse Cultivators FPO",
+                    crop_name="Green Capsicum (Bell Pepper)",
+                    category="Vegetables",
+                    grade="Grade A Fresh",
+                    quantity_kg=2200.0,
+                    price_per_kg=38.00,
+                    middleman_baseline_price=28.00,
+                    consumer_benchmark_price=58.00,
+                    harvest_date="2026-08-23",
+                    shelf_life_days=14,
+                    latitude=12.7409,
+                    longitude=77.8253,
+                    location_name="Hosur Agri Hub, Tamil Nadu",
+                    status=ListingStatus.AVAILABLE
                 )
             ]
             db.add_all(listings)

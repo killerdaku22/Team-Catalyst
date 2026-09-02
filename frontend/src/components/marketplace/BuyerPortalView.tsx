@@ -41,10 +41,14 @@ import {
 import { DataProvenance } from '../ui/DataProvenance';
 
 const CROP_IMAGES: Record<string, string> = {
-  'Tomato': '/assets/agridirect-farmer-harvest.webp.png',
-  'Onion': '/assets/agridirect-fpo-collection.webp.png',
-  'Potato': '/assets/agridirect-market-arrival.webp.png',
-  'Wheat': '/assets/agridirect-farm-hero.webp.png',
+  'Tomato': '/assets/crop-tomato.jpg',
+  'Onion': '/assets/crop-onion.jpg',
+  'Potato': '/assets/crop-potato.jpg',
+  'Wheat': '/assets/crop-wheat.jpg',
+  'Rice': '/assets/crop-rice.jpg',
+  'Paddy': '/assets/crop-rice.jpg',
+  'Basmati': '/assets/crop-rice.jpg',
+  'Capsicum': '/assets/crop-capsicum.jpg',
 };
 
 export const BuyerPortalView: React.FC = () => {
@@ -177,12 +181,26 @@ export const BuyerPortalView: React.FC = () => {
   };
 
   const getImageForCrop = (cropName: string) => {
-    for (const key of Object.keys(CROP_IMAGES)) {
-      if (cropName.toLowerCase().includes(key.toLowerCase())) {
-        return CROP_IMAGES[key];
-      }
+    const lower = cropName.toLowerCase();
+    if (lower.includes('rice') || lower.includes('paddy') || lower.includes('basmati')) {
+      return CROP_IMAGES['Rice'];
     }
-    return '/assets/agridirect-farmer-harvest.webp.png';
+    if (lower.includes('wheat') || lower.includes('kalyan') || lower.includes('grain')) {
+      return CROP_IMAGES['Wheat'];
+    }
+    if (lower.includes('tomato')) {
+      return CROP_IMAGES['Tomato'];
+    }
+    if (lower.includes('onion')) {
+      return CROP_IMAGES['Onion'];
+    }
+    if (lower.includes('potato')) {
+      return CROP_IMAGES['Potato'];
+    }
+    if (lower.includes('capsicum') || lower.includes('pepper') || lower.includes('chilli')) {
+      return CROP_IMAGES['Capsicum'];
+    }
+    return CROP_IMAGES['Wheat'];
   };
 
   return (
@@ -380,6 +398,20 @@ export const BuyerPortalView: React.FC = () => {
                     <span className="ad-badge ad-badge-success text-xs font-bold px-2 py-0.5">
                       {selectedListing.grade} Certified
                     </span>
+                  </div>
+
+                  {/* Visual Crop Header Banner */}
+                  <div className="w-full h-28 rounded-xl overflow-hidden border border-[#26332C] relative bg-[#101513]">
+                    <img
+                      src={getImageForCrop(selectedListing.crop_name)}
+                      alt={selectedListing.crop_name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#101513]/90 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute bottom-2 left-3 text-xs font-semibold text-white flex items-center space-x-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#48BB78] animate-pulse" />
+                      <span>{selectedListing.crop_name} • {selectedListing.category}</span>
+                    </div>
                   </div>
 
                   {/* FPO Batch Provenance */}

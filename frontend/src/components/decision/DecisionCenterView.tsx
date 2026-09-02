@@ -35,10 +35,12 @@ interface DecisionCenterViewProps {
 }
 
 const COMMODITY_PRESETS: Record<string, { price: number; shelfLife: number; location: string; image: string }> = {
-  'Tomato': { price: 26.0, shelfLife: 10, location: 'Kolar Agri Hub, Karnataka', image: '/assets/agridirect-harvest-assessment.jpg' },
-  'Onion': { price: 24.5, shelfLife: 45, location: 'Pimpalgaon, Nashik, Maharashtra', image: '/assets/agridirect-fpo-collection.webp.png' },
-  'Potato': { price: 16.0, shelfLife: 60, location: 'Khandari, Agra, Uttar Pradesh', image: '/assets/agridirect-market-arrival.webp.png' },
-  'Wheat': { price: 24.0, shelfLife: 180, location: 'Khanna Mandi, Ludhiana, Punjab', image: '/assets/agridirect-farm-hero.webp.png' },
+  'Tomato': { price: 26.0, shelfLife: 10, location: 'Kolar Agri Hub, Karnataka', image: '/assets/crop-tomato.jpg' },
+  'Onion': { price: 24.5, shelfLife: 45, location: 'Pimpalgaon, Nashik, Maharashtra', image: '/assets/crop-onion.jpg' },
+  'Potato': { price: 16.0, shelfLife: 60, location: 'Khandari, Agra, Uttar Pradesh', image: '/assets/crop-potato.jpg' },
+  'Wheat': { price: 24.0, shelfLife: 180, location: 'Khanna Mandi, Ludhiana, Punjab', image: '/assets/crop-wheat.jpg' },
+  'Rice': { price: 34.0, shelfLife: 150, location: 'Taraori Mandi, Karnal, Haryana', image: '/assets/crop-rice.jpg' },
+  'Capsicum': { price: 38.0, shelfLife: 14, location: 'Hosur Agri Hub, Tamil Nadu', image: '/assets/crop-capsicum.jpg' },
 };
 
 export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
@@ -196,17 +198,42 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           {/* Left Batch Identity & Prominent Recommendation */}
           <div className="lg:col-span-7 space-y-4">
             
-            {/* Batch Identity Tags */}
-            <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="bg-[#101513] text-[#48BB78] px-3 py-1 rounded-full border border-[#26332C] font-bold font-mono">
-                {quantityKg.toLocaleString()} kg • {commodity}
-              </span>
-              <span className="bg-[#101513] text-[#C2CBC5] px-3 py-1 rounded-full border border-[#26332C]">
-                {originLocation.split(',')[0]}
-              </span>
-              <span className="bg-[#101513] text-[#8E9C93] px-3 py-1 rounded-full border border-[#26332C]">
-                Local Mandi: ₹{currentMandiPrice.toFixed(2)}/kg
-              </span>
+            {/* Batch Identity Tags & Commodity Preset Switcher */}
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                <span className="text-[11px] font-bold text-[#8E9C93] uppercase tracking-wider mr-1">Select Crop:</span>
+                {Object.keys(COMMODITY_PRESETS).map((crop) => (
+                  <button
+                    key={crop}
+                    onClick={() => {
+                      setCommodity(crop);
+                      const preset = COMMODITY_PRESETS[crop];
+                      setCurrentMandiPrice(preset.price);
+                      setShelfLifeDays(preset.shelfLife);
+                      setOriginLocation(preset.location);
+                    }}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold transition-all border ${
+                      commodity === crop
+                        ? 'bg-[#2D6A4F] text-white border-[#48BB78] shadow-md scale-105'
+                        : 'bg-[#101513] text-[#8E9C93] border-[#26332C] hover:text-white hover:border-[#52796F]'
+                    }`}
+                  >
+                    {crop}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2 text-xs pt-1">
+                <span className="bg-[#101513] text-[#48BB78] px-3 py-1 rounded-full border border-[#26332C] font-bold font-mono">
+                  {quantityKg.toLocaleString()} kg • {commodity}
+                </span>
+                <span className="bg-[#101513] text-[#C2CBC5] px-3 py-1 rounded-full border border-[#26332C]">
+                  {originLocation.split(',')[0]}
+                </span>
+                <span className="bg-[#101513] text-[#8E9C93] px-3 py-1 rounded-full border border-[#26332C]">
+                  Local Mandi: ₹{currentMandiPrice.toFixed(2)}/kg
+                </span>
+              </div>
             </div>
 
             {/* Prominent Action Recommendation Readout */}
