@@ -233,12 +233,8 @@ export const VoiceKisanAssistant: React.FC = () => {
           >
             <Mic className="w-3 h-3" style={{ color: 'var(--ad-accent)' }} />
           </div>
-          <span className="hidden sm:inline" style={{ color: 'var(--ad-text-primary)' }}>Kisan Voice</span>
-          <span
-            className="text-[9px] px-1.5 py-0.5 rounded font-bold"
-            style={{ background: 'var(--ad-brand-light)', color: 'var(--ad-brand-bright)' }}
-          >
-            AI Audio
+          <span className="font-semibold" style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}>
+            Kisan Voice
           </span>
         </button>
       )}
