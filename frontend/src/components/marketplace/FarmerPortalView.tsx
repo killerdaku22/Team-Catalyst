@@ -106,27 +106,32 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
 
   return (
     <div className="space-y-6">
-      {/* Page Header (Compact 80-120px) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2B3731]">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#273029]">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">Producer Workspace</span>
+            <span className="text-[10px] font-bold text-[#C7A356] uppercase tracking-wider">Producer Workspace</span>
             <DataProvenance source="Verified FPO Registry" status="OBSERVED" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-0.5">Farmer & FPO Portal</h1>
+          <h1
+            className="text-2xl sm:text-3xl font-extrabold text-[#F2F4F3] tracking-tight mt-0.5"
+            style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+          >
+            Farmer & FPO Portal
+          </h1>
           <p className="text-xs text-[#8E9C93]">
             List produce directly for institutional offtake and optimize harvest monetization.
           </p>
         </div>
 
         {/* Action Tabs */}
-        <div className="flex items-center space-x-1.5 bg-[#121815] p-1 rounded-lg border border-[#2B3731] shrink-0">
+        <div className="flex items-center space-x-1.5 bg-[#101613] p-1 rounded-xl border border-[#273029] shrink-0">
           <button
             onClick={() => setActiveTab('LISTING')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer ${
               activeTab === 'LISTING'
-                ? 'bg-[#2D6A4F] text-white'
-                : 'text-[#C2CBC5] hover:text-white'
+                ? 'bg-[#28724E] text-white shadow-sm'
+                : 'text-[#8E9C93] hover:text-[#F2F4F3]'
             }`}
           >
             <PlusCircle className="w-3.5 h-3.5" />
@@ -146,10 +151,10 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
                 }).then(setDecisionResult).catch(() => {});
               }
             }}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer ${
               activeTab === 'DECISION'
-                ? 'bg-[#2D6A4F] text-white'
-                : 'text-[#C2CBC5] hover:text-white'
+                ? 'bg-[#28724E] text-white shadow-sm'
+                : 'text-[#8E9C93] hover:text-[#F2F4F3]'
             }`}
           >
             <Scale className="w-3.5 h-3.5" />
@@ -169,10 +174,10 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
                 }).then(setOpportunityResult).catch(() => {});
               }
             }}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer ${
               activeTab === 'OPPORTUNITIES'
-                ? 'bg-[#2D6A4F] text-white'
-                : 'text-[#C2CBC5] hover:text-white'
+                ? 'bg-[#28724E] text-white shadow-sm'
+                : 'text-[#8E9C93] hover:text-[#F2F4F3]'
             }`}
           >
             <Building2 className="w-3.5 h-3.5" />
@@ -183,10 +188,10 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
 
       {/* Regional Disruption Alert Strip (If Active) */}
       {marketEvents.length > 0 && (
-        <div className="bg-[#1C211E] border border-[#B45309]/40 rounded-lg p-3 flex items-start space-x-2.5 text-xs">
-          <AlertTriangle className="w-4 h-4 text-[#ED8936] shrink-0 mt-0.5" />
+        <div className="bg-[#1C1812] border border-[#C7A356]/40 rounded-xl p-3 flex items-start space-x-2.5 text-xs">
+          <AlertTriangle className="w-4 h-4 text-[#C7A356] shrink-0 mt-0.5" />
           <div className="flex-1 text-[#C2CBC5]">
-            <span className="font-semibold text-[#ED8936] mr-1.5">Market Alert:</span>
+            <span className="font-semibold text-[#C7A356] mr-1.5">Market Alert:</span>
             <span>{marketEvents[0].title} — Multiplier ×{marketEvents[0].price_shock_multiplier} on {marketEvents[0].affected_commodities.join(', ')}.</span>
           </div>
         </div>
@@ -197,29 +202,32 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
           {/* Left: Compact Enterprise Form (7 Cols) */}
-          <div className="lg:col-span-7 bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 space-y-4">
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider pb-2 border-b border-[#2B3731]">
+          <div className="lg:col-span-7 bg-[#141A17] border border-[#273029] rounded-2xl p-5 space-y-4">
+            <h2
+              className="text-sm font-bold text-[#F2F4F3] uppercase tracking-wider pb-2 border-b border-[#273029]"
+              style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+            >
               Produce Listing Specifications
             </h2>
 
             {submitted ? (
               <div className="py-8 text-center space-y-3">
-                <CheckCircle2 className="w-10 h-10 text-[#48BB78] mx-auto" />
-                <h3 className="text-base font-bold text-white">Batch Successfully Registered</h3>
+                <CheckCircle2 className="w-10 h-10 text-[#34C772] mx-auto" />
+                <h3 className="text-base font-bold text-[#F2F4F3]">Batch Successfully Registered</h3>
                 <p className="text-xs text-[#8E9C93] max-w-sm mx-auto">
                   Your lot of {quantityKg.toLocaleString()} kg {cropVariety} is published on the institutional buyer board.
                 </p>
                 <div className="pt-2 flex justify-center space-x-3">
                   <button
                     onClick={() => setSubmitted(false)}
-                    className="ad-btn-secondary text-xs"
+                    className="px-3.5 py-2 rounded-lg text-xs font-semibold text-[#F2F4F3] bg-[#101613] border border-[#273029] hover:bg-[#1B2320] transition-all cursor-pointer"
                   >
                     List Another Batch
                   </button>
                   {onNavigateToMarketplace && (
                     <button
                       onClick={onNavigateToMarketplace}
-                      className="ad-btn-primary text-xs"
+                      className="px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-[#28724E] hover:bg-[#1F5C3D] transition-all cursor-pointer"
                     >
                       View Live Board
                     </button>
@@ -230,14 +238,14 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
               <form onSubmit={handleListingSubmit} className="space-y-3.5 text-xs">
                 {/* Row 1: FPO Selection */}
                 <div>
-                  <label className="ad-label">FPO / Cooperative Entity</label>
+                  <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">FPO / Cooperative Entity</label>
                   <select
                     value={selectedFPO}
                     onChange={(e) => setSelectedFPO(e.target.value)}
-                    className="ad-input"
+                    className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white focus:border-[#34C772] focus:outline-none cursor-pointer"
                   >
                     {FPO_OPTIONS.map(fpo => (
-                      <option key={fpo.id} value={fpo.id} className="bg-[#1A221E] text-white">
+                      <option key={fpo.id} value={fpo.id} className="bg-[#141A17] text-white">
                         {fpo.name} ({fpo.location})
                       </option>
                     ))}
@@ -247,26 +255,26 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
                 {/* Row 2: Category & Variety (2 Columns) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="ad-label">Crop Category</label>
+                    <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Crop Category</label>
                     <select
                       value={cropCategory}
                       onChange={(e) => handleCategoryChange(e.target.value)}
-                      className="ad-input"
+                      className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white focus:border-[#34C772] focus:outline-none cursor-pointer"
                     >
                       {Object.keys(CROP_VARIETIES).map(cat => (
-                        <option key={cat} value={cat} className="bg-[#1A221E] text-white">{cat}</option>
+                        <option key={cat} value={cat} className="bg-[#141A17] text-white">{cat}</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="ad-label">Crop Variety</label>
+                    <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Crop Variety</label>
                     <select
                       value={cropVariety}
                       onChange={(e) => setCropVariety(e.target.value)}
-                      className="ad-input"
+                      className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white focus:border-[#34C772] focus:outline-none cursor-pointer"
                     >
                       {(CROP_VARIETIES[cropCategory] || []).map(v => (
-                        <option key={v} value={v} className="bg-[#1A221E] text-white">{v}</option>
+                        <option key={v} value={v} className="bg-[#141A17] text-white">{v}</option>
                       ))}
                     </select>
                   </div>
@@ -275,26 +283,26 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
                 {/* Row 3: Quantity & Target Price (2 Columns) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="ad-label">Quantity Available (kg)</label>
+                    <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Quantity Available (kg)</label>
                     <input
                       type="number"
                       value={quantityKg}
                       onChange={(e) => setQuantityKg(Number(e.target.value))}
                       min={100}
                       step={100}
-                      className="ad-input"
+                      className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#34C772] focus:outline-none"
                       required
                     />
                   </div>
                   <div>
-                    <label className="ad-label">Target Ask Price (₹/kg)</label>
+                    <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Target Ask Price (₹/kg)</label>
                     <input
                       type="number"
                       value={targetPrice}
                       onChange={(e) => setTargetPrice(Number(e.target.value))}
                       min={1}
                       step={0.5}
-                      className="ad-input"
+                      className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#34C772] focus:outline-none"
                       required
                     />
                   </div>
@@ -303,24 +311,24 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
                 {/* Row 4: Harvest Date & Quality Standard */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="ad-label">Harvest / Ready Date</label>
+                    <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Harvest / Ready Date</label>
                     <input
                       type="date"
                       value={harvestDate}
                       onChange={(e) => setHarvestDate(e.target.value)}
-                      className="ad-input"
+                      className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white focus:border-[#34C772] focus:outline-none"
                       required
                     />
                   </div>
-                  <div className="flex items-end pb-1">
+                  <div className="flex items-end pb-2">
                     <label className="flex items-center space-x-2 cursor-pointer text-xs text-[#C2CBC5]">
                       <input
                         type="checkbox"
                         checked={isOrganic}
                         onChange={(e) => setIsOrganic(e.target.checked)}
-                        className="rounded border-[#2B3731] bg-[#121815] text-[#2D6A4F] focus:ring-0"
+                        className="w-4 h-4 rounded border-[#273029] bg-[#101613] text-[#34C772] focus:ring-0 cursor-pointer"
                       />
-                      <span>Certified Organic / Residue Free</span>
+                      <span>Assay Graded / Residue Free Standard</span>
                     </label>
                   </div>
                 </div>
@@ -330,7 +338,7 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="ad-btn-primary w-full sm:w-auto text-xs"
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-lg text-xs font-bold text-white bg-[#28724E] hover:bg-[#1F5C3D] transition-all flex items-center justify-center space-x-2 shadow-sm cursor-pointer"
                   >
                     <span>{isSubmitting ? 'Publishing...' : 'Publish to Direct Marketplace'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -342,23 +350,26 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
 
           {/* Right: Compact Economic Realization Summary (5 Cols) */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 space-y-3.5">
-              <h2 className="text-xs font-bold text-[#8E9C93] uppercase tracking-wider">
+            <div className="bg-[#141A17] border border-[#273029] rounded-2xl p-5 space-y-3.5">
+              <h2
+                className="text-xs font-bold text-[#7F8F85] uppercase tracking-wider"
+                style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+              >
                 Price Realization Analysis
               </h2>
 
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
-                  <span className="text-[10px] text-[#8E9C93] block">Direct Ask Value</span>
-                  <strong className="text-base font-bold text-white mt-0.5 block">
+                <div className="bg-[#101613] p-3 rounded-xl border border-[#273029]">
+                  <span className="text-[10px] text-[#7F8F85] block">Direct Ask Value</span>
+                  <strong className="text-base font-black text-white font-mono mt-0.5 block">
                     ₹{directGross.toLocaleString()}
                   </strong>
-                  <span className="text-[10px] text-[#52796F]">₹{targetPrice.toFixed(2)}/kg</span>
+                  <span className="text-[10px] text-[#34C772]">₹{targetPrice.toFixed(2)}/kg</span>
                 </div>
 
-                <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
-                  <span className="text-[10px] text-[#8E9C93] block">Local Mandi Benchmark</span>
-                  <strong className="text-base font-bold text-[#C2CBC5] mt-0.5 block">
+                <div className="bg-[#101613] p-3 rounded-xl border border-[#273029]">
+                  <span className="text-[10px] text-[#7F8F85] block">Local Mandi Benchmark</span>
+                  <strong className="text-base font-black text-[#C2CBC5] font-mono mt-0.5 block">
                     ₹{mandiGross.toLocaleString()}
                   </strong>
                   <span className="text-[10px] text-[#8E9C93]">₹{referenceMandiPrice.toFixed(2)}/kg</span>
@@ -366,18 +377,31 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
               </div>
 
               {/* Net Estimated Uplift */}
-              <div className="bg-[#222C27] border border-[#2D6A4F]/40 p-3 rounded-lg flex items-center justify-between text-xs">
+              <div className="bg-[#1A2420] border border-[#34C772]/30 p-3.5 rounded-xl flex items-center justify-between text-xs">
                 <div>
-                  <span className="text-[10px] text-[#52796F] font-semibold block uppercase">Estimated Direct Uplift</span>
-                  <strong className="text-sm font-bold text-[#48BB78]">
+                  <span className="text-[10px] text-[#34C772] font-semibold block uppercase">Estimated Direct Uplift</span>
+                  <strong className="text-base font-black text-[#34C772] font-mono">
                     +₹{estimatedUplift.toLocaleString()} ({Math.round((estimatedUplift / mandiGross) * 100)}%)
                   </strong>
                 </div>
-                <span className="ad-badge ad-badge-success text-[10px]">Zero Middleman APMC Deductions</span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#34C772]/15 text-[#34C772] border border-[#34C772]/30">
+                  Zero Middleman Deductions
+                </span>
+              </div>
+
+              <div className="bg-[#101613] p-3 rounded-xl border border-[#273029] space-y-1.5 text-xs text-[#8E9C93]">
+                <div className="flex justify-between">
+                  <span>Settlement SLA:</span>
+                  <span className="font-semibold text-white">T+24 Hours Direct Escrow</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Quality Protocol:</span>
+                  <span className="font-semibold text-white">Digital Metrology Assayed</span>
+                </div>
               </div>
 
               <p className="text-[11px] text-[#8E9C93] leading-relaxed">
-                Direct buyer offtake avoids trader commission cess and mandi physical handling deductions.
+                Direct buyer offtake bypasses trader commission cess and mandi physical handling deductions.
               </p>
             </div>
           </div>
@@ -386,14 +410,19 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
 
       {/* Decision Engine Tab */}
       {activeTab === 'DECISION' && (
-        <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#2B3731] pb-3">
+        <div className="bg-[#141A17] border border-[#273029] rounded-2xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#273029] pb-3">
             <div>
-              <h2 className="text-base font-bold text-white">Automated Batch Decision Analysis</h2>
+              <h2
+                className="text-base font-bold text-[#F2F4F3]"
+                style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+              >
+                Automated Batch Decision Analysis
+              </h2>
               <p className="text-xs text-[#8E9C93]">Optimal action computed across holding costs and spatial arbitrage.</p>
             </div>
             {decisionResult && (
-              <span className="ad-badge ad-badge-success text-xs font-bold px-2.5 py-1">
+              <span className="px-2.5 py-1 rounded text-xs font-bold bg-[#34C772]/15 text-[#34C772] border border-[#34C772]/30">
                 Recommendation: {decisionResult.optimal_action}
               </span>
             )}
@@ -401,20 +430,20 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
 
           {decisionResult && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-              <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
-                <span className="text-[#8E9C93] block text-[10px]">Optimal Net Revenue</span>
-                <strong className="text-base font-bold text-[#48BB78] mt-0.5 block">
+              <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029]">
+                <span className="text-[#7F8F85] block text-[10px]">Optimal Net Revenue</span>
+                <strong className="text-lg font-black text-[#34C772] font-mono mt-0.5 block">
                   ₹{Math.round(decisionResult.optimal_net_revenue).toLocaleString()}
                 </strong>
               </div>
-              <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
-                <span className="text-[#8E9C93] block text-[10px]">Net Uplift vs Local</span>
-                <strong className="text-base font-bold text-white mt-0.5 block">
+              <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029]">
+                <span className="text-[#7F8F85] block text-[10px]">Net Uplift vs Local</span>
+                <strong className="text-lg font-black text-white font-mono mt-0.5 block">
                   +₹{Math.round(decisionResult.net_uplift_vs_local_sell_now).toLocaleString()} ({decisionResult.net_uplift_pct}%)
                 </strong>
               </div>
-              <div className="bg-[#121815] p-3 rounded-lg border border-[#1F2723]">
-                <span className="text-[#8E9C93] block text-[10px]">Strategy Summary</span>
+              <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029]">
+                <span className="text-[#7F8F85] block text-[10px]">Strategy Summary</span>
                 <span className="text-xs text-[#C2CBC5] mt-0.5 block line-clamp-2">
                   {decisionResult.recommendation_summary}
                 </span>
@@ -426,34 +455,39 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
 
       {/* Best Markets Tab */}
       {activeTab === 'OPPORTUNITIES' && (
-        <div className="bg-[#1A221E] border border-[#2B3731] rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#2B3731] pb-3">
+        <div className="bg-[#141A17] border border-[#273029] rounded-2xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#273029] pb-3">
             <div>
-              <h2 className="text-base font-bold text-white">Ranked Candidate Markets</h2>
+              <h2
+                className="text-base font-bold text-[#F2F4F3]"
+                style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+              >
+                Ranked Candidate Markets
+              </h2>
               <p className="text-xs text-[#8E9C93]">Net realization after deducting transit freight and handling.</p>
             </div>
           </div>
 
           {opportunityResult && (
             <div className="overflow-x-auto">
-              <table className="ad-table">
-                <thead>
+              <table className="w-full text-left text-xs text-[#C2CBC5]">
+                <thead className="text-[11px] text-[#7F8F85] uppercase bg-[#101613] border-b border-[#273029]">
                   <tr>
-                    <th>Market / Buyer</th>
-                    <th>Gross Price</th>
-                    <th>Distance</th>
-                    <th>Freight Cost</th>
-                    <th>Net Realization</th>
+                    <th className="py-2.5 px-3">Market / Buyer</th>
+                    <th className="py-2.5 px-3">Gross Price</th>
+                    <th className="py-2.5 px-3">Distance</th>
+                    <th className="py-2.5 px-3">Freight Cost</th>
+                    <th className="py-2.5 px-3">Net Realization</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-[#273029]">
                   {opportunityResult.ranked_opportunities.map((m, idx) => (
-                    <tr key={idx}>
-                      <td className="font-semibold text-white">{m.destination_name}</td>
-                      <td>₹{m.gross_market_price_per_kg.toFixed(2)}/kg</td>
-                      <td>{m.distance_km} km</td>
-                      <td>-₹{m.freight_cost_per_kg.toFixed(2)}/kg</td>
-                      <td className="font-bold text-[#48BB78]">₹{m.net_realization_per_kg.toFixed(2)}/kg</td>
+                    <tr key={idx} className="hover:bg-[#1B2320]/50 transition-colors">
+                      <td className="py-2.5 px-3 font-semibold text-white">{m.destination_name}</td>
+                      <td className="py-2.5 px-3 font-mono">₹{m.gross_market_price_per_kg.toFixed(2)}/kg</td>
+                      <td className="py-2.5 px-3 font-mono">{m.distance_km} km</td>
+                      <td className="py-2.5 px-3 font-mono text-[#E84F4F]">-₹{m.freight_cost_per_kg.toFixed(2)}/kg</td>
+                      <td className="py-2.5 px-3 font-mono font-bold text-[#34C772]">₹{m.net_realization_per_kg.toFixed(2)}/kg</td>
                     </tr>
                   ))}
                 </tbody>
