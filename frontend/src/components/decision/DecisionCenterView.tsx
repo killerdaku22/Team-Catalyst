@@ -191,15 +191,9 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
       {/* ============================================================
           SECTION 2 — HERO PRODUCT RECOMMENDATION SECTION
           ============================================================ */}
-      <section className="p-6 sm:p-8 shadow-2xl relative overflow-hidden" style={{
-        borderRadius: 'var(--ad-radius-xl)',
-        background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 50%, var(--ad-surface-2) 100%)',
-        border: '1px solid var(--ad-border-accent)',
-        borderLeft: '3px solid var(--ad-accent)',
-        boxShadow: 'var(--ad-shadow-lg), var(--ad-shadow-glow-accent)',
-      }}>
-        <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(199, 163, 86, 0.04)' }} />
-
+      <section
+        className="p-6 sm:p-8 shadow-xl relative overflow-hidden rounded-2xl border border-[#273029] bg-[#141A17]"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           {/* Left Batch Identity & Prominent Recommendation */}
           <div className="lg:col-span-7 space-y-4">
@@ -207,7 +201,7 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
             {/* Batch Identity Tags & Commodity Preset Switcher */}
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-1.5 text-xs">
-                <span className="text-[11px] font-semibold mr-1" style={{ color: 'var(--ad-text-muted)' }}>Select Crop:</span>
+                <span className="text-[11px] font-semibold mr-1 text-[#7F8F85]">Select Crop:</span>
                 {Object.keys(COMMODITY_PRESETS).map((crop) => (
                   <button
                     key={crop}
@@ -218,13 +212,12 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
                       setShelfLifeDays(preset.shelfLife);
                       setOriginLocation(preset.location);
                     }}
-                    className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer"
                     style={{
-                      background: commodity === crop ? 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)' : 'var(--ad-surface-0)',
-                      color: commodity === crop ? '#0B0F0D' : 'var(--ad-text-tertiary)',
-                      border: commodity === crop ? '1px solid var(--ad-accent)' : '1px solid var(--ad-border)',
-                      boxShadow: commodity === crop ? '0 2px 8px rgba(199, 163, 86, 0.2)' : 'none',
-                      fontFamily: 'var(--ad-font-display)',
+                      backgroundColor: commodity === crop ? '#C7A356' : '#101613',
+                      color: commodity === crop ? '#0B0F0D' : '#7F8F85',
+                      border: commodity === crop ? '1px solid #C7A356' : '1px solid #273029',
+                      fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
                     }}
                   >
                     {crop}
@@ -233,22 +226,16 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
               </div>
 
               <div className="flex flex-wrap items-center gap-2 text-xs pt-1">
-                <span className="px-3 py-1.5 rounded-lg font-bold" style={{
-                  background: 'var(--ad-brand-light)', color: 'var(--ad-brand-bright)',
-                  border: '1px solid rgba(52, 199, 114, 0.15)', fontFamily: 'var(--ad-font-display)'
-                }}>
+                <span
+                  className="px-3 py-1.5 rounded-lg font-bold bg-[#28724E]/20 text-[#34C772] border border-[#34C772]/30"
+                  style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+                >
                   {quantityKg.toLocaleString()} kg · {commodity}
                 </span>
-                <span className="px-3 py-1.5 rounded-lg" style={{
-                  background: 'var(--ad-surface-0)', color: 'var(--ad-text-secondary)',
-                  border: '1px solid var(--ad-border-subtle)'
-                }}>
+                <span className="px-3 py-1.5 rounded-lg bg-[#101613] text-[#B8C4BC] border border-[#273029]">
                   {originLocation.split(',')[0]}
                 </span>
-                <span className="px-3 py-1.5 rounded-lg" style={{
-                  background: 'var(--ad-surface-0)', color: 'var(--ad-text-muted)',
-                  border: '1px solid var(--ad-border-subtle)'
-                }}>
+                <span className="px-3 py-1.5 rounded-lg bg-[#101613] text-[#7F8F85] border border-[#273029]">
                   Local Mandi: ₹{currentMandiPrice.toFixed(2)}/kg
                 </span>
               </div>
@@ -257,20 +244,20 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
             {/* Prominent Action Recommendation Readout */}
             <div className="space-y-1 pt-1">
               <div className="flex items-center space-x-2">
-                <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold shadow-md" style={{
-                  background: 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)',
-                  color: '#0B0F0D',
-                  boxShadow: '0 2px 8px rgba(199, 163, 86, 0.25)',
-                }}>
+                <span
+                  className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-md text-xs font-bold bg-[#C7A356] text-[#0B0F0D]"
+                  style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+                >
                   <Award className="w-3.5 h-3.5" />
                   <span>Recommended Action</span>
                 </span>
-                <span className="text-xs font-semibold" style={{ color: 'var(--ad-text-muted)' }}>Deterministic Economic Optimization</span>
+                <span className="text-xs font-semibold text-[#7F8F85]">Deterministic Economic Optimization</span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight pt-1" style={{
-                fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)'
-              }}>
+              <h2
+                className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight pt-1 text-[#F2F4F3]"
+                style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+              >
                 {optimalAction === 'MOVE' && 'Dispatch to Terminal Agro-Hub'}
                 {optimalAction === 'STORE' && 'Hold in Certified Cold Storage'}
                 {optimalAction === 'SELL_NOW' && 'Execute Immediate Local Sale'}
@@ -278,44 +265,40 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
               </h2>
             </div>
 
-            <p className="text-sm leading-relaxed max-w-xl" style={{ color: 'var(--ad-text-secondary)' }}>
+            <p className="text-sm leading-relaxed max-w-xl text-[#B8C4BC]">
               {decisionResult?.recommendation_summary ||
                 "Optimizing this batch against 14-day price trends and distance matrices guarantees the maximum net cash return for your federation."}
             </p>
 
             {/* Financial Uplift Highlights */}
             <div className="grid grid-cols-2 gap-4 pt-3 max-w-lg">
-              <div className="p-4 rounded-xl" style={{
-                background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)',
-                borderLeft: '3px solid var(--ad-brand-bright)'
-              }}>
-                <span className="text-xs font-semibold block" style={{ color: 'var(--ad-text-tertiary)' }}>
+              <div className="p-4 rounded-xl bg-[#101613] border border-[#273029]">
+                <span className="text-xs font-semibold block text-[#7F8F85]">
                   Expected Net Realization
                 </span>
-                <strong className="text-2xl font-extrabold mt-1 block" style={{
-                  color: 'var(--ad-brand-bright)', fontFamily: 'var(--ad-font-display)'
-                }}>
+                <strong
+                  className="text-2xl font-extrabold mt-1 block text-[#34C772]"
+                  style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+                >
                   ₹{netRealizationPerKg.toFixed(2)}
-                  <span className="text-xs font-normal" style={{ color: 'var(--ad-text-muted)' }}>/kg</span>
+                  <span className="text-xs font-normal text-[#7F8F85]">/kg</span>
                 </strong>
-                <span className="text-[11px] block mt-1" style={{ color: 'var(--ad-text-muted)' }}>
+                <span className="text-[11px] block mt-1 text-[#7F8F85]">
                   Total: ₹{decisionResult ? decisionResult.optimal_net_revenue.toLocaleString() : (netRealizationPerKg * quantityKg).toLocaleString()}
                 </span>
               </div>
 
-              <div className="p-4 rounded-xl" style={{
-                background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)',
-                borderLeft: '3px solid var(--ad-accent)'
-              }}>
-                <span className="text-xs font-semibold block" style={{ color: 'var(--ad-text-tertiary)' }}>
+              <div className="p-4 rounded-xl bg-[#101613] border border-[#273029]">
+                <span className="text-xs font-semibold block text-[#7F8F85]">
                   Net Expected Uplift
                 </span>
-                <strong className="text-2xl font-extrabold mt-1 block" style={{
-                  color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)'
-                }}>
+                <strong
+                  className="text-2xl font-extrabold mt-1 block text-[#F2F4F3]"
+                  style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+                >
                   +{decisionResult ? decisionResult.net_uplift_pct : 26.4}%
                 </strong>
-                <span className="text-[11px] font-bold block mt-1" style={{ color: 'var(--ad-accent)' }}>
+                <span className="text-[11px] font-bold block mt-1 text-[#C7A356]">
                   +₹{decisionResult ? decisionResult.net_uplift_vs_local_sell_now.toLocaleString() : Math.round(baselineTotal * 0.264).toLocaleString()} over local
                 </span>
               </div>
@@ -326,7 +309,8 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
               {optimalAction === 'MOVE' && (
                 <button
                   onClick={onNavigateToLogistics}
-                  className="ad-btn-primary px-5 py-3 text-xs font-bold shadow-xl flex items-center space-x-2"
+                  className="px-5 py-3 rounded-lg text-xs font-bold text-white flex items-center space-x-2 shadow-md cursor-pointer"
+                  style={{ backgroundColor: '#28724E' }}
                 >
                   <Truck className="w-4 h-4" />
                   <span>View Optimized Logistics Route</span>
@@ -335,7 +319,8 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
               {optimalAction === 'STORE' && (
                 <button
                   onClick={onNavigateToStorage}
-                  className="ad-btn-primary px-5 py-3 text-xs font-bold shadow-xl flex items-center space-x-2"
+                  className="px-5 py-3 rounded-lg text-xs font-bold text-white flex items-center space-x-2 shadow-md cursor-pointer"
+                  style={{ backgroundColor: '#28724E' }}
                 >
                   <Warehouse className="w-4 h-4" />
                   <span>Book Cold Storage Space</span>
@@ -344,7 +329,8 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
               {optimalAction === 'SELL_NOW' && (
                 <button
                   onClick={onNavigateToMarketplace}
-                  className="ad-btn-primary px-5 py-3 text-xs font-bold shadow-xl flex items-center space-x-2"
+                  className="px-5 py-3 rounded-lg text-xs font-bold text-white flex items-center space-x-2 shadow-md cursor-pointer"
+                  style={{ backgroundColor: '#28724E' }}
                 >
                   <Scale className="w-4 h-4" />
                   <span>List for Direct Procurement</span>
@@ -356,7 +342,7 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
                   const el = document.getElementById('scenarios-comparison-section');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="ad-btn-secondary px-4 py-3 text-xs font-semibold"
+                className="px-4 py-3 rounded-lg text-xs font-semibold text-[#B8C4BC] bg-[#101613] border border-[#273029] hover:text-white transition-all cursor-pointer"
               >
                 Compare All 3 Scenarios
               </button>
@@ -364,26 +350,25 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           </div>
 
           {/* Right Contextual Agricultural Photography */}
-          <div className="lg:col-span-5 relative overflow-hidden shadow-2xl group aspect-[4/3]" style={{
-            borderRadius: 'var(--ad-radius-xl)', background: 'var(--ad-surface-0)',
-            border: '1px solid var(--ad-border)',
-          }}>
+          <div
+            className="lg:col-span-5 relative overflow-hidden shadow-xl group aspect-[4/3] rounded-2xl bg-[#0E1310] border border-[#273029]"
+          >
             <img
               src={activePreset.image}
               alt={commodity}
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, var(--ad-bg) 0%, transparent 40%)' }} />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, #141A17 0%, transparent 40%)' }} />
 
             {/* Bottom Overlay Label */}
-            <div className="absolute bottom-3 left-3 right-3 z-10 bg-[#121815]/90 backdrop-blur-md border border-[#26332C] p-3 rounded-xl flex items-center justify-between text-xs">
+            <div className="absolute bottom-3 left-3 right-3 z-10 bg-[#101613]/90 backdrop-blur-md border border-[#273029] p-3 rounded-xl flex items-center justify-between text-xs">
               <div>
                 <span className="font-bold text-white block">{originLocation}</span>
-                <span className="text-[10px] text-[#8E9C93]">Cooperative Lot • Shelf Life {shelfLifeDays}d</span>
+                <span className="text-[10px] text-[#7F8F85]">Cooperative Lot • Shelf Life {shelfLifeDays}d</span>
               </div>
-              <span className="ad-badge ad-badge-sage text-[10px] font-mono">
-                Grade A Verified
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#1E4D34] text-[#34C772] border border-[#34C772]/30">
+                Grade A Graded
               </span>
             </div>
           </div>
@@ -395,10 +380,13 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           ============================================================ */}
       <section id="scenarios-comparison-section" className="space-y-4">
         <div>
-          <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-[#7F8F85] uppercase tracking-wider">
             Comparative Scenario Analysis
           </span>
-          <h3 className="text-xl font-bold text-white tracking-tight mt-0.5">
+          <h3
+            className="text-xl font-bold text-[#F2F4F3] tracking-tight mt-0.5"
+            style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+          >
             Three Alternative Produce Dispositions
           </h3>
           <p className="text-xs text-[#8E9C93]">
@@ -410,26 +398,28 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           {/* Scenario 1: SELL NOW */}
           <div className={`p-5 rounded-2xl border transition-all flex flex-col justify-between space-y-4 ${
             optimalAction === 'SELL_NOW'
-              ? 'bg-[#1D2722] border-2 border-[#2D6A4F] ring-1 ring-[#2D6A4F] shadow-xl'
-              : 'bg-[#161E1A] border-[#26332C]'
+              ? 'bg-[#1A2420] border border-[#34C772] shadow-lg'
+              : 'bg-[#141A17] border border-[#273029]'
           }`}>
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#101513] border border-[#26332C] flex items-center justify-center text-[#8E9C93]">
+                  <div className="w-8 h-8 rounded-lg bg-[#101613] border border-[#273029] flex items-center justify-center text-[#7F8F85]">
                     <Scale className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">Sell Immediately</h4>
-                    <span className="text-[10px] text-[#8E9C93]">Local Mandi Yard</span>
+                    <h4 className="text-sm font-bold text-[#F2F4F3]">Sell Immediately</h4>
+                    <span className="text-[10px] text-[#7F8F85]">Local Mandi Yard</span>
                   </div>
                 </div>
                 {optimalAction === 'SELL_NOW' && (
-                  <span className="ad-badge ad-badge-success text-[10px]">Optimal</span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#34C772]/15 text-[#34C772] border border-[#34C772]/30">
+                    Optimal
+                  </span>
                 )}
               </div>
 
-              <div className="bg-[#101513] p-3 rounded-xl border border-[#26332C] space-y-1.5 text-xs">
+              <div className="bg-[#101613] p-3 rounded-xl border border-[#273029] space-y-1.5 text-xs">
                 <div className="flex justify-between text-[#8E9C93]">
                   <span>Gross Realization:</span>
                   <strong className="text-white font-mono">₹{currentMandiPrice.toFixed(2)}/kg</strong>
@@ -445,14 +435,14 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
               </div>
             </div>
 
-            <div className="pt-3 border-t border-[#26332C] flex items-baseline justify-between">
+            <div className="pt-3 border-t border-[#273029] flex items-baseline justify-between">
               <div>
-                <span className="text-[10px] text-[#8E9C93] block">Net Realization</span>
+                <span className="text-[10px] text-[#7F8F85] block">Net Realization</span>
                 <strong className="text-lg font-black text-white font-mono">
                   ₹{baselineTotal.toLocaleString()}
                 </strong>
               </div>
-              <span className="text-xs text-[#8E9C93] font-semibold">
+              <span className="text-xs text-[#7F8F85] font-semibold">
                 Baseline (0% uplift)
               </span>
             </div>
@@ -461,33 +451,35 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           {/* Scenario 2: STORE */}
           <div className={`p-5 rounded-2xl border transition-all flex flex-col justify-between space-y-4 ${
             optimalAction === 'STORE'
-              ? 'bg-[#1D2722] border-2 border-[#2D6A4F] ring-1 ring-[#2D6A4F] shadow-xl'
-              : 'bg-[#161E1A] border-[#26332C]'
+              ? 'bg-[#1A2420] border border-[#34C772] shadow-lg'
+              : 'bg-[#141A17] border border-[#273029]'
           }`}>
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#101513] border border-[#26332C] flex items-center justify-center text-[#52796F]">
+                  <div className="w-8 h-8 rounded-lg bg-[#101613] border border-[#273029] flex items-center justify-center text-[#C7A356]">
                     <Warehouse className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">Hold in Cold Storage</h4>
-                    <span className="text-[10px] text-[#8E9C93]">7–10 Day Storage Holding</span>
+                    <h4 className="text-sm font-bold text-[#F2F4F3]">Hold in Cold Storage</h4>
+                    <span className="text-[10px] text-[#7F8F85]">7–10 Day Storage Holding</span>
                   </div>
                 </div>
                 {optimalAction === 'STORE' && (
-                  <span className="ad-badge ad-badge-success text-[10px]">Optimal</span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#34C772]/15 text-[#34C772] border border-[#34C772]/30">
+                    Optimal
+                  </span>
                 )}
               </div>
 
-              <div className="bg-[#101513] p-3 rounded-xl border border-[#26332C] space-y-1.5 text-xs">
+              <div className="bg-[#101613] p-3 rounded-xl border border-[#273029] space-y-1.5 text-xs">
                 <div className="flex justify-between text-[#8E9C93]">
                   <span>Projected Future Price:</span>
                   <strong className="text-white font-mono">₹{(currentMandiPrice * 1.32).toFixed(2)}/kg</strong>
                 </div>
                 <div className="flex justify-between text-[#8E9C93]">
                   <span>Holding Rent & Shrinkage:</span>
-                  <span className="text-[#F56565] font-mono">-₹0.80/kg</span>
+                  <span className="text-[#E84F4F] font-mono">-₹0.80/kg</span>
                 </div>
                 <div className="flex justify-between text-[#8E9C93]">
                   <span>Payout Timeline:</span>
@@ -496,14 +488,14 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
               </div>
             </div>
 
-            <div className="pt-3 border-t border-[#26332C] flex items-baseline justify-between">
+            <div className="pt-3 border-t border-[#273029] flex items-baseline justify-between">
               <div>
-                <span className="text-[10px] text-[#8E9C93] block">Net Realization</span>
-                <strong className="text-lg font-black text-[#48BB78] font-mono">
+                <span className="text-[10px] text-[#7F8F85] block">Net Realization</span>
+                <strong className="text-lg font-black text-[#34C772] font-mono">
                   ₹{Math.round((quantityKg * currentMandiPrice * 1.32) - (quantityKg * 0.8)).toLocaleString()}
                 </strong>
               </div>
-              <span className="text-xs font-bold text-[#48BB78]">
+              <span className="text-xs font-bold text-[#34C772]">
                 +18.4% Uplift
               </span>
             </div>
@@ -512,33 +504,35 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           {/* Scenario 3: DISPATCH (MOVE) */}
           <div className={`p-5 rounded-2xl border transition-all flex flex-col justify-between space-y-4 ${
             optimalAction === 'MOVE' || optimalAction === 'SPLIT'
-              ? 'bg-[#1D2722] border-2 border-[#2D6A4F] ring-1 ring-[#2D6A4F] shadow-xl'
-              : 'bg-[#161E1A] border-[#26332C]'
+              ? 'bg-[#1A2420] border border-[#34C772] shadow-lg'
+              : 'bg-[#141A17] border border-[#273029]'
           }`}>
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#101513] border border-[#26332C] flex items-center justify-center text-[#48BB78]">
+                  <div className="w-8 h-8 rounded-lg bg-[#101613] border border-[#273029] flex items-center justify-center text-[#34C772]">
                     <Truck className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">Dispatch to Terminal Hub</h4>
-                    <span className="text-[10px] text-[#8E9C93]">Inter-State Direct Sourcing</span>
+                    <h4 className="text-sm font-bold text-[#F2F4F3]">Dispatch to Terminal Hub</h4>
+                    <span className="text-[10px] text-[#7F8F85]">Inter-State Direct Sourcing</span>
                   </div>
                 </div>
                 {(optimalAction === 'MOVE' || optimalAction === 'SPLIT') && (
-                  <span className="ad-badge ad-badge-success text-[10px]">Optimal</span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#34C772]/15 text-[#34C772] border border-[#34C772]/30">
+                    Optimal
+                  </span>
                 )}
               </div>
 
-              <div className="bg-[#101513] p-3 rounded-xl border border-[#26332C] space-y-1.5 text-xs">
+              <div className="bg-[#101613] p-3 rounded-xl border border-[#273029] space-y-1.5 text-xs">
                 <div className="flex justify-between text-[#8E9C93]">
                   <span>Destination Mandi Price:</span>
                   <strong className="text-white font-mono">₹{grossDestPrice.toFixed(2)}/kg</strong>
                 </div>
                 <div className="flex justify-between text-[#8E9C93]">
                   <span>Cold Transit & Spoilage:</span>
-                  <span className="text-[#F56565] font-mono">-₹{(freightCostPerKg + spoilageCostPerKg).toFixed(2)}/kg</span>
+                  <span className="text-[#E84F4F] font-mono">-₹{(freightCostPerKg + spoilageCostPerKg).toFixed(2)}/kg</span>
                 </div>
                 <div className="flex justify-between text-[#8E9C93]">
                   <span>Payout Timeline:</span>
@@ -547,14 +541,14 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
               </div>
             </div>
 
-            <div className="pt-3 border-t border-[#26332C] flex items-baseline justify-between">
+            <div className="pt-3 border-t border-[#273029] flex items-baseline justify-between">
               <div>
-                <span className="text-[10px] text-[#8E9C93] block">Net Realization</span>
-                <strong className="text-lg font-black text-[#48BB78] font-mono">
+                <span className="text-[10px] text-[#7F8F85] block">Net Realization</span>
+                <strong className="text-lg font-black text-[#34C772] font-mono">
                   ₹{Math.round(quantityKg * netRealizationPerKg).toLocaleString()}
                 </strong>
               </div>
-              <span className="text-xs font-bold text-[#48BB78]">
+              <span className="text-xs font-bold text-[#34C772]">
                 +{decisionResult ? decisionResult.net_uplift_pct : 26.4}% Uplift
               </span>
             </div>
@@ -565,12 +559,15 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
       {/* ============================================================
           SECTION 4 — ECONOMIC WATERFALL FLOW
           ============================================================ */}
-      <section className="bg-[#161E1A] border border-[#26332C] rounded-2xl p-6 space-y-4">
+      <section className="bg-[#141A17] border border-[#273029] rounded-2xl p-6 space-y-4">
         <div>
-          <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-[#7F8F85] uppercase tracking-wider">
             Deterministic Economic Flow
           </span>
-          <h3 className="text-lg font-bold text-white tracking-tight mt-0.5">
+          <h3
+            className="text-lg font-bold text-[#F2F4F3] tracking-tight mt-0.5"
+            style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+          >
             Unit Price Realization Breakdown (₹/kg)
           </h3>
           <p className="text-xs text-[#8E9C93]">
@@ -581,8 +578,8 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
         {/* Waterfall Flow Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2">
           {/* Step 1: Local Baseline */}
-          <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-1">
-            <span className="text-[10px] text-[#8E9C93] block">1. Local Farmgate</span>
+          <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029] space-y-1">
+            <span className="text-[10px] text-[#7F8F85] block">1. Local Farmgate</span>
             <strong className="text-base font-black text-[#8E9C93] font-mono block">
               ₹{currentMandiPrice.toFixed(2)}
             </strong>
@@ -590,39 +587,39 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           </div>
 
           {/* Step 2: Destination Price */}
-          <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-1">
-            <span className="text-[10px] text-[#8E9C93] block">2. Destination Mandi</span>
+          <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029] space-y-1">
+            <span className="text-[10px] text-[#7F8F85] block">2. Destination Mandi</span>
             <strong className="text-base font-black text-white font-mono block">
               ₹{grossDestPrice.toFixed(2)}
             </strong>
-            <span className="text-[10px] text-[#48BB78] font-semibold">+₹{(grossDestPrice - currentMandiPrice).toFixed(2)} spread</span>
+            <span className="text-[10px] text-[#34C772] font-semibold">+₹{(grossDestPrice - currentMandiPrice).toFixed(2)} spread</span>
           </div>
 
           {/* Step 3: Freight Deduct */}
-          <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-1">
-            <span className="text-[10px] text-[#8E9C93] block">3. Cold-Chain Freight</span>
-            <strong className="text-base font-black text-[#F56565] font-mono block">
+          <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029] space-y-1">
+            <span className="text-[10px] text-[#7F8F85] block">3. Cold-Chain Freight</span>
+            <strong className="text-base font-black text-[#E84F4F] font-mono block">
               -₹{freightCostPerKg.toFixed(2)}
             </strong>
-            <span className="text-[10px] text-[#8E9C93]">185 km transit</span>
+            <span className="text-[10px] text-[#7F8F85]">185 km transit</span>
           </div>
 
           {/* Step 4: Transit Spoilage */}
-          <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-1">
-            <span className="text-[10px] text-[#8E9C93] block">4. Transit Spoilage</span>
-            <strong className="text-base font-black text-[#F56565] font-mono block">
+          <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029] space-y-1">
+            <span className="text-[10px] text-[#7F8F85] block">4. Transit Spoilage</span>
+            <strong className="text-base font-black text-[#E84F4F] font-mono block">
               -₹{spoilageCostPerKg.toFixed(2)}
             </strong>
-            <span className="text-[10px] text-[#8E9C93]">1.2% moisture loss</span>
+            <span className="text-[10px] text-[#7F8F85]">1.2% moisture loss</span>
           </div>
 
           {/* Step 5: Final Net Realization */}
-          <div className="bg-[#1D2722] p-3.5 rounded-xl border-2 border-[#2D6A4F] space-y-1 col-span-2 sm:col-span-1 shadow-md">
-            <span className="text-[10px] text-[#52796F] font-bold uppercase block">5. Net Cash Realized</span>
-            <strong className="text-lg font-black text-[#48BB78] font-mono block">
+          <div className="bg-[#1A2420] p-3.5 rounded-xl border border-[#34C772] space-y-1 col-span-2 sm:col-span-1 shadow-md">
+            <span className="text-[10px] text-[#34C772] font-bold uppercase block">5. Net Cash Realized</span>
+            <strong className="text-lg font-black text-[#34C772] font-mono block">
               ₹{netRealizationPerKg.toFixed(2)}/kg
             </strong>
-            <span className="text-[10px] text-[#48BB78] font-bold">
+            <span className="text-[10px] text-[#34C772] font-bold">
               +₹{(netRealizationPerKg - currentMandiPrice).toFixed(2)}/kg uplift
             </span>
           </div>
@@ -632,35 +629,35 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
       {/* ============================================================
           SECTION 5 — COMPACT DECISION TRAIL ("WHY THIS MOVE?")
           ============================================================ */}
-      <section className="bg-[#161E1A] border border-[#26332C] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center space-x-2 text-xs font-bold text-[#52796F]">
-          <ShieldCheck className="w-4 h-4 text-[#48BB78]" />
+      <section className="bg-[#141A17] border border-[#273029] rounded-2xl p-6 space-y-4">
+        <div className="flex items-center space-x-2 text-xs font-bold text-[#7F8F85]">
+          <ShieldCheck className="w-4 h-4 text-[#34C772]" />
           <span className="text-white uppercase tracking-wider">Decision Logic & Feasibility Trail</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs text-[#C2CBC5]">
-          <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-1">
+          <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029] space-y-1">
             <span className="font-bold text-white block text-xs">01. Higher Expected Payout</span>
             <p className="text-[11px] text-[#8E9C93] leading-relaxed">
               Spatial arbitrage across the regional corridor captures +26% higher net returns over local spot selling.
             </p>
           </div>
 
-          <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-1">
+          <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029] space-y-1">
             <span className="font-bold text-white block text-xs">02. Economically Viable Freight</span>
             <p className="text-[11px] text-[#8E9C93] leading-relaxed">
               Refrigerated transit cost (-₹3.80/kg) is well below the regional gross spread of ₹12.00/kg.
             </p>
           </div>
 
-          <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-1">
+          <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029] space-y-1">
             <span className="font-bold text-white block text-xs">03. Shelf-Life Safe Window</span>
             <p className="text-[11px] text-[#8E9C93] leading-relaxed">
               {shelfLifeDays}-day physiological shelf life easily absorbs the 4.2-hour cold transit time.
             </p>
           </div>
 
-          <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-1">
+          <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029] space-y-1">
             <span className="font-bold text-white block text-xs">04. Zero Broker Cess</span>
             <p className="text-[11px] text-[#8E9C93] leading-relaxed">
               Bypassing traditional APMC commission agents preserves an additional 6–8% in cooperative pocket cash.
@@ -672,12 +669,15 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
       {/* ============================================================
           SECTION 6 — BATCH JOURNEY VISUAL PROCESS
           ============================================================ */}
-      <section className="bg-[#161E1A] border border-[#26332C] rounded-2xl p-6 space-y-4">
+      <section className="bg-[#141A17] border border-[#273029] rounded-2xl p-6 space-y-4">
         <div>
-          <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-[#7F8F85] uppercase tracking-wider">
             Operational Produce Lifecycle
           </span>
-          <h3 className="text-lg font-bold text-white tracking-tight mt-0.5">
+          <h3
+            className="text-lg font-bold text-[#F2F4F3] tracking-tight mt-0.5"
+            style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+          >
             Batch Disposition Journey
           </h3>
         </div>
@@ -689,21 +689,21 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
             { step: '03. DECISION', status: 'ACTIVE', label: 'AgriDirect Optimal' },
             { step: '04. TRANSIT', status: 'PENDING', label: 'Cold Reefer' },
             { step: '05. MARKET', status: 'PENDING', label: 'T+24 Settlement' }
-          ].map((st, idx) => (
+          ].map((st) => (
             <div
               key={st.step}
               className={`p-3 rounded-xl border transition-all ${
                 st.status === 'ACTIVE'
-                  ? 'bg-[#1D2722] border-2 border-[#2D6A4F] text-white shadow-md'
+                  ? 'bg-[#1A2420] border border-[#34C772] text-white shadow-md'
                   : st.status === 'DONE'
-                  ? 'bg-[#101513] border-[#26332C] text-[#48BB78]'
-                  : 'bg-[#101513]/50 border-[#1F2723] text-[#637068]'
+                  ? 'bg-[#101613] border border-[#273029] text-[#34C772]'
+                  : 'bg-[#101613]/50 border border-[#273029]/60 text-[#637068]'
               }`}
             >
               <div className="flex items-center justify-between text-[10px] mb-1">
                 <span className="font-bold">{st.step}</span>
-                {st.status === 'DONE' && <Check className="w-3 h-3 text-[#48BB78]" />}
-                {st.status === 'ACTIVE' && <span className="w-2 h-2 rounded-full bg-[#48BB78] animate-ping" />}
+                {st.status === 'DONE' && <Check className="w-3 h-3 text-[#34C772]" />}
+                {st.status === 'ACTIVE' && <span className="w-2 h-2 rounded-full bg-[#34C772] animate-pulse" />}
               </div>
               <span className="text-xs font-bold block">{st.label}</span>
             </div>
@@ -714,20 +714,23 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
       {/* ============================================================
           SECTION 7 — ADVANCED BATCH PARAMETERS & TUNING
           ============================================================ */}
-      <section className="bg-[#161E1A] border border-[#26332C] rounded-2xl p-6 space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-[#26332C]">
+      <section className="bg-[#141A17] border border-[#273029] rounded-2xl p-6 space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-[#273029]">
           <div>
-            <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-[#7F8F85] uppercase tracking-wider">
               Simulation & Batch Parameters
             </span>
-            <h3 className="text-sm font-bold text-white tracking-tight mt-0.5">
+            <h3
+              className="text-sm font-bold text-[#F2F4F3] tracking-tight mt-0.5"
+              style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+            >
               Tune Harvest Attributes & Constraints
             </h3>
           </div>
           <button
             onClick={runDecisionOptimization}
             disabled={loading}
-            className="ad-btn-secondary text-xs h-8 px-3 flex items-center space-x-1.5"
+            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-[#F2F4F3] bg-[#101613] border border-[#273029] hover:bg-[#1B2320] transition-all flex items-center space-x-1.5 cursor-pointer"
           >
             <RotateCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Recalculate Engine</span>
@@ -737,14 +740,14 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
           {/* Commodity */}
           <div>
-            <label className="ad-label text-[11px] text-[#C2CBC5]">Commodity</label>
+            <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Commodity</label>
             <select
               value={commodity}
               onChange={(e) => handleCommodityChange(e.target.value)}
-              className="w-full bg-[#101513] border border-[#26332C] rounded-xl px-3 py-2 text-xs text-white focus:border-[#2D6A4F] focus:outline-none"
+              className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white focus:border-[#34C772] focus:outline-none"
             >
               {Object.keys(COMMODITY_PRESETS).map(c => (
-                <option key={c} value={c} className="bg-[#161E1A] text-white">
+                <option key={c} value={c} className="bg-[#141A17] text-white">
                   {c} ({COMMODITY_PRESETS[c].location.split(',')[0]})
                 </option>
               ))}
@@ -753,40 +756,40 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
 
           {/* Batch Volume */}
           <div>
-            <label className="ad-label text-[11px] text-[#C2CBC5]">Batch Quantity (kg)</label>
+            <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Batch Quantity (kg)</label>
             <input
               type="number"
               value={quantityKg}
               onChange={(e) => setQuantityKg(Number(e.target.value))}
               step={500}
               min={500}
-              className="w-full bg-[#101513] border border-[#26332C] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#2D6A4F] focus:outline-none"
+              className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#34C772] focus:outline-none"
             />
           </div>
 
           {/* Mandi Price */}
           <div>
-            <label className="ad-label text-[11px] text-[#C2CBC5]">Current Local Price (₹/kg)</label>
+            <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Current Local Price (₹/kg)</label>
             <input
               type="number"
               value={currentMandiPrice}
               onChange={(e) => setCurrentMandiPrice(Number(e.target.value))}
               step={0.5}
               min={1}
-              className="w-full bg-[#101513] border border-[#26332C] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#2D6A4F] focus:outline-none"
+              className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#34C772] focus:outline-none"
             />
           </div>
 
           {/* Shelf Life */}
           <div>
-            <label className="ad-label text-[11px] text-[#C2CBC5]">Physiological Shelf Life (Days)</label>
+            <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Physiological Shelf Life (Days)</label>
             <input
               type="number"
               value={shelfLifeDays}
               onChange={(e) => setShelfLifeDays(Number(e.target.value))}
               min={2}
               max={365}
-              className="w-full bg-[#101513] border border-[#26332C] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#2D6A4F] focus:outline-none"
+              className="w-full bg-[#101613] border border-[#273029] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#34C772] focus:outline-none"
             />
           </div>
         </div>
