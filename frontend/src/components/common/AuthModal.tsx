@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { UserRole } from '../../types';
 import {
   X,
@@ -7,12 +8,12 @@ import {
   CheckCircle2,
   AlertCircle,
   Sprout,
-  Building2,
   ShoppingCart,
   Landmark,
   ShieldCheck,
   Truck,
-  ArrowRight
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 
 interface AuthModalProps {
@@ -29,7 +30,6 @@ const SEEDED_ACCOUNTS = [
     email: 'farmer@agridirect.org',
     password: 'FarmerPass123!',
     icon: Sprout,
-    badgeColor: 'bg-[#222C27] text-[#48BB78] border-[#2B3731]'
   },
   {
     role: 'BUYER' as UserRole,
@@ -38,7 +38,6 @@ const SEEDED_ACCOUNTS = [
     email: 'buyer@bigbasket.com',
     password: 'BuyerPass123!',
     icon: ShoppingCart,
-    badgeColor: 'bg-[#222C27] text-[#48BB78] border-[#2B3731]'
   },
   {
     role: 'LOGISTICS' as UserRole,
@@ -47,7 +46,6 @@ const SEEDED_ACCOUNTS = [
     email: 'transporter@agridirect.org',
     password: 'TransporterPass123!',
     icon: Truck,
-    badgeColor: 'bg-[#222C27] text-[#48BB78] border-[#2B3731]'
   },
   {
     role: 'DOCA_OBSERVER' as UserRole,
@@ -56,7 +54,6 @@ const SEEDED_ACCOUNTS = [
     email: 'observer@doca.gov.in',
     password: 'ObserverPass123!',
     icon: Landmark,
-    badgeColor: 'bg-[#222C27] text-[#D97706] border-[#2B3731]'
   }
 ];
 
@@ -70,6 +67,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  // Handle ESC key to close
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -101,7 +108,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         setTimeout(() => {
           onLoginSuccess(data.user?.role || 'FARMER', email);
           onClose();
-        }, 500);
+        }, 400);
       } else {
         // Fallback for offline demo mode
         const matched = SEEDED_ACCOUNTS.find(a => a.email === email);
@@ -110,7 +117,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           setTimeout(() => {
             onLoginSuccess(matched.role, email);
             onClose();
-          }, 500);
+          }, 400);
         } else {
           setErrorMsg('Invalid email or password. Please select one of the verified demo accounts.');
         }
@@ -122,7 +129,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         setTimeout(() => {
           onLoginSuccess(matched.role, email);
           onClose();
-        }, 500);
+        }, 400);
       } else {
         setErrorMsg('Network error. Selected demo account authenticated.');
       }
@@ -131,52 +138,123 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-      <div className="glass-panel rounded-3xl border border-slate-700 max-w-2xl w-full overflow-hidden grid grid-cols-1 md:grid-cols-12 shadow-2xl animate-fadeIn">
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[9999] overflow-y-auto flex items-center justify-center p-4 sm:p-6"
+      style={{
+        background: 'rgba(5, 8, 6, 0.85)',
+        backdropFilter: 'blur(8px)',
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="relative rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 w-full max-w-2xl my-auto shadow-2xl animate-fadeIn"
+        style={{
+          background: 'var(--ad-surface-0)',
+          border: '1px solid var(--ad-border-accent)',
+          boxShadow: 'var(--ad-shadow-2xl), 0 0 32px rgba(199, 163, 86, 0.15)',
+          maxHeight: 'calc(100vh - 40px)',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Left Side: Visual Farm Banner */}
-        <div className="md:col-span-5 relative hidden md:block bg-slate-900 overflow-hidden">
+        <div
+          className="md:col-span-5 relative hidden md:flex flex-col justify-between p-6 overflow-hidden"
+          style={{ background: 'var(--ad-surface-1)' }}
+        >
           <img
             src="/assets/agridirect-login-farm.webp.jpeg"
             alt="AgriDirect Farm Direct Network"
-            className="w-full h-full object-cover opacity-60"
+            className="absolute inset-0 w-full h-full object-cover opacity-50"
             onError={(e) => {
               (e.target as HTMLElement).style.display = 'none';
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent flex flex-col justify-end p-6">
-            <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest">
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(to top, rgba(11, 15, 13, 0.95) 0%, rgba(11, 15, 13, 0.5) 50%, rgba(11, 15, 13, 0.3) 100%)'
+            }}
+          />
+
+          {/* Top Brand Mark */}
+          <div className="relative z-10 flex items-center space-x-2">
+            <div
+              className="w-7 h-7 rounded-lg flex items-center justify-center shadow"
+              style={{ background: 'linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%)' }}
+            >
+              <Sprout className="w-4 h-4 text-white" />
+            </div>
+            <span
+              className="font-extrabold text-sm tracking-tight"
+              style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}
+            >
+              Agri<span style={{ color: 'var(--ad-accent-bright)' }}>Direct</span>
+            </span>
+          </div>
+
+          {/* Bottom Narrative */}
+          <div className="relative z-10 space-y-2 pt-16">
+            <span
+              className="text-[9px] font-bold uppercase tracking-wider block"
+              style={{ color: 'var(--ad-accent)', fontFamily: 'var(--ad-font-display)' }}
+            >
               Digital Public Infrastructure
             </span>
-            <h3 className="text-lg font-black text-white leading-tight mt-1">
+            <h3
+              className="text-base font-extrabold leading-snug"
+              style={{ fontFamily: 'var(--ad-font-display)', color: '#FFFFFF' }}
+            >
               Empowering India's Agricultural Value Chain
             </h3>
-            <p className="text-[11px] text-slate-300 mt-1">
+            <p className="text-[11px] leading-relaxed" style={{ color: 'var(--ad-text-secondary)' }}>
               Verified RBAC credentials with SHA-256 audit trails.
             </p>
           </div>
         </div>
 
-        {/* Right Side: Quick Login Form */}
-        <div className="md:col-span-7 p-6 sm:p-7 space-y-4">
-          <div className="flex items-center justify-between">
+        {/* Right Side: Authentication Interface */}
+        <div
+          className="md:col-span-7 p-5 sm:p-6 space-y-4 overflow-y-auto"
+          style={{ maxHeight: 'calc(100vh - 40px)', background: 'var(--ad-surface-0)' }}
+        >
+          {/* Header Title & Close Button */}
+          <div className="flex items-start justify-between gap-2">
             <div>
-              <h2 className="text-xl font-black text-white tracking-tight">Sign In / Switch Persona</h2>
-              <p className="text-xs text-slate-400">Select a verified demo role or enter credentials.</p>
+              <h2
+                className="text-lg sm:text-xl font-extrabold tracking-tight"
+                style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}
+              >
+                Sign In / Switch Persona
+              </h2>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--ad-text-tertiary)' }}>
+                Select a verified demo role or enter credentials.
+              </p>
             </div>
             <button
+              type="button"
               onClick={onClose}
-              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-1.5 rounded-lg transition-colors cursor-pointer"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-secondary)'
+              }}
+              title="Close modal"
+              aria-label="Close modal"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Preset Persona Quick Chips */}
+          {/* 1-Click Demo Persona Chips */}
           <div className="space-y-1.5">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-              1-Click Demo Accounts:
-            </label>
+            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider">
+              <span style={{ color: 'var(--ad-text-muted)' }}>1-Click Demo Accounts:</span>
+              <span style={{ color: 'var(--ad-accent)' }}>Fast Fill</span>
+            </div>
             <div className="grid grid-cols-2 gap-1.5">
               {SEEDED_ACCOUNTS.map((acc) => {
                 const isSelected = email === acc.email;
@@ -186,16 +264,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     key={acc.email}
                     type="button"
                     onClick={() => handleSelectPreset(acc)}
-                    className={`p-2 rounded-xl text-left border transition-all flex items-center space-x-2 ${
-                      isSelected
-                        ? 'border-emerald-500 bg-emerald-950/30 text-white'
-                        : 'border-slate-800 bg-slate-900/60 text-slate-400 hover:border-slate-700 hover:text-slate-200'
-                    }`}
+                    className="p-2 rounded-xl text-left transition-all cursor-pointer flex items-center space-x-2"
+                    style={{
+                      background: isSelected ? 'var(--ad-surface-1)' : 'var(--ad-surface-0)',
+                      border: isSelected ? '1px solid var(--ad-border-accent)' : '1px solid var(--ad-border)',
+                      borderLeft: isSelected ? '3px solid var(--ad-accent)' : '1px solid var(--ad-border)',
+                      boxShadow: isSelected ? '0 0 10px rgba(199, 163, 86, 0.15)' : 'none',
+                    }}
                   >
-                    <IconComponent className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-emerald-400' : 'text-slate-500'}`} />
+                    <IconComponent
+                      className="w-3.5 h-3.5 shrink-0"
+                      style={{ color: isSelected ? 'var(--ad-accent-bright)' : 'var(--ad-text-muted)' }}
+                    />
                     <div className="truncate">
-                      <span className="text-[11px] font-bold block truncate">{acc.title}</span>
-                      <span className="text-[9px] text-slate-500 block truncate">{acc.name}</span>
+                      <span
+                        className="text-[11px] font-bold block truncate"
+                        style={{
+                          color: isSelected ? 'var(--ad-text-primary)' : 'var(--ad-text-secondary)',
+                          fontFamily: 'var(--ad-font-display)'
+                        }}
+                      >
+                        {acc.title}
+                      </span>
+                      <span className="text-[9px] block truncate" style={{ color: 'var(--ad-text-muted)' }}>
+                        {acc.name}
+                      </span>
                     </div>
                   </button>
                 );
@@ -204,45 +297,73 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-3 pt-1 border-t border-slate-800/80 text-xs">
+          <form onSubmit={handleSubmit} className="space-y-3 pt-2 text-xs" style={{ borderTop: '1px solid var(--ad-border)' }}>
             <div>
-              <label className="block text-slate-400 font-semibold mb-1">Email Address:</label>
+              <label className="block font-semibold mb-1 text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>
+                Email Address:
+              </label>
               <div className="relative">
-                <User className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--ad-text-muted)' }} />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-8 pr-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono"
+                  className="w-full pl-8 pr-3 py-2 rounded-xl text-xs font-mono focus:outline-none"
+                  style={{
+                    background: 'var(--ad-surface-1)',
+                    border: '1px solid var(--ad-border)',
+                    color: 'var(--ad-text-primary)',
+                  }}
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-slate-400 font-semibold mb-1">Password:</label>
+              <label className="block font-semibold mb-1 text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>
+                Password:
+              </label>
               <div className="relative">
-                <Lock className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Lock className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--ad-text-muted)' }} />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-8 pr-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono"
+                  className="w-full pl-8 pr-3 py-2 rounded-xl text-xs font-mono focus:outline-none"
+                  style={{
+                    background: 'var(--ad-surface-1)',
+                    border: '1px solid var(--ad-border)',
+                    color: 'var(--ad-text-primary)',
+                  }}
                   required
                 />
               </div>
             </div>
 
             {errorMsg && (
-              <div className="p-2.5 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 flex items-center space-x-1.5">
-                <AlertCircle className="w-4 h-4 shrink-0" />
+              <div
+                className="p-2.5 rounded-xl text-xs flex items-center space-x-1.5"
+                style={{
+                  background: 'var(--ad-danger-bg)',
+                  border: '1px solid var(--ad-danger)',
+                  color: 'var(--ad-danger-text)'
+                }}
+              >
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                 <span>{errorMsg}</span>
               </div>
             )}
 
             {successMsg && (
-              <div className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 flex items-center space-x-1.5">
-                <CheckCircle2 className="w-4 h-4 shrink-0" />
+              <div
+                className="p-2.5 rounded-xl text-xs flex items-center space-x-1.5"
+                style={{
+                  background: 'var(--ad-brand-light)',
+                  border: '1px solid var(--ad-brand)',
+                  color: 'var(--ad-brand-bright)'
+                }}
+              >
+                <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                 <span>{successMsg}</span>
               </div>
             )}
@@ -250,7 +371,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-emerald-700/20 text-xs flex items-center justify-center space-x-1.5"
+              className="w-full py-2.5 rounded-xl font-bold transition-all shadow-md text-xs flex items-center justify-center space-x-1.5 cursor-pointer"
+              style={{
+                background: 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)',
+                color: '#0B0F0D',
+                fontFamily: 'var(--ad-font-display)',
+                boxShadow: '0 2px 10px rgba(199, 163, 86, 0.3)',
+              }}
             >
               <span>{loading ? 'Authenticating...' : 'Sign In with Selected Role'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -260,4 +387,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };
