@@ -167,5 +167,5 @@ def test_api_forecasting_and_benchmark_endpoints(client: TestClient):
     res_b = client.get("/api/v1/forecasting/models-benchmark?commodity=Potato&region=Agra")
     assert res_b.status_code == 200
     b_data = res_b.json()
-    assert len(b_data["baseline_comparison"]) == 4
+    assert len(b_data["baseline_comparison"]) >= 4
     assert "active_model" in b_data

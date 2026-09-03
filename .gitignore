@@ -46,4 +46,10 @@ implementation_plan.md
 *.log
 npm-debug.log*
 
+# Archives & Temporary Raw Zip Drops
+*.zip
+ml model/
+dataset/
+
 .github/
+

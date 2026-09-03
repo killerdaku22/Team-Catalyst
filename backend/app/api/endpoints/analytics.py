@@ -153,3 +153,41 @@ def get_ministry_macro_analytics(db: Session = Depends(get_db)):
         },
         "regional_breakdown": regional_breakdown
     }
+
+_ml_analytics_engine = None
+
+def get_ml_analytics_engine():
+    global _ml_analytics_engine
+    if _ml_analytics_engine is None:
+        from app.engines.analytics_engine import DataAnalyticsEngine
+        _ml_analytics_engine = DataAnalyticsEngine()
+    return _ml_analytics_engine
+
+@router.get("/market")
+def get_market_analytics(
+    commodity: str = "Tomato",
+    market: str = "Ranchi",
+):
+    """
+    Returns live market intelligence, 1d/7d/30d price changes, volatility classification,
+    active market signals (supply shocks, gluts, price spikes), and 30-day historical trend.
+    """
+    engine = get_ml_analytics_engine()
+    res = engine.get_market_analytics(commodity=commodity, market=market)
+    if "error" in res:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail=res["error"])
+    return res
+
+@router.get("/arbitrage")
+def get_cross_mandi_arbitrage(
+    commodity: str = "Tomato",
+    origin_market: str = "Ranchi",
+):
+    """
+    Evaluates real-time price arbitrage across distant mandis, penalizing for
+    freight haulage distance and ambient heat spoilage to compute net realization.
+    """
+    engine = get_ml_analytics_engine()
+    return engine.compute_cross_mandi_arbitrage(origin_market=origin_market, commodity=commodity)
+
