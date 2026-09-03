@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { UserRole } from './types';
 import { Header } from './components/common/Header';
 import { MinistryAdminView } from './components/dashboard/MinistryAdminView';
@@ -15,6 +16,14 @@ import { MarketIntelligenceView } from './components/intelligence/MarketIntellig
 import { LoginPageView } from './components/auth/LoginPageView';
 import { DesignSystem } from './components/common/DesignSystem';
 import { VoiceKisanAssistant } from './components/voice/VoiceKisanAssistant';
+import { Sprout } from 'lucide-react';
+
+const pageTransition = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -6 },
+  transition: { duration: 0.25 },
+};
 
 export const App: React.FC = () => {
   const [activeRole, setActiveRole] = useState<UserRole>('FARMER');
@@ -30,8 +39,68 @@ export const App: React.FC = () => {
       .catch(() => setIsBackendConnected(false));
   }, []);
 
+  const renderActiveView = () => {
+    switch (activeTab) {
+      case 'home':
+        return (
+          <LandingPageView
+            onNavigate={(tab, role) => {
+              setActiveTab(tab);
+              if (role) setActiveRole(role as UserRole);
+            }}
+          />
+        );
+      case 'farmer':
+        return <FarmerPortalView onNavigateToMarketplace={() => setActiveTab('marketplace')} />;
+      case 'decision':
+        return (
+          <DecisionCenterView
+            onNavigateToMarketplace={() => setActiveTab('marketplace')}
+            onNavigateToStorage={() => setActiveTab('storage')}
+            onNavigateToLogistics={() => setActiveTab('logistics')}
+          />
+        );
+      case 'best-market':
+        return <BestMarketView onNavigateToLogistics={() => setActiveTab('logistics')} />;
+      case 'marketplace':
+        return <BuyerPortalView />;
+      case 'logistics':
+        return <LogisticsRouteView />;
+      case 'forecasting':
+        return <DemandForecastView />;
+      case 'intelligence':
+        return <MarketIntelligenceView />;
+      case 'ministry':
+        return <MinistryAdminView />;
+      case 'buffer':
+        return <BufferStockView />;
+      case 'storage':
+        return <ColdStorageView />;
+      case 'design-system':
+        return <DesignSystem />;
+      case 'login':
+        return (
+          <LoginPageView
+            onLoginSuccess={(role) => {
+              setActiveRole(role);
+              if (role === 'DOCA_OBSERVER' || role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') setActiveTab('ministry');
+              else if (role === 'BUYER') setActiveTab('marketplace');
+              else if (role === 'FPO' || role === 'FARMER') setActiveTab('farmer');
+              else if (role === 'LOGISTICS' || role === 'TRANSPORTER') setActiveTab('logistics');
+            }}
+            onNavigateHome={() => setActiveTab('home')}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#0F1412] text-[#F5F7F5]">
+    <div className="min-h-screen flex flex-col" style={{
+      background: 'var(--ad-bg)',
+      color: 'var(--ad-text-primary)',
+    }}>
       {/* Accessible Skip Landmark */}
       <a href="#main-content" className="skip-to-content">
         Skip to main content
@@ -46,75 +115,69 @@ export const App: React.FC = () => {
         isBackendConnected={isBackendConnected}
       />
 
-      {/* Main Content Container — Max Width 1440px & Standard Gutter */}
-      <main id="main-content" className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-5" tabIndex={-1}>
-        {activeTab === 'home' && (
-          <LandingPageView
-            onNavigate={(tab, role) => {
-              setActiveTab(tab);
-              if (role) setActiveRole(role as UserRole);
-            }}
-          />
-        )}
-        {activeTab === 'farmer' && (
-          <FarmerPortalView onNavigateToMarketplace={() => setActiveTab('marketplace')} />
-        )}
-        {activeTab === 'decision' && (
-          <DecisionCenterView
-            onNavigateToMarketplace={() => setActiveTab('marketplace')}
-            onNavigateToStorage={() => setActiveTab('storage')}
-            onNavigateToLogistics={() => setActiveTab('logistics')}
-          />
-        )}
-        {activeTab === 'best-market' && (
-          <BestMarketView
-            onNavigateToLogistics={() => setActiveTab('logistics')}
-          />
-        )}
-        {activeTab === 'marketplace' && <BuyerPortalView />}
-        {activeTab === 'logistics' && <LogisticsRouteView />}
-        {activeTab === 'forecasting' && <DemandForecastView />}
-        {activeTab === 'intelligence' && <MarketIntelligenceView />}
-        {activeTab === 'ministry' && <MinistryAdminView />}
-        {activeTab === 'buffer' && <BufferStockView />}
-        {activeTab === 'storage' && <ColdStorageView />}
-        {activeTab === 'design-system' && <DesignSystem />}
-        {activeTab === 'login' && (
-          <LoginPageView
-            onLoginSuccess={(role) => {
-              setActiveRole(role);
-              if (role === 'DOCA_OBSERVER' || role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') setActiveTab('ministry');
-              else if (role === 'BUYER') setActiveTab('marketplace');
-              else if (role === 'FPO' || role === 'FARMER') setActiveTab('farmer');
-              else if (role === 'LOGISTICS' || role === 'TRANSPORTER') setActiveTab('logistics');
-            }}
-            onNavigateHome={() => setActiveTab('home')}
-          />
-        )}
+      {/* Main Content Container — Smooth page transitions */}
+      <main id="main-content" className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6" tabIndex={-1}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={pageTransition.initial}
+            animate={pageTransition.animate}
+            exit={pageTransition.exit}
+            transition={pageTransition.transition}
+          >
+            {renderActiveView()}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
-      {/* Clean Compact Footer */}
-      <footer className="border-t border-[#2B3731] bg-[#121815] py-4 mt-8">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#8E9C93] gap-2">
-          <div className="flex items-center space-x-2">
-            <span className="font-semibold text-white">AgriDirect</span>
-            <span>•</span>
-            <span>Agricultural Commerce & Market Intelligence Platform</span>
-          </div>
-          <div className="flex items-center space-x-3 text-[11px]">
-            <button
-              onClick={() => setActiveTab('design-system')}
-              className="text-[#52796F] hover:text-[#709A7E] font-medium transition-colors"
-            >
-              Design Tokens
-            </button>
-            <span>•</span>
-            <span>Verified Data Provenance</span>
+      {/* Footer — Professional, not generic */}
+      <footer
+        className="mt-10"
+        style={{
+          borderTop: '1px solid var(--ad-border)',
+          background: 'linear-gradient(180deg, var(--ad-surface-0) 0%, var(--ad-bg) 100%)',
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            {/* Left: Brand */}
+            <div className="flex items-center space-x-3">
+              <div
+                className="w-7 h-7 rounded-lg flex items-center justify-center"
+                style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border)' }}
+              >
+                <Sprout className="w-3.5 h-3.5" style={{ color: 'var(--ad-brand-bright)' }} />
+              </div>
+              <div>
+                <span className="font-bold text-sm" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                  AgriDirect
+                </span>
+                <span className="mx-2 text-xs" style={{ color: 'var(--ad-border-strong)' }}>·</span>
+                <span className="text-xs" style={{ color: 'var(--ad-text-muted)' }}>
+                  Connecting Indian agriculture to fair, transparent markets
+                </span>
+              </div>
+            </div>
+
+            {/* Right: Links */}
+            <div className="flex items-center space-x-4 text-[11px]" style={{ color: 'var(--ad-text-muted)' }}>
+              <button
+                onClick={() => setActiveTab('design-system')}
+                className="transition-colors hover:text-[var(--ad-text-secondary)]"
+                style={{ color: 'var(--ad-text-muted)' }}
+              >
+                Design System
+              </button>
+              <span style={{ color: 'var(--ad-border)' }}>·</span>
+              <span>Verified Data Sources</span>
+              <span style={{ color: 'var(--ad-border)' }}>·</span>
+              <span>v2.0</span>
+            </div>
           </div>
         </div>
       </footer>
 
-      {/* Compact Bottom-Right Floating Voice Assistant */}
+      {/* Floating Voice Assistant */}
       <VoiceKisanAssistant />
     </div>
   );

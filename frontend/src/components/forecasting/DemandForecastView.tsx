@@ -58,23 +58,44 @@ export const DemandForecastView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner & Selectors */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-4">
+      <div
+        className="p-6 sm:p-8 rounded-2xl space-y-5 shadow-lg"
+        style={{
+          background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 100%)',
+          border: '1px solid var(--ad-border)',
+        }}
+      >
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-mono font-bold border border-emerald-500/30">
+              <span
+                className="text-[10px] px-3 py-1 rounded-full font-bold tracking-wider uppercase"
+                style={{
+                  background: 'var(--ad-accent-light)',
+                  color: 'var(--ad-accent-bright)',
+                  border: '1px solid var(--ad-border-accent)',
+                  fontFamily: 'var(--ad-font-display)'
+                }}
+              >
                 Multi-Model Time-Series Analytics
               </span>
               {forecast?.active_model && (
-                <span className="bg-cyan-500/10 text-cyan-300 text-xs px-2.5 py-1 rounded-full font-mono font-semibold border border-cyan-500/30">
+                <span
+                  className="text-[10px] px-2.5 py-1 rounded-full font-semibold"
+                  style={{
+                    background: 'var(--ad-cool-light)',
+                    color: 'var(--ad-cool-bright)',
+                    border: '1px solid rgba(88, 134, 160, 0.2)',
+                  }}
+                >
                   Model: {forecast.active_model}
                 </span>
               )}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-2">
-              MARKET OUTLOOK
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+              14-Day Market Price Outlook
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mt-1">
+            <p className="text-sm max-w-2xl mt-1" style={{ color: 'var(--ad-text-tertiary)' }}>
               Automated backtesting evaluation across Naive Persistence, 7-Day Moving Average, Holt-Winters Exponential Smoothing, and Ridge Autoregressive Regression.
             </p>
           </div>
@@ -83,13 +104,19 @@ export const DemandForecastView: React.FC = () => {
         </div>
 
         {/* Commodity & Region Selector Toolbar */}
-        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-800/80">
+        <div className="flex flex-wrap items-center gap-3 pt-3" style={{ borderTop: '1px solid var(--ad-border)' }}>
           <div className="flex items-center space-x-2">
-            <span className="text-xs font-semibold text-slate-400">Commodity:</span>
+            <span className="text-xs font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Commodity:</span>
             <select
               value={commodity}
               onChange={(e) => setCommodity(e.target.value)}
-              className="bg-slate-900 text-emerald-400 font-bold text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+              className="font-bold text-xs rounded-xl px-3.5 py-2 cursor-pointer focus:outline-none"
+              style={{
+                background: 'var(--ad-surface-1)',
+                color: 'var(--ad-text-primary)',
+                border: '1px solid var(--ad-border)',
+                fontFamily: 'var(--ad-font-display)'
+              }}
             >
               <option value="Tomato">🍅 Tomato (Hybrid Red)</option>
               <option value="Onion">🧅 Onion (Nashik Red)</option>
@@ -102,23 +129,34 @@ export const DemandForecastView: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-2">
-            <span className="text-xs font-semibold text-slate-400">Market / Region:</span>
+            <span className="text-xs font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Market / Region:</span>
             <select
               value={region}
               onChange={(e) => setRegion(e.target.value)}
-              className="bg-slate-900 text-cyan-400 font-bold text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-1 focus:ring-cyan-500 cursor-pointer"
+              className="font-bold text-xs rounded-xl px-3.5 py-2 cursor-pointer focus:outline-none"
+              style={{
+                background: 'var(--ad-surface-1)',
+                color: 'var(--ad-text-primary)',
+                border: '1px solid var(--ad-border)',
+                fontFamily: 'var(--ad-font-display)'
+              }}
             >
               <option value="Delhi-NCR">📍 Delhi-NCR Azadpur Hub</option>
-              <option value="Punjab">📍 Punjab Mandi Circuit</option>
-              <option value="Maharashtra">📍 Maharashtra (Nashik/Vashi)</option>
-              <option value="Karnataka">📍 Karnataka (Kolar/Bengaluru)</option>
-              <option value="Uttar Pradesh">📍 Uttar Pradesh (Agra)</option>
+              <option value="Bengaluru">📍 Bengaluru Electronic City</option>
+              <option value="Mumbai">📍 Mumbai Vashi APMC</option>
+              <option value="Lucknow">📍 Lucknow Mandi Hub</option>
+              <option value="Kolkata">📍 Kolkata Central Depot</option>
             </select>
           </div>
 
           <button
             onClick={loadForecast}
-            className="ml-auto p-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 transition-all flex items-center space-x-1.5 text-xs font-semibold"
+            className="ml-auto p-2.5 rounded-xl transition-all flex items-center space-x-1.5 text-xs font-semibold"
+            style={{
+              background: 'var(--ad-surface-1)',
+              border: '1px solid var(--ad-border)',
+              color: 'var(--ad-text-secondary)',
+            }}
             title="Re-estimate model parameters"
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -138,46 +176,74 @@ export const DemandForecastView: React.FC = () => {
         />
       ) : (
         <div className="space-y-6">
-          {/* Top 4 Primary KPI Cards */}
+          {/* Top 4 Primary KPI Cards — Color-coded left accents */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-1">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Current Modal Price</span>
-              <div className="text-2xl font-black text-white font-mono">
-                ₹{forecast.current_modal_price} <span className="text-xs text-slate-400 font-normal">/ kg</span>
+            <div
+              className="p-5 rounded-2xl space-y-1.5 shadow-sm"
+              style={{
+                background: 'var(--ad-surface-0)',
+                border: '1px solid var(--ad-border)',
+                borderLeft: '3px solid var(--ad-border-strong)',
+              }}
+            >
+              <span className="text-xs font-semibold block" style={{ color: 'var(--ad-text-tertiary)' }}>Current Modal Price</span>
+              <div className="text-2xl font-extrabold" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                ₹{forecast.current_modal_price} <span className="text-xs font-normal" style={{ color: 'var(--ad-text-muted)' }}>/ kg</span>
               </div>
-              <p className="text-[11px] text-slate-400 font-mono">
+              <p className="text-[11px]" style={{ color: 'var(--ad-text-muted)' }}>
                 Historical Baseline: ₹{forecast.historical_mean_price || forecast.current_modal_price}/kg
               </p>
             </div>
 
-            <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-1">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">14-Day Price Outlook</span>
-              <div className="text-2xl font-black text-emerald-400 font-mono">
+            <div
+              className="p-5 rounded-2xl space-y-1.5 shadow-sm"
+              style={{
+                background: 'var(--ad-surface-0)',
+                border: '1px solid var(--ad-border)',
+                borderLeft: '3px solid var(--ad-brand-bright)',
+              }}
+            >
+              <span className="text-xs font-semibold block" style={{ color: 'var(--ad-text-tertiary)' }}>14-Day Price Outlook</span>
+              <div className="text-2xl font-extrabold" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-brand-bright)' }}>
                 ₹{forecast.demand_forecast[forecast.demand_forecast.length - 1]?.predicted_modal_price || forecast.current_modal_price}
-                <span className="text-xs text-slate-400 font-normal"> / kg</span>
+                <span className="text-xs font-normal" style={{ color: 'var(--ad-text-muted)' }}> / kg</span>
               </div>
-              <p className="text-[11px] text-emerald-400 font-semibold flex items-center space-x-1">
+              <p className="text-[11px] font-semibold flex items-center space-x-1" style={{ color: 'var(--ad-brand-bright)' }}>
                 <TrendingUp className="w-3.5 h-3.5" />
                 <span>Steady Appreciation Projected</span>
               </p>
             </div>
 
-            <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-1">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Forecast Volatility</span>
-              <div className="text-2xl font-black text-cyan-400 font-mono">
+            <div
+              className="p-5 rounded-2xl space-y-1.5 shadow-sm"
+              style={{
+                background: 'var(--ad-surface-0)',
+                border: '1px solid var(--ad-border)',
+                borderLeft: '3px solid var(--ad-cool-bright)',
+              }}
+            >
+              <span className="text-xs font-semibold block" style={{ color: 'var(--ad-text-tertiary)' }}>Forecast Volatility</span>
+              <div className="text-2xl font-extrabold" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-cool-bright)' }}>
                 ±{forecast.demand_forecast[0]?.uncertainty_interval_pct || 6.2}%
               </div>
-              <p className="text-[11px] text-slate-400 font-mono">
+              <p className="text-[11px]" style={{ color: 'var(--ad-text-muted)' }}>
                 95% Confidence Interval Band
               </p>
             </div>
 
-            <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-1">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Demand Velocity</span>
-              <div className="text-2xl font-black text-amber-400 font-mono">
-                {forecast.demand_forecast[0]?.predicted_demand_tonnes || 180} <span className="text-xs text-slate-400 font-normal">T/day</span>
+            <div
+              className="p-5 rounded-2xl space-y-1.5 shadow-sm"
+              style={{
+                background: 'var(--ad-surface-0)',
+                border: '1px solid var(--ad-border)',
+                borderLeft: '3px solid var(--ad-accent)',
+              }}
+            >
+              <span className="text-xs font-semibold block" style={{ color: 'var(--ad-text-tertiary)' }}>Demand Velocity</span>
+              <div className="text-2xl font-extrabold" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-accent-bright)' }}>
+                {forecast.demand_forecast[0]?.predicted_demand_tonnes || 180} <span className="text-xs font-normal" style={{ color: 'var(--ad-text-muted)' }}>T/day</span>
               </div>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px]" style={{ color: 'var(--ad-text-muted)' }}>
                 High Regional Absorption Capacity
               </p>
             </div>
@@ -186,7 +252,7 @@ export const DemandForecastView: React.FC = () => {
           {/* Main Forecast Chart & Key Drivers Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left: 14-Day Area Forecast Chart */}
-            <div className="lg:col-span-8 glass-panel p-6 rounded-3xl border border-slate-800 space-y-4">
+            <div className="lg:col-span-8 p-6 rounded-3xl border" style={{ background: 'var(--ad-surface-0)', borderColor: 'var(--ad-border)' }}>
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-bold text-white text-base">14-Day Price Trajectory & Confidence Interval</h3>

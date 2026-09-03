@@ -1,7 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+export type ButtonVariant = 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -17,6 +17,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 const variantClasses: Record<ButtonVariant, string> = {
   primary:   'ad-btn--primary',
   secondary: 'ad-btn--secondary',
+  accent:    'ad-btn--accent',
   ghost:     'ad-btn--ghost',
   danger:    'ad-btn--danger',
 };
@@ -46,7 +47,7 @@ export const Button: React.FC<ButtonProps> = ({
       {loading ? (
         <span className="ad-loading-spinner ad-loading-spinner--sm" aria-hidden="true" />
       ) : icon ? (
-        <span className="flex-shrink-0 w-4 h-4" aria-hidden="true">{icon}</span>
+        <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center" aria-hidden="true">{icon}</span>
       ) : null}
       <span>{children}</span>
     </button>

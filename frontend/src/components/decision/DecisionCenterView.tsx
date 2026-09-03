@@ -171,19 +171,19 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
       {/* ============================================================
           SECTION 1 — TOP EDITORIAL IDENTITY & BATCH SUMMARY
           ============================================================ */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#26332C]">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5" style={{ borderBottom: '1px solid var(--ad-border)' }}>
         <div>
           <div className="flex items-center space-x-2">
-            <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ad-accent)' }}>
               Produce Disposition Intelligence
             </span>
             <DataProvenance source="14-Day Price Forecasting & Multi-Mandi Feeds" status="MODEL_OUTPUT" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
             Produce Decision Engine
           </h1>
-          <p className="text-xs text-[#8E9C93] max-w-2xl mt-0.5">
-            Solves: <em className="text-[#C2CBC5] not-italic font-semibold">"What should I do with this harvest?"</em> — Evaluates immediate sale, cold storage preservation, and inter-state dispatch to maximize net farmgate realization.
+          <p className="text-sm max-w-2xl mt-1" style={{ color: 'var(--ad-text-tertiary)' }}>
+            Solves: <em className="not-italic font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>"What should I do with this harvest?"</em> — Evaluates immediate sale, cold storage preservation, and inter-state dispatch to maximize net farmgate realization.
           </p>
         </div>
       </div>
@@ -191,17 +191,23 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
       {/* ============================================================
           SECTION 2 — HERO PRODUCT RECOMMENDATION SECTION
           ============================================================ */}
-      <section className="bg-gradient-to-br from-[#1A2620] via-[#161E1A] to-[#121815] border-2 border-[#2D6A4F] rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#2D6A4F]/15 rounded-full blur-3xl pointer-events-none" />
+      <section className="p-6 sm:p-8 shadow-2xl relative overflow-hidden" style={{
+        borderRadius: 'var(--ad-radius-xl)',
+        background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 50%, var(--ad-surface-2) 100%)',
+        border: '1px solid var(--ad-border-accent)',
+        borderLeft: '3px solid var(--ad-accent)',
+        boxShadow: 'var(--ad-shadow-lg), var(--ad-shadow-glow-accent)',
+      }}>
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(199, 163, 86, 0.04)' }} />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           {/* Left Batch Identity & Prominent Recommendation */}
           <div className="lg:col-span-7 space-y-4">
             
             {/* Batch Identity Tags & Commodity Preset Switcher */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-1.5 text-xs">
-                <span className="text-[11px] font-bold text-[#8E9C93] uppercase tracking-wider mr-1">Select Crop:</span>
+                <span className="text-[11px] font-semibold mr-1" style={{ color: 'var(--ad-text-muted)' }}>Select Crop:</span>
                 {Object.keys(COMMODITY_PRESETS).map((crop) => (
                   <button
                     key={crop}
@@ -212,11 +218,14 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
                       setShelfLifeDays(preset.shelfLife);
                       setOriginLocation(preset.location);
                     }}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold transition-all border ${
-                      commodity === crop
-                        ? 'bg-[#2D6A4F] text-white border-[#48BB78] shadow-md scale-105'
-                        : 'bg-[#101513] text-[#8E9C93] border-[#26332C] hover:text-white hover:border-[#52796F]'
-                    }`}
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                    style={{
+                      background: commodity === crop ? 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)' : 'var(--ad-surface-0)',
+                      color: commodity === crop ? '#0B0F0D' : 'var(--ad-text-tertiary)',
+                      border: commodity === crop ? '1px solid var(--ad-accent)' : '1px solid var(--ad-border)',
+                      boxShadow: commodity === crop ? '0 2px 8px rgba(199, 163, 86, 0.2)' : 'none',
+                      fontFamily: 'var(--ad-font-display)',
+                    }}
                   >
                     {crop}
                   </button>
@@ -224,13 +233,22 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
               </div>
 
               <div className="flex flex-wrap items-center gap-2 text-xs pt-1">
-                <span className="bg-[#101513] text-[#48BB78] px-3 py-1 rounded-full border border-[#26332C] font-bold font-mono">
-                  {quantityKg.toLocaleString()} kg • {commodity}
+                <span className="px-3 py-1.5 rounded-lg font-bold" style={{
+                  background: 'var(--ad-brand-light)', color: 'var(--ad-brand-bright)',
+                  border: '1px solid rgba(52, 199, 114, 0.15)', fontFamily: 'var(--ad-font-display)'
+                }}>
+                  {quantityKg.toLocaleString()} kg · {commodity}
                 </span>
-                <span className="bg-[#101513] text-[#C2CBC5] px-3 py-1 rounded-full border border-[#26332C]">
+                <span className="px-3 py-1.5 rounded-lg" style={{
+                  background: 'var(--ad-surface-0)', color: 'var(--ad-text-secondary)',
+                  border: '1px solid var(--ad-border-subtle)'
+                }}>
                   {originLocation.split(',')[0]}
                 </span>
-                <span className="bg-[#101513] text-[#8E9C93] px-3 py-1 rounded-full border border-[#26332C]">
+                <span className="px-3 py-1.5 rounded-lg" style={{
+                  background: 'var(--ad-surface-0)', color: 'var(--ad-text-muted)',
+                  border: '1px solid var(--ad-border-subtle)'
+                }}>
                   Local Mandi: ₹{currentMandiPrice.toFixed(2)}/kg
                 </span>
               </div>
@@ -239,49 +257,65 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
             {/* Prominent Action Recommendation Readout */}
             <div className="space-y-1 pt-1">
               <div className="flex items-center space-x-2">
-                <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#2D6A4F] text-white text-xs font-black shadow-md">
+                <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold shadow-md" style={{
+                  background: 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)',
+                  color: '#0B0F0D',
+                  boxShadow: '0 2px 8px rgba(199, 163, 86, 0.25)',
+                }}>
                   <Award className="w-3.5 h-3.5" />
-                  <span>RECOMMENDED ACTION</span>
+                  <span>Recommended Action</span>
                 </span>
-                <span className="text-xs text-[#52796F] font-semibold">Deterministic Economic Optimization</span>
+                <span className="text-xs font-semibold" style={{ color: 'var(--ad-text-muted)' }}>Deterministic Economic Optimization</span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight pt-1">
-                {optimalAction === 'MOVE' && 'DISPATCH TO TERMINAL AGRO-HUB'}
-                {optimalAction === 'STORE' && 'HOLD IN CERTIFIED COLD STORAGE'}
-                {optimalAction === 'SELL_NOW' && 'EXECUTE IMMEDIATE LOCAL SALE'}
-                {optimalAction === 'SPLIT' && 'SPLIT LOT: 20% LIQUIDITY + 80% TRANSIT'}
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight pt-1" style={{
+                fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)'
+              }}>
+                {optimalAction === 'MOVE' && 'Dispatch to Terminal Agro-Hub'}
+                {optimalAction === 'STORE' && 'Hold in Certified Cold Storage'}
+                {optimalAction === 'SELL_NOW' && 'Execute Immediate Local Sale'}
+                {optimalAction === 'SPLIT' && 'Split Lot: 20% Liquidity + 80% Transit'}
               </h2>
             </div>
 
-            <p className="text-xs sm:text-sm text-[#C2CBC5] leading-relaxed max-w-xl">
+            <p className="text-sm leading-relaxed max-w-xl" style={{ color: 'var(--ad-text-secondary)' }}>
               {decisionResult?.recommendation_summary ||
                 "Optimizing this batch against 14-day price trends and distance matrices guarantees the maximum net cash return for your federation."}
             </p>
 
             {/* Financial Uplift Highlights */}
-            <div className="grid grid-cols-2 gap-3 pt-2 max-w-lg">
-              <div className="bg-[#101513] p-3.5 rounded-2xl border border-[#26332C]">
-                <span className="text-[10px] font-bold text-[#8E9C93] uppercase tracking-wider block">
+            <div className="grid grid-cols-2 gap-4 pt-3 max-w-lg">
+              <div className="p-4 rounded-xl" style={{
+                background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)',
+                borderLeft: '3px solid var(--ad-brand-bright)'
+              }}>
+                <span className="text-xs font-semibold block" style={{ color: 'var(--ad-text-tertiary)' }}>
                   Expected Net Realization
                 </span>
-                <strong className="text-2xl font-black text-[#48BB78] font-mono mt-0.5 block">
+                <strong className="text-2xl font-extrabold mt-1 block" style={{
+                  color: 'var(--ad-brand-bright)', fontFamily: 'var(--ad-font-display)'
+                }}>
                   ₹{netRealizationPerKg.toFixed(2)}
-                  <span className="text-xs text-[#8E9C93] font-normal">/kg</span>
+                  <span className="text-xs font-normal" style={{ color: 'var(--ad-text-muted)' }}>/kg</span>
                 </strong>
-                <span className="text-[11px] text-[#52796F] block mt-0.5">
+                <span className="text-[11px] block mt-1" style={{ color: 'var(--ad-text-muted)' }}>
                   Total: ₹{decisionResult ? decisionResult.optimal_net_revenue.toLocaleString() : (netRealizationPerKg * quantityKg).toLocaleString()}
                 </span>
               </div>
 
-              <div className="bg-[#101513] p-3.5 rounded-2xl border border-[#26332C]">
-                <span className="text-[10px] font-bold text-[#8E9C93] uppercase tracking-wider block">
+              <div className="p-4 rounded-xl" style={{
+                background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)',
+                borderLeft: '3px solid var(--ad-accent)'
+              }}>
+                <span className="text-xs font-semibold block" style={{ color: 'var(--ad-text-tertiary)' }}>
                   Net Expected Uplift
                 </span>
-                <strong className="text-2xl font-black text-white font-mono mt-0.5 block">
+                <strong className="text-2xl font-extrabold mt-1 block" style={{
+                  color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)'
+                }}>
                   +{decisionResult ? decisionResult.net_uplift_pct : 26.4}%
                 </strong>
-                <span className="text-[11px] text-[#48BB78] font-bold block mt-0.5">
+                <span className="text-[11px] font-bold block mt-1" style={{ color: 'var(--ad-accent)' }}>
                   +₹{decisionResult ? decisionResult.net_uplift_vs_local_sell_now.toLocaleString() : Math.round(baselineTotal * 0.264).toLocaleString()} over local
                 </span>
               </div>
@@ -330,14 +364,17 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           </div>
 
           {/* Right Contextual Agricultural Photography */}
-          <div className="lg:col-span-5 relative rounded-2xl overflow-hidden border border-[#26332C] bg-[#101513] shadow-2xl group aspect-[4/3]">
+          <div className="lg:col-span-5 relative overflow-hidden shadow-2xl group aspect-[4/3]" style={{
+            borderRadius: 'var(--ad-radius-xl)', background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+          }}>
             <img
               src={activePreset.image}
               alt={commodity}
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0C100E]/90 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, var(--ad-bg) 0%, transparent 40%)' }} />
 
             {/* Bottom Overlay Label */}
             <div className="absolute bottom-3 left-3 right-3 z-10 bg-[#121815]/90 backdrop-blur-md border border-[#26332C] p-3 rounded-xl flex items-center justify-between text-xs">

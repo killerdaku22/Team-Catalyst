@@ -110,105 +110,163 @@ export const MinistryAdminView: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-8 animate-fadeIn pb-12">
       {/* Header Banner */}
-      <div className="glass-panel p-6 rounded-2xl border border-emerald-500/20 bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+      <div
+        className="p-6 sm:p-8 rounded-2xl relative overflow-hidden shadow-xl"
+        style={{
+          background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 100%)',
+          border: '1px solid var(--ad-border-accent)',
+          borderLeft: '3px solid var(--ad-accent)',
+          boxShadow: 'var(--ad-shadow-lg), var(--ad-shadow-glow-accent)',
+        }}
+      >
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="bg-[#222C27] text-[#48BB78] border border-[#2B3731] text-xs px-3 py-1 rounded-full font-mono font-semibold">
+              <span
+                className="text-[10px] px-3 py-1 rounded-full font-bold tracking-wider uppercase"
+                style={{
+                  background: 'var(--ad-accent-light)',
+                  color: 'var(--ad-accent-bright)',
+                  border: '1px solid var(--ad-border-accent)',
+                  fontFamily: 'var(--ad-font-display)'
+                }}
+              >
                 DoCA Market Oversight & Intelligence
               </span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-2 tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mt-2" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
               Department of Consumer Affairs (DoCA) — Market Intelligence & Oversight
             </h1>
-            <p className="text-slate-300 text-sm mt-1 max-w-3xl">
+            <p className="text-sm mt-1 max-w-3xl leading-relaxed" style={{ color: 'var(--ad-text-tertiary)' }}>
               Read-only oversight of agricultural disintermediation, price variance reduction, direct farmer payout uplift, and urban consumer price stabilization.
             </p>
           </div>
 
-          <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-col items-end gap-2 shrink-0">
             <DataProvenance source="DoCA National Price Monitoring Cell" status="LIVE" />
-            <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-right font-mono">
-              <div className="text-[10px] text-slate-400">Supply Stability Index</div>
-              <div className="text-xl font-black text-emerald-400 flex items-center justify-end space-x-1">
+            <div
+              className="p-3.5 rounded-xl text-right font-mono"
+              style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border-subtle)' }}
+            >
+              <div className="text-[10px]" style={{ color: 'var(--ad-text-muted)' }}>Supply Stability Index</div>
+              <div className="text-xl font-extrabold flex items-center justify-end space-x-1" style={{ color: 'var(--ad-brand-bright)', fontFamily: 'var(--ad-font-display)' }}>
                 <span>{macro_metrics.supply_demand_stability_index}</span>
-                <span className="text-xs text-slate-400">/ 100</span>
+                <span className="text-xs font-normal" style={{ color: 'var(--ad-text-muted)' }}>/ 100</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Metric Cards Grid */}
+      {/* Metric Cards Grid — Color-coded left accents */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="glass-card p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
+        <div
+          className="p-5 rounded-2xl space-y-2 relative overflow-hidden shadow-sm"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+            borderLeft: '3px solid var(--ad-brand-bright)',
+          }}
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Farmer Earnings Uplift</span>
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--ad-text-muted)' }}>Farmer Earnings Uplift</span>
+            <div
+              className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{ background: 'var(--ad-brand-light)', color: 'var(--ad-brand-bright)' }}
+            >
               <TrendingUp className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="text-2xl font-extrabold text-white tracking-tight">
+          <div>
+            <div className="text-2xl font-extrabold tracking-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
               ₹{(macro_metrics.total_farmer_earnings_uplift_inr).toLocaleString('en-IN')}
             </div>
-            <div className="flex items-center space-x-1 mt-1 text-xs text-emerald-400 font-medium">
+            <div className="flex items-center space-x-1 mt-1 text-xs font-semibold" style={{ color: 'var(--ad-brand-bright)' }}>
               <ArrowUpRight className="w-4 h-4" />
               <span>+{macro_metrics.avg_farmer_earnings_uplift_percent}% net income vs middleman</span>
             </div>
           </div>
         </div>
 
-        <div className="glass-card p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
+        <div
+          className="p-5 rounded-2xl space-y-2 relative overflow-hidden shadow-sm"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+            borderLeft: '3px solid var(--ad-cool-bright)',
+          }}
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Consumer Cost Savings</span>
-            <div className="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--ad-text-muted)' }}>Consumer Cost Savings</span>
+            <div
+              className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{ background: 'var(--ad-cool-light)', color: 'var(--ad-cool-bright)' }}
+            >
               <DollarSign className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="text-2xl font-extrabold text-white tracking-tight">
+          <div>
+            <div className="text-2xl font-extrabold tracking-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
               ₹{(macro_metrics.total_consumer_savings_inr).toLocaleString('en-IN')}
             </div>
-            <div className="flex items-center space-x-1 mt-1 text-xs text-cyan-400 font-medium">
+            <div className="flex items-center space-x-1 mt-1 text-xs font-semibold" style={{ color: 'var(--ad-cool-bright)' }}>
               <ArrowDownRight className="w-4 h-4" />
               <span>-{macro_metrics.avg_consumer_cost_reduction_percent}% lower retail price</span>
             </div>
           </div>
         </div>
 
-        <div className="glass-card p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
+        <div
+          className="p-5 rounded-2xl space-y-2 relative overflow-hidden shadow-sm"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+            borderLeft: '3px solid var(--ad-accent)',
+          }}
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Middleman Margin Cut</span>
-            <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--ad-text-muted)' }}>Middleman Margin Cut</span>
+            <div
+              className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{ background: 'var(--ad-accent-light)', color: 'var(--ad-accent-bright)' }}
+            >
               <Scale className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="text-2xl font-extrabold text-white tracking-tight">
+          <div>
+            <div className="text-2xl font-extrabold tracking-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
               {macro_metrics.avg_middleman_margin_eliminated_percent}%
             </div>
-            <div className="text-xs text-slate-400 mt-1">
+            <div className="text-xs mt-1" style={{ color: 'var(--ad-text-muted)' }}>
               Redirected to Farmer & Consumer value
             </div>
           </div>
         </div>
 
-        <div className="glass-card p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
+        <div
+          className="p-5 rounded-2xl space-y-2 relative overflow-hidden shadow-sm"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+            borderLeft: '3px solid var(--ad-brand)',
+          }}
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Carbon Footprint Saved</span>
-            <div className="w-9 h-9 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--ad-text-muted)' }}>Carbon Footprint Saved</span>
+            <div
+              className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{ background: 'var(--ad-brand-light)', color: 'var(--ad-brand-bright)' }}
+            >
               <Leaf className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="text-2xl font-extrabold text-white tracking-tight">
+          <div>
+            <div className="text-2xl font-extrabold tracking-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
               {macro_metrics.co2_emissions_reduced_kg.toLocaleString()} kg
             </div>
-            <div className="text-xs text-teal-400 mt-1 font-medium">
+            <div className="text-xs mt-1 font-semibold" style={{ color: 'var(--ad-brand-bright)' }}>
               Via pooled multi-stop VRP routing
             </div>
           </div>

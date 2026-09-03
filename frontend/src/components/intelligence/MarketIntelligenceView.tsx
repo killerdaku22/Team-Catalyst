@@ -83,17 +83,26 @@ export const MarketIntelligenceView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner Header */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-4">
+      <div
+        className="p-6 sm:p-8 rounded-2xl space-y-5 shadow-lg"
+        style={{
+          background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 100%)',
+          border: '1px solid var(--ad-border)',
+        }}
+      >
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <span className="text-amber-400 font-mono text-xs font-bold uppercase tracking-widest flex items-center space-x-1.5">
+            <span
+              className="text-xs font-bold uppercase tracking-wider flex items-center space-x-1.5"
+              style={{ color: 'var(--ad-accent)', fontFamily: 'var(--ad-font-display)' }}
+            >
               <Radio className="w-3.5 h-3.5" />
               <span>Regional Market Shocks & Disruption Simulation</span>
             </span>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
-              MARKET INTELLIGENCE
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+              Market Intelligence & Corridor Shocks
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mt-1">
+            <p className="text-sm max-w-2xl mt-1" style={{ color: 'var(--ad-text-tertiary)' }}>
               Understand supply disruptions, agrometeorological events, and price shock multipliers affecting regional agricultural trade corridors.
             </p>
           </div>
@@ -102,15 +111,20 @@ export const MarketIntelligenceView: React.FC = () => {
         </div>
 
         {/* Filters and Search Toolbar */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 pt-2 border-t border-slate-800/80 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 pt-3 text-xs" style={{ borderTop: '1px solid var(--ad-border)' }}>
           <div className="relative sm:col-span-2">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-3.5 h-3.5" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: 'var(--ad-text-muted)' }} />
             <input
               type="text"
               placeholder="Search by event, commodity, or state..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 font-medium"
+              className="w-full pl-9 pr-3 py-2.5 rounded-xl font-medium focus:outline-none"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-primary)',
+              }}
             />
           </div>
 
@@ -118,13 +132,19 @@ export const MarketIntelligenceView: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full bg-slate-900 text-white rounded-xl p-2 border border-slate-700 font-medium"
+              className="w-full rounded-xl p-2.5 font-semibold focus:outline-none cursor-pointer"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-primary)',
+                fontFamily: 'var(--ad-font-display)'
+              }}
             >
-              <option value="ALL">All Event Categories</option>
-              <option value="WEATHER_SHOCK">⚡ Weather Shocks</option>
-              <option value="SUPPLY_DISRUPTION">⚠️ Supply Disruptions</option>
-              <option value="DEMAND_SPIKE">📈 Demand Surges</option>
-              <option value="POLICY_TRADE">🏛️ Policy Interventions</option>
+              <option value="ALL" style={{ background: '#141A17', color: '#F2F4F3' }}>All Event Categories</option>
+              <option value="WEATHER_SHOCK" style={{ background: '#141A17', color: '#F2F4F3' }}>⚡ Weather Shocks</option>
+              <option value="SUPPLY_DISRUPTION" style={{ background: '#141A17', color: '#F2F4F3' }}>⚠️ Supply Disruptions</option>
+              <option value="DEMAND_SPIKE" style={{ background: '#141A17', color: '#F2F4F3' }}>📈 Demand Surges</option>
+              <option value="POLICY_TRADE" style={{ background: '#141A17', color: '#F2F4F3' }}>🏛️ Policy Interventions</option>
             </select>
           </div>
 
@@ -132,17 +152,28 @@ export const MarketIntelligenceView: React.FC = () => {
             <select
               value={selectedSeverity}
               onChange={(e) => setSelectedSeverity(e.target.value)}
-              className="w-full bg-slate-900 text-white rounded-xl p-2 border border-slate-700 font-medium"
+              className="w-full rounded-xl p-2.5 font-semibold focus:outline-none cursor-pointer"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-primary)',
+                fontFamily: 'var(--ad-font-display)'
+              }}
             >
-              <option value="ALL">All Severities</option>
-              <option value="CRITICAL">🔴 Critical</option>
-              <option value="HIGH">🟠 High</option>
-              <option value="MEDIUM">🔵 Medium</option>
+              <option value="ALL" style={{ background: '#141A17', color: '#F2F4F3' }}>All Severities</option>
+              <option value="CRITICAL" style={{ background: '#141A17', color: '#F2F4F3' }}>🔴 Critical</option>
+              <option value="HIGH" style={{ background: '#141A17', color: '#F2F4F3' }}>🟠 High</option>
+              <option value="MEDIUM" style={{ background: '#141A17', color: '#F2F4F3' }}>🔵 Medium</option>
             </select>
 
             <button
               onClick={loadEvents}
-              className="p-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white"
+              className="p-2.5 rounded-xl transition-colors"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-secondary)',
+              }}
               title="Refresh intelligence feeds"
             >
               <RefreshCw className="w-4 h-4" />
@@ -151,34 +182,62 @@ export const MarketIntelligenceView: React.FC = () => {
         </div>
       </div>
 
-      {/* Summary KPI Strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 font-mono text-xs">
-        <div className="glass-panel p-4 rounded-2xl border border-slate-800 space-y-1">
-          <span className="text-slate-400 text-[10px] uppercase">Active Market Events</span>
-          <div className="text-2xl font-black text-white">{events.length}</div>
-          <p className="text-[10px] text-slate-500">Live multi-source feeds</p>
+      {/* Summary KPI Strip — Color-coded left borders */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+        <div
+          className="p-4 rounded-2xl space-y-1 shadow-sm"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+            borderLeft: '3px solid var(--ad-border-strong)',
+          }}
+        >
+          <span className="text-[10px] uppercase font-bold" style={{ color: 'var(--ad-text-muted)' }}>Active Market Events</span>
+          <div className="text-2xl font-extrabold" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>{events.length}</div>
+          <p className="text-[10px]" style={{ color: 'var(--ad-text-muted)' }}>Live multi-source feeds</p>
         </div>
 
-        <div className="glass-panel p-4 rounded-2xl border border-slate-800 space-y-1">
-          <span className="text-slate-400 text-[10px] uppercase">Max Price Multiplier</span>
-          <div className="text-2xl font-black text-amber-400">
+        <div
+          className="p-4 rounded-2xl space-y-1 shadow-sm"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+            borderLeft: '3px solid var(--ad-accent)',
+          }}
+        >
+          <span className="text-[10px] uppercase font-bold" style={{ color: 'var(--ad-text-muted)' }}>Max Price Multiplier</span>
+          <div className="text-2xl font-extrabold" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-accent-bright)' }}>
             {events.length > 0 ? `+${Math.round((Math.max(...events.map(e => e.price_shock_multiplier)) - 1) * 100)}%` : '+34%'}
           </div>
-          <p className="text-[10px] text-slate-500">Shock-adjusted ceiling</p>
+          <p className="text-[10px]" style={{ color: 'var(--ad-text-muted)' }}>Shock-adjusted ceiling</p>
         </div>
 
-        <div className="glass-panel p-4 rounded-2xl border border-slate-800 space-y-1">
-          <span className="text-slate-400 text-[10px] uppercase">Supply Deficit Alerts</span>
-          <div className="text-2xl font-black text-rose-400">
+        <div
+          className="p-4 rounded-2xl space-y-1 shadow-sm"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+            borderLeft: '3px solid var(--ad-danger)',
+          }}
+        >
+          <span className="text-[10px] uppercase font-bold" style={{ color: 'var(--ad-text-muted)' }}>Supply Deficit Alerts</span>
+          <div className="text-2xl font-extrabold" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-danger-text)' }}>
             {events.filter(e => e.supply_impact_pct < 0).length} Regions
           </div>
-          <p className="text-[10px] text-slate-500">Monitored corridor deficits</p>
+          <p className="text-[10px]" style={{ color: 'var(--ad-text-muted)' }}>Monitored corridor deficits</p>
         </div>
 
-        <div className="glass-panel p-4 rounded-2xl border border-slate-800 space-y-1">
-          <span className="text-slate-400 text-[10px] uppercase">Confidence Rating</span>
-          <div className="text-2xl font-black text-emerald-400">92.8%</div>
-          <p className="text-[10px] text-slate-500">Multi-agency triangulation</p>
+        <div
+          className="p-4 rounded-2xl space-y-1 shadow-sm"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+            borderLeft: '3px solid var(--ad-brand-bright)',
+          }}
+        >
+          <span className="text-[10px] uppercase font-bold" style={{ color: 'var(--ad-text-muted)' }}>Confidence Rating</span>
+          <div className="text-2xl font-extrabold" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-brand-bright)' }}>92.8%</div>
+          <p className="text-[10px]" style={{ color: 'var(--ad-text-muted)' }}>Multi-agency triangulation</p>
         </div>
       </div>
 
@@ -186,7 +245,10 @@ export const MarketIntelligenceView: React.FC = () => {
       {loading ? (
         <CardSkeleton count={3} />
       ) : filteredEvents.length === 0 ? (
-        <div className="glass-panel p-12 rounded-3xl border border-slate-800 text-center text-slate-400 text-xs">
+        <div
+          className="p-12 rounded-3xl text-center text-xs"
+          style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)', color: 'var(--ad-text-muted)' }}
+        >
           No market events match your selected filters.
         </div>
       ) : (
@@ -194,19 +256,31 @@ export const MarketIntelligenceView: React.FC = () => {
           {filteredEvents.map((evt) => (
             <div
               key={evt.id}
-              className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4 hover:border-slate-700 transition-all"
+              className="p-5 rounded-2xl space-y-4 transition-all"
+              style={{
+                background: 'var(--ad-surface-0)',
+                border: '1px solid var(--ad-border)',
+                borderLeft: evt.severity === 'CRITICAL'
+                  ? '3px solid var(--ad-danger)'
+                  : evt.severity === 'HIGH'
+                    ? '3px solid var(--ad-accent)'
+                    : '3px solid var(--ad-cool)',
+                boxShadow: 'var(--ad-shadow-sm)',
+              }}
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="space-y-1">
                   <div className="flex items-center space-x-2">
-                    <span className="p-1.5 rounded-lg bg-slate-900 border border-slate-800">
+                    <span className="p-1.5 rounded-lg" style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border)' }}>
                       {getCategoryIcon(evt.category)}
                     </span>
-                    <span className="text-[10px] font-mono font-bold text-slate-400">
-                      {evt.id} • {evt.category.replace('_', ' ')}
+                    <span className="text-[10px] font-bold" style={{ color: 'var(--ad-text-muted)' }}>
+                      {evt.id} · {evt.category.replace('_', ' ')}
                     </span>
                   </div>
-                  <h3 className="font-bold text-white text-base leading-snug">{evt.title}</h3>
+                  <h3 className="font-bold text-base leading-snug" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                    {evt.title}
+                  </h3>
                 </div>
 
                 <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${getSeverityBadge(evt.severity)}`}>

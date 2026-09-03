@@ -2,16 +2,39 @@ import React from 'react';
 import { clsx } from 'clsx';
 
 /* --- Card Container --- */
+export type CardVariant = 'default' | 'elevated' | 'featured' | 'ghost';
+
 interface CardProps {
   children: React.ReactNode;
   className?: string;
-  /** Optional padding override. Default padding is applied via CardBody. */
-  noPadding?: boolean;
+  variant?: CardVariant;
+  interactive?: boolean;
+  onClick?: () => void;
 }
 
-export const Card: React.FC<CardProps> = ({ children, className }) => {
+export const Card: React.FC<CardProps> = ({
+  children,
+  className,
+  variant = 'default',
+  interactive = false,
+  onClick
+}) => {
+  const variantClass = {
+    default: 'ad-card',
+    elevated: 'ad-card ad-card--elevated',
+    featured: 'ad-card ad-card--featured',
+    ghost: 'ad-card ad-card--ghost',
+  }[variant];
+
   return (
-    <div className={clsx('ad-card', className)}>
+    <div
+      onClick={onClick}
+      className={clsx(
+        variantClass,
+        interactive && 'ad-card--interactive',
+        className
+      )}
+    >
       {children}
     </div>
   );

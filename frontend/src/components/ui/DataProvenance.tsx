@@ -124,42 +124,52 @@ export const DataProvenance: React.FC<DataProvenanceProps> = ({
         <div
           onMouseEnter={() => setShowPopover(true)}
           onMouseLeave={() => setShowPopover(false)}
-          className="absolute z-50 left-0 top-full mt-1.5 w-80 p-3.5 bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-xl shadow-2xl text-left pointer-events-auto animate-in fade-in zoom-in-95 duration-150"
+          className="absolute z-50 left-0 top-full mt-1.5 w-80 p-3.5 rounded-xl shadow-2xl text-left pointer-events-auto"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border-accent)',
+            boxShadow: 'var(--ad-shadow-xl), var(--ad-shadow-glow-accent)',
+          }}
         >
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+          <div className="flex items-center justify-between pb-2 mb-2" style={{ borderBottom: '1px solid var(--ad-border)' }}>
             <div className="flex items-center gap-1.5">
               <span className={`w-2 h-2 rounded-full ${config.dotColor}`} />
-              <span className="text-xs font-semibold text-white tracking-tight">{config.label}</span>
+              <span className="text-xs font-semibold tracking-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                {config.label}
+              </span>
             </div>
-            <span className="text-[10px] px-1.5 py-0.5 bg-slate-800 rounded text-slate-400 font-mono">
+            <span
+              className="text-[9px] px-1.5 py-0.5 rounded font-bold"
+              style={{ background: 'var(--ad-surface-1)', color: 'var(--ad-accent-bright)', border: '1px solid var(--ad-border-accent)' }}
+            >
               PROVENANCE
             </span>
           </div>
 
-          <div className="space-y-2 text-[11px] text-slate-300">
+          <div className="space-y-2 text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>
             <div>
-              <span className="text-slate-500 font-medium block text-[10px] uppercase tracking-wider">Source Entity</span>
-              <span className="text-slate-100 font-medium">{source}</span>
+              <span className="font-medium block text-[10px] uppercase tracking-wider" style={{ color: 'var(--ad-text-muted)' }}>Source Entity</span>
+              <span className="font-semibold" style={{ color: 'var(--ad-text-primary)' }}>{source}</span>
             </div>
 
             <div>
-              <span className="text-slate-500 font-medium block text-[10px] uppercase tracking-wider">Methodology & Formula</span>
-              <span className="text-slate-300 leading-relaxed">{methodology || config.defaultMethod}</span>
+              <span className="font-medium block text-[10px] uppercase tracking-wider" style={{ color: 'var(--ad-text-muted)' }}>Methodology & Formula</span>
+              <span className="leading-relaxed" style={{ color: 'var(--ad-text-secondary)' }}>{methodology || config.defaultMethod}</span>
             </div>
 
             {detail && (
               <div>
-                <span className="text-slate-500 font-medium block text-[10px] uppercase tracking-wider">Confidence & Scope</span>
-                <span className="text-slate-300">{detail}</span>
+                <span className="font-medium block text-[10px] uppercase tracking-wider" style={{ color: 'var(--ad-text-muted)' }}>Confidence & Scope</span>
+                <span style={{ color: 'var(--ad-text-secondary)' }}>{detail}</span>
               </div>
             )}
 
-            <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-[10px] text-slate-400">
+            <div className="flex items-center justify-between pt-2 text-[10px]" style={{ borderTop: '1px solid var(--ad-border)', color: 'var(--ad-text-muted)' }}>
               <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-slate-500" />
+                <Clock className="w-3 h-3" style={{ color: 'var(--ad-text-muted)' }} />
                 {updatedAt || 'Continuous telemetry'}
               </span>
-              <span className="flex items-center gap-1 text-emerald-400 font-medium">
+              <span className="flex items-center gap-1 font-semibold" style={{ color: 'var(--ad-brand-bright)' }}>
                 <CheckCircle2 className="w-3 h-3" />
                 Audit Verified
               </span>

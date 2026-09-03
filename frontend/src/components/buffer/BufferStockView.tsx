@@ -132,18 +132,36 @@ export const BufferStockView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-8 animate-fadeIn pb-12">
       {/* Top Banner */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#161E1A] p-6 rounded-2xl border border-[#26332C] items-center shadow-lg">
-        <div className="lg:col-span-8 space-y-3">
+      <div
+        className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 sm:p-8 rounded-2xl items-center shadow-xl relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 100%)',
+          border: '1px solid var(--ad-border-accent)',
+          borderLeft: '3px solid var(--ad-accent)',
+          boxShadow: 'var(--ad-shadow-lg), var(--ad-shadow-glow-accent)',
+        }}
+      >
+        <div className="lg:col-span-8 space-y-4">
           <div className="flex items-center space-x-2">
-            <span className="bg-[#222C27] text-[#D97706] text-xs px-2.5 py-1 rounded-full font-mono font-semibold border border-[#2B3731]">
+            <span
+              className="text-[10px] px-3 py-1 rounded-full font-bold tracking-wider uppercase"
+              style={{
+                background: 'var(--ad-accent-light)',
+                color: 'var(--ad-accent-bright)',
+                border: '1px solid var(--ad-border-accent)',
+                fontFamily: 'var(--ad-font-display)'
+              }}
+            >
               DoCA National Food Security & Market Intervention Scheme (MIS)
             </span>
             <DataProvenance source="DoCA Strategic Buffer Reference (NAFED/NCCF Guidelines)" status="HISTORICAL" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Strategic Buffer Stock & Price Stabilization</h1>
-          <p className="text-xs text-[#8E9C93] leading-relaxed max-w-xl">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+            Strategic Buffer Stock & Price Stabilization
+          </h1>
+          <p className="text-sm leading-relaxed max-w-xl" style={{ color: 'var(--ad-text-tertiary)' }}>
             Monitoring of NAFED and NCCF strategic buffer stock with automated convoy dispatch simulation to evaluate market cooling interventions.
           </p>
 
@@ -153,34 +171,53 @@ export const BufferStockView: React.FC = () => {
                 setShowInterventionModal(true);
                 setInterventionResult(null);
               }}
-              className="bg-[#D97706] hover:bg-[#B45309] text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-lg transition-all"
+              className="px-5 py-3 rounded-xl text-xs font-bold flex items-center space-x-2 shadow-lg transition-all"
+              style={{
+                background: 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)',
+                color: '#0B0F0D',
+                boxShadow: '0 2px 10px rgba(199, 163, 86, 0.25)',
+                fontFamily: 'var(--ad-font-display)'
+              }}
             >
-              <ShieldAlert className="w-4 h-4 text-white stroke-[2.5]" />
+              <ShieldAlert className="w-4 h-4 stroke-[2.5]" />
               <span>Trigger MIS Market Intervention</span>
             </button>
           </div>
         </div>
 
         {/* Contextual Grain Silo Image */}
-        <div className="lg:col-span-4 relative rounded-xl overflow-hidden border border-[#26332C] bg-[#101513] aspect-[16/10] shadow-md group">
+        <div
+          className="lg:col-span-4 relative rounded-xl overflow-hidden aspect-[16/10] shadow-md group"
+          style={{ background: 'var(--ad-surface-muted)', border: '1px solid var(--ad-border)' }}
+        >
           <img
             src="/assets/agridirect-grain-buffer-silo.jpg"
             alt="National Strategic Buffer Silo"
             loading="lazy"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0C100E]/80 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute bottom-2 left-2 right-2 bg-[#121815]/90 border border-[#26332C] px-2.5 py-1 rounded text-[10px] text-[#C2CBC5] flex justify-between">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(to top, var(--ad-surface-0) 0%, transparent 40%)' }}
+          />
+          <div
+            className="absolute bottom-2.5 left-2.5 right-2.5 px-3 py-1.5 rounded-lg text-[10px] flex justify-between items-center"
+            style={{
+              background: 'rgba(11, 15, 13, 0.88)',
+              border: '1px solid var(--ad-border)',
+              backdropFilter: 'blur(4px)',
+            }}
+          >
             <span className="font-bold text-white">NAFED Silo Complex</span>
-            <span className="text-[#D97706] font-mono">180,000 MT Reserve</span>
+            <span className="font-bold" style={{ color: 'var(--ad-accent-bright)' }}>180,000 MT Reserve</span>
           </div>
         </div>
       </div>
 
       {/* Strategic Silos Inventory Grid */}
-      <div className="space-y-3">
-        <h2 className="text-base font-extrabold text-white flex items-center space-x-2">
-          <Building2 className="w-4 h-4 text-amber-400" />
+      <div className="space-y-4">
+        <h2 className="text-base font-bold flex items-center space-x-2" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+          <Building2 className="w-4 h-4" style={{ color: 'var(--ad-accent)' }} />
           <span>National Strategic Reserve Silos (180,000+ Tonnes Under Management)</span>
         </h2>
 
@@ -188,44 +225,71 @@ export const BufferStockView: React.FC = () => {
           {reserves.map(silo => {
             const availPct = Math.round((silo.available_for_release_tonnes / silo.total_stored_tonnes) * 100);
             return (
-              <div key={silo.silo_id} className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-3 relative overflow-hidden">
+              <div
+                key={silo.silo_id}
+                className="p-5 rounded-2xl space-y-3 relative overflow-hidden"
+                style={{
+                  background: 'var(--ad-surface-0)',
+                  border: '1px solid var(--ad-border)',
+                  borderLeft: '3px solid var(--ad-accent)',
+                  boxShadow: 'var(--ad-shadow-sm)',
+                }}
+              >
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="bg-amber-500/20 text-amber-300 font-mono text-[10px] px-2 py-0.5 rounded font-bold">
+                    <span
+                      className="text-[10px] px-2 py-0.5 rounded font-bold"
+                      style={{
+                        background: 'var(--ad-accent-light)',
+                        color: 'var(--ad-accent-bright)',
+                        border: '1px solid var(--ad-border-accent)',
+                        fontFamily: 'var(--ad-font-display)'
+                      }}
+                    >
                       {silo.managing_agency}
                     </span>
-                    <h3 className="font-extrabold text-white text-base mt-1">{silo.commodity} Silo</h3>
-                    <p className="text-xs text-slate-400 flex items-center space-x-1 mt-0.5">
-                      <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
+                    <h3 className="font-bold text-base mt-1.5" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                      {silo.commodity} Silo
+                    </h3>
+                    <p className="text-xs flex items-center space-x-1 mt-0.5" style={{ color: 'var(--ad-text-muted)' }}>
+                      <MapPin className="w-3 h-3 shrink-0" style={{ color: 'var(--ad-cool)' }} />
                       <span>{silo.location_hub}, {silo.state}</span>
                     </p>
                   </div>
-                  <span className="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[10px] font-mono">
+                  <span
+                    className="px-2 py-0.5 rounded text-[10px]"
+                    style={{ background: 'var(--ad-surface-1)', color: 'var(--ad-text-tertiary)', border: '1px solid var(--ad-border-subtle)' }}
+                  >
                     {silo.condition_grade}
                   </span>
                 </div>
 
                 {/* Capacity Progress Bar */}
-                <div className="space-y-1 pt-2">
-                  <div className="flex justify-between text-xs font-mono">
-                    <span className="text-slate-400">Available for Release:</span>
-                    <strong className="text-white">{silo.available_for_release_tonnes.toLocaleString()} / {silo.total_stored_tonnes.toLocaleString()} T</strong>
+                <div className="space-y-1.5 pt-2">
+                  <div className="flex justify-between text-xs">
+                    <span style={{ color: 'var(--ad-text-muted)' }}>Available for Release:</span>
+                    <strong className="font-semibold" style={{ color: 'var(--ad-text-primary)' }}>
+                      {silo.available_for_release_tonnes.toLocaleString()} / {silo.total_stored_tonnes.toLocaleString()} T
+                    </strong>
                   </div>
-                  <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                  <div className="w-full rounded-full h-2 overflow-hidden" style={{ background: 'var(--ad-surface-muted)', border: '1px solid var(--ad-border-subtle)' }}>
                     <div
-                      className="bg-gradient-to-r from-amber-500 to-emerald-500 h-full rounded-full transition-all duration-500"
-                      style={{ width: `${availPct}%` }}
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{
+                        width: `${availPct}%`,
+                        background: 'linear-gradient(90deg, var(--ad-brand), var(--ad-accent))'
+                      }}
                     />
                   </div>
-                  <div className="flex justify-between text-[10px] text-slate-400 font-mono pt-0.5">
+                  <div className="flex justify-between text-[10px] pt-0.5" style={{ color: 'var(--ad-text-muted)' }}>
                     <span>Strategic Floor: {silo.reserved_minimum_tonnes.toLocaleString()} T</span>
-                    <span>{availPct}% Liquid</span>
+                    <span style={{ color: 'var(--ad-accent-bright)', fontWeight: 600 }}>{availPct}% Liquid</span>
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-400 flex justify-between">
-                  <span>Vintage: <strong className="text-slate-300">{silo.procurement_vintage}</strong></span>
-                  <span className="text-emerald-400 font-semibold font-mono">Ready to Dispatch</span>
+                <div className="pt-2 text-[11px] flex justify-between" style={{ borderTop: '1px solid var(--ad-border-subtle)', color: 'var(--ad-text-muted)' }}>
+                  <span>Vintage: <strong style={{ color: 'var(--ad-text-secondary)' }}>{silo.procurement_vintage}</strong></span>
+                  <span className="font-semibold" style={{ color: 'var(--ad-brand-bright)' }}>Ready to Dispatch</span>
                 </div>
               </div>
             );
@@ -234,26 +298,45 @@ export const BufferStockView: React.FC = () => {
       </div>
 
       {/* Active Subsidized Intervention Convoys Feed */}
-      <div className="space-y-3">
-        <h2 className="text-base font-extrabold text-white flex items-center space-x-2">
-          <Truck className="w-4 h-4 text-emerald-400" />
+      <div className="space-y-4">
+        <h2 className="text-base font-bold flex items-center space-x-2" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+          <Truck className="w-4 h-4" style={{ color: 'var(--ad-cool-bright)' }} />
           <span>Active Subsidized Food Security Intervention Convoys</span>
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {dispatches.map(disp => (
-            <div key={disp.dispatch_id} className="glass-panel p-4 rounded-2xl border border-slate-800 space-y-3">
+            <div
+              key={disp.dispatch_id}
+              className="p-4 rounded-2xl space-y-3"
+              style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)' }}
+            >
               <div className="flex items-start justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-mono font-black text-xs">
+                <div className="flex items-center space-x-2.5">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold"
+                    style={{ background: 'var(--ad-cool-light)', color: 'var(--ad-cool-bright)', border: '1px solid rgba(88, 134, 160, 0.2)' }}
+                  >
                     🚚
                   </div>
                   <div>
-                    <h4 className="font-bold text-white text-sm">{disp.commodity} Convoy ({disp.dispatched_tonnes} Tonnes)</h4>
-                    <span className="text-[11px] text-emerald-400 font-mono">{disp.managing_agency} Dispatch • {disp.dispatch_id}</span>
+                    <h4 className="font-bold text-sm" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                      {disp.commodity} Convoy ({disp.dispatched_tonnes} Tonnes)
+                    </h4>
+                    <span className="text-[11px]" style={{ color: 'var(--ad-text-muted)' }}>
+                      {disp.managing_agency} Dispatch · {disp.dispatch_id}
+                    </span>
                   </div>
                 </div>
-                <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold font-mono px-2 py-0.5 rounded-full border border-emerald-500/40">
+                <span
+                  className="text-[10px] font-bold px-2.5 py-1 rounded-full"
+                  style={{
+                    background: 'var(--ad-brand-light)',
+                    color: 'var(--ad-brand-bright)',
+                    border: '1px solid rgba(52, 199, 114, 0.2)',
+                    fontFamily: 'var(--ad-font-display)'
+                  }}
+                >
                   {disp.convoy_status}
                 </span>
               </div>

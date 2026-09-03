@@ -206,42 +206,49 @@ export const BuyerPortalView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn pb-10">
       {/* Top Editorial Identity Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#26332C]">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5" style={{ borderBottom: '1px solid var(--ad-border)' }}>
         <div>
           <div className="flex items-center space-x-2">
-            <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ad-accent)' }}>
               Verified Producer Sourcing Network
             </span>
             <DataProvenance source="Direct FPO Registry & APMC Gate Telemetry" status="LIVE" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
             Direct Produce Marketplace
           </h1>
-          <p className="text-xs text-[#8E9C93] max-w-2xl mt-0.5">
+          <p className="text-sm max-w-2xl mt-1" style={{ color: 'var(--ad-text-tertiary)' }}>
             Institutional buyers procure farmgate-graded produce directly from cooperative aggregators with guaranteed legal metrology and zero broker deductions.
           </p>
         </div>
 
         {/* View Switcher Tabs */}
-        <div className="flex items-center space-x-1.5 bg-[#121815] p-1 rounded-xl border border-[#26332C] shrink-0 self-start lg:self-auto shadow-inner">
+        <div
+          className="flex items-center space-x-1.5 p-1 rounded-xl shrink-0 self-start lg:self-auto shadow-inner"
+          style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)' }}
+        >
           <button
             onClick={() => setActiveTab('MARKETPLACE')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 ${
-              activeTab === 'MARKETPLACE'
-                ? 'bg-[#2D6A4F] text-white shadow-md'
-                : 'text-[#8E9C93] hover:text-white'
-            }`}
+            className="px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-2"
+            style={{
+              background: activeTab === 'MARKETPLACE' ? 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)' : 'transparent',
+              color: activeTab === 'MARKETPLACE' ? '#0B0F0D' : 'var(--ad-text-tertiary)',
+              boxShadow: activeTab === 'MARKETPLACE' ? '0 2px 8px rgba(199, 163, 86, 0.25)' : 'none',
+              fontFamily: 'var(--ad-font-display)',
+            }}
           >
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>Spot Produce Lots</span>
           </button>
           <button
             onClick={() => setActiveTab('CONTRACTS')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 ${
-              activeTab === 'CONTRACTS'
-                ? 'bg-[#2D6A4F] text-white shadow-md'
-                : 'text-[#8E9C93] hover:text-white'
-            }`}
+            className="px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-2"
+            style={{
+              background: activeTab === 'CONTRACTS' ? 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)' : 'transparent',
+              color: activeTab === 'CONTRACTS' ? '#0B0F0D' : 'var(--ad-text-tertiary)',
+              boxShadow: activeTab === 'CONTRACTS' ? '0 2px 8px rgba(199, 163, 86, 0.25)' : 'none',
+              fontFamily: 'var(--ad-font-display)',
+            }}
           >
             <FileText className="w-3.5 h-3.5" />
             <span>Institutional RFQ Contracts</span>
@@ -255,16 +262,25 @@ export const BuyerPortalView: React.FC = () => {
       {activeTab === 'MARKETPLACE' && (
         <div className="space-y-4">
           {/* Top Filter & Sourcing Metrics Bar */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center bg-[#161E1A] border border-[#26332C] p-3 rounded-2xl shadow-sm">
+          <div
+            className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center p-3.5 rounded-2xl shadow-sm"
+            style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)' }}
+          >
             {/* Search Input */}
             <div className="lg:col-span-4 relative">
-              <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-[#52796F]" />
+              <Search className="absolute left-3.5 top-2.5 w-4 h-4" style={{ color: 'var(--ad-text-muted)' }} />
               <input
                 type="text"
                 placeholder="Search commodity, producer FPO, or state..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#101513] border border-[#26332C] rounded-xl pl-10 pr-3 py-1.5 text-xs text-white placeholder-[#637068] focus:border-[#2D6A4F] focus:outline-none transition-colors"
+                className="w-full rounded-xl pl-10 pr-3 py-2 text-xs transition-colors"
+                style={{
+                  background: 'var(--ad-surface-1)',
+                  border: '1px solid var(--ad-border)',
+                  color: 'var(--ad-text-primary)',
+                  outline: 'none',
+                }}
               />
             </div>
 
@@ -274,11 +290,14 @@ export const BuyerPortalView: React.FC = () => {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wide transition-all whitespace-nowrap ${
-                    selectedCategory === cat
-                      ? 'bg-[#2D6A4F] text-white shadow-sm'
-                      : 'bg-[#101513] text-[#8E9C93] hover:text-white border border-[#26332C]'
-                  }`}
+                  className="px-3.5 py-1.5 rounded-lg text-[11px] font-bold tracking-wide transition-all whitespace-nowrap"
+                  style={{
+                    background: selectedCategory === cat ? 'linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%)' : 'var(--ad-surface-1)',
+                    color: selectedCategory === cat ? '#FFFFFF' : 'var(--ad-text-tertiary)',
+                    border: selectedCategory === cat ? '1px solid var(--ad-brand-bright)' : '1px solid var(--ad-border)',
+                    boxShadow: selectedCategory === cat ? '0 2px 6px rgba(40, 114, 78, 0.2)' : 'none',
+                    fontFamily: 'var(--ad-font-display)',
+                  }}
                 >
                   {cat}
                 </button>
@@ -311,22 +330,36 @@ export const BuyerPortalView: React.FC = () => {
                     <div
                       key={item.id}
                       onClick={() => handleSelectListing(item)}
-                      className={`relative overflow-hidden rounded-2xl border p-4 transition-all cursor-pointer group ${
-                        isSelected
-                          ? 'bg-[#1D2722] border-[#2D6A4F] ring-1 ring-[#2D6A4F] shadow-lg'
-                          : 'bg-[#161E1A] border-[#26332C] hover:border-[#384A41] hover:bg-[#1A221E]'
-                      }`}
+                      className="relative overflow-hidden p-4 transition-all cursor-pointer group"
+                      style={{
+                        borderRadius: 'var(--ad-radius-lg)',
+                        background: isSelected ? 'var(--ad-surface-1)' : 'var(--ad-surface-0)',
+                        border: isSelected ? '1px solid var(--ad-border-accent)' : '1px solid var(--ad-border)',
+                        borderLeft: isSelected ? '3px solid var(--ad-accent)' : '1px solid var(--ad-border)',
+                        boxShadow: isSelected ? 'var(--ad-shadow-md), var(--ad-shadow-glow-accent)' : 'none',
+                      }}
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                         {/* Thumbnail Image */}
-                        <div className="w-full sm:w-28 h-24 rounded-xl overflow-hidden bg-[#101513] border border-[#26332C] shrink-0 relative">
+                        <div
+                          className="w-full sm:w-28 h-24 rounded-xl overflow-hidden shrink-0 relative"
+                          style={{ background: 'var(--ad-surface-muted)', border: '1px solid var(--ad-border)' }}
+                        >
                           <img
                             src={getImageForCrop(item.crop_name)}
                             alt={item.crop_name}
                             loading="lazy"
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
-                          <div className="absolute top-1.5 left-1.5 bg-[#121815]/90 border border-[#26332C] text-[#48BB78] px-1.5 py-0.5 rounded text-[9px] font-bold">
+                          <div
+                            className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded text-[9px] font-bold"
+                            style={{
+                              background: 'rgba(11, 15, 13, 0.88)',
+                              border: '1px solid var(--ad-border)',
+                              color: 'var(--ad-accent)',
+                              fontFamily: 'var(--ad-font-display)',
+                            }}
+                          >
                             {item.grade}
                           </div>
                         </div>
@@ -334,42 +367,50 @@ export const BuyerPortalView: React.FC = () => {
                         {/* Middle Details */}
                         <div className="flex-1 space-y-1">
                           <div className="flex items-center space-x-2">
-                            <h3 className="text-base font-bold text-white tracking-tight">
+                            <h3 className="text-base font-bold tracking-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
                               {item.crop_name}
                             </h3>
-                            <span className="text-[10px] text-[#52796F] font-mono">• {item.shelf_life_days}d Shelf Life</span>
+                            <span className="text-[10px] font-semibold" style={{ color: 'var(--ad-text-muted)' }}>· {item.shelf_life_days}d Shelf Life</span>
                           </div>
 
-                          <div className="flex items-center space-x-1.5 text-xs text-[#C2CBC5]">
-                            <Building2 className="w-3.5 h-3.5 text-[#52796F] shrink-0" />
-                            <span className="font-semibold text-white">{item.fpo_name}</span>
+                          <div className="flex items-center space-x-1.5 text-xs">
+                            <Building2 className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--ad-accent)' }} />
+                            <span className="font-semibold" style={{ color: 'var(--ad-text-primary)' }}>{item.fpo_name}</span>
                           </div>
 
-                          <div className="flex items-center space-x-1 text-[11px] text-[#8E9C93]">
-                            <MapPin className="w-3 h-3 text-[#52796F] shrink-0" />
+                          <div className="flex items-center space-x-1 text-[11px]" style={{ color: 'var(--ad-text-muted)' }}>
+                            <MapPin className="w-3 h-3 shrink-0" style={{ color: 'var(--ad-cool)' }} />
                             <span>{item.location_name}</span>
                           </div>
 
                           {/* Sourcing Realization Advantage */}
                           <div className="pt-1.5 flex items-center space-x-2 text-[11px]">
-                            <span className="text-[#8E9C93]">Mandi Benchmark:</span>
-                            <span className="line-through text-[#637068]">₹{item.consumer_benchmark_price.toFixed(2)}/kg</span>
-                            <span className="text-[#48BB78] font-bold bg-[#222C27] px-1.5 py-0.5 rounded border border-[#2B3731]">
-                              -{discountPct}% Direct Sourcing Advantage
+                            <span style={{ color: 'var(--ad-text-muted)' }}>Mandi Benchmark:</span>
+                            <span className="line-through" style={{ color: 'var(--ad-text-muted)' }}>₹{item.consumer_benchmark_price.toFixed(2)}/kg</span>
+                            <span
+                              className="font-bold px-2 py-0.5 rounded text-[10px]"
+                              style={{
+                                background: 'var(--ad-accent-light)',
+                                color: 'var(--ad-accent-bright)',
+                                border: '1px solid var(--ad-border-accent)',
+                                fontFamily: 'var(--ad-font-display)'
+                              }}
+                            >
+                              -{discountPct}% Direct Advantage
                             </span>
                           </div>
                         </div>
 
                         {/* Right Price & Quantity */}
-                        <div className="text-left sm:text-right shrink-0 border-t sm:border-t-0 border-[#26332C] pt-2 sm:pt-0">
-                          <strong className="text-xl font-black text-[#48BB78] block font-mono">
+                        <div className="text-left sm:text-right shrink-0 pt-2 sm:pt-0" style={{ borderTop: '1px solid var(--ad-border-subtle)' }}>
+                          <strong className="text-xl font-extrabold block" style={{ color: 'var(--ad-brand-bright)', fontFamily: 'var(--ad-font-display)' }}>
                             ₹{item.price_per_kg.toFixed(2)}
-                            <span className="text-xs text-[#8E9C93] font-normal">/kg</span>
+                            <span className="text-xs font-normal" style={{ color: 'var(--ad-text-muted)' }}>/kg</span>
                           </strong>
-                          <span className="text-xs text-white font-mono block mt-0.5">
+                          <span className="text-xs font-semibold block mt-0.5" style={{ color: 'var(--ad-text-primary)' }}>
                             {item.quantity_kg.toLocaleString()} kg batch
                           </span>
-                          <span className="text-[10px] text-[#52796F] block mt-1">
+                          <span className="text-[10px] block mt-1" style={{ color: 'var(--ad-text-muted)' }}>
                             Harvested {item.harvest_date}
                           </span>
                         </div>
@@ -383,50 +424,77 @@ export const BuyerPortalView: React.FC = () => {
             {/* Right: Sticky Selected Order Workspace & Landed Cost Breakdown */}
             <div className="lg:col-span-5 lg:sticky lg:top-20 space-y-4">
               {selectedListing ? (
-                <div className="bg-[#161E1A] border-2 border-[#2D6A4F]/60 rounded-2xl p-6 space-y-5 shadow-2xl relative overflow-hidden">
-                  
+                <div
+                  className="p-6 space-y-5 shadow-2xl relative overflow-hidden"
+                  style={{
+                    borderRadius: 'var(--ad-radius-xl)',
+                    background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 100%)',
+                    border: '1px solid var(--ad-border-accent)',
+                    borderLeft: '3px solid var(--ad-accent)',
+                    boxShadow: 'var(--ad-shadow-lg), var(--ad-shadow-glow-accent)',
+                  }}
+                >
                   {/* Top Header */}
-                  <div className="flex items-center justify-between pb-3 border-b border-[#26332C]">
+                  <div className="flex items-center justify-between pb-3" style={{ borderBottom: '1px solid var(--ad-border)' }}>
                     <div>
-                      <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
+                      <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ad-accent)' }}>
                         Procurement Order Workspace
                       </span>
-                      <h2 className="text-lg font-bold text-white tracking-tight mt-0.5">
+                      <h2 className="text-lg font-bold tracking-tight mt-0.5" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
                         {selectedListing.crop_name}
                       </h2>
                     </div>
-                    <span className="ad-badge ad-badge-success text-xs font-bold px-2 py-0.5">
+                    <span
+                      className="text-xs font-bold px-2.5 py-1 rounded-md"
+                      style={{
+                        background: 'var(--ad-brand-light)',
+                        color: 'var(--ad-brand-bright)',
+                        border: '1px solid rgba(52, 199, 114, 0.2)',
+                        fontFamily: 'var(--ad-font-display)'
+                      }}
+                    >
                       {selectedListing.grade} Certified
                     </span>
                   </div>
 
                   {/* Visual Crop Header Banner */}
-                  <div className="w-full h-28 rounded-xl overflow-hidden border border-[#26332C] relative bg-[#101513]">
+                  <div
+                    className="w-full h-28 rounded-xl overflow-hidden relative"
+                    style={{ background: 'var(--ad-surface-muted)', border: '1px solid var(--ad-border)' }}
+                  >
                     <img
                       src={getImageForCrop(selectedListing.crop_name)}
                       alt={selectedListing.crop_name}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#101513]/90 via-transparent to-transparent pointer-events-none" />
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{ background: 'linear-gradient(to top, var(--ad-surface-0) 0%, transparent 40%)' }}
+                    />
                     <div className="absolute bottom-2 left-3 text-xs font-semibold text-white flex items-center space-x-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#48BB78] animate-pulse" />
-                      <span>{selectedListing.crop_name} • {selectedListing.category}</span>
+                      <span className="w-2 h-2 rounded-full" style={{ background: 'var(--ad-accent)' }} />
+                      <span>{selectedListing.crop_name} · {selectedListing.category}</span>
                     </div>
                   </div>
 
                   {/* FPO Batch Provenance */}
-                  <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-2 text-xs">
+                  <div
+                    className="p-3.5 rounded-xl space-y-2 text-xs"
+                    style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border-subtle)' }}
+                  >
                     <div className="flex justify-between items-center">
-                      <span className="text-[#8E9C93]">Verified Producer FPO:</span>
-                      <strong className="text-white font-semibold">{selectedListing.fpo_name}</strong>
+                      <span style={{ color: 'var(--ad-text-muted)' }}>Verified Producer FPO:</span>
+                      <strong className="font-semibold" style={{ color: 'var(--ad-text-primary)' }}>{selectedListing.fpo_name}</strong>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[#8E9C93]">Collection Center:</span>
-                      <span className="text-[#C2CBC5]">{selectedListing.location_name}</span>
+                      <span style={{ color: 'var(--ad-text-muted)' }}>Collection Center:</span>
+                      <span style={{ color: 'var(--ad-text-secondary)' }}>{selectedListing.location_name}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[#8E9C93]">Farmgate Batch Available:</span>
-                      <span className="font-mono text-[#48BB78] font-bold">{selectedListing.quantity_kg.toLocaleString()} kg</span>
+                      <span style={{ color: 'var(--ad-text-muted)' }}>Farmgate Batch Available:</span>
+                      <span className="font-bold" style={{ color: 'var(--ad-brand-bright)', fontFamily: 'var(--ad-font-display)' }}>
+                        {selectedListing.quantity_kg.toLocaleString()} kg
+                      </span>
                     </div>
                   </div>
 
@@ -435,8 +503,16 @@ export const BuyerPortalView: React.FC = () => {
                     {/* Quantity Slider */}
                     <div>
                       <div className="flex justify-between items-center text-xs mb-1.5">
-                        <label className="font-bold text-white">Procurement Volume</label>
-                        <span className="font-mono text-[#48BB78] font-black text-sm bg-[#101513] px-2 py-0.5 rounded border border-[#26332C]">
+                        <label className="font-bold" style={{ color: 'var(--ad-text-primary)' }}>Procurement Volume</label>
+                        <span
+                          className="font-bold text-sm px-2.5 py-0.5 rounded"
+                          style={{
+                            background: 'var(--ad-surface-0)',
+                            color: 'var(--ad-accent)',
+                            border: '1px solid var(--ad-border)',
+                            fontFamily: 'var(--ad-font-display)'
+                          }}
+                        >
                           {orderQuantity.toLocaleString()} kg
                         </span>
                       </div>
@@ -447,9 +523,10 @@ export const BuyerPortalView: React.FC = () => {
                         step={100}
                         value={orderQuantity}
                         onChange={(e) => setOrderQuantity(Number(e.target.value))}
-                        className="w-full h-2 bg-[#101513] rounded-lg appearance-none cursor-pointer accent-[#2D6A4F]"
+                        className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                        style={{ background: 'var(--ad-surface-0)', accentColor: 'var(--ad-accent)' }}
                       />
-                      <div className="flex justify-between text-[10px] text-[#8E9C93] mt-1">
+                      <div className="flex justify-between text-[10px] mt-1" style={{ color: 'var(--ad-text-muted)' }}>
                         <span>Min: 100 kg</span>
                         <span>Cooperative Max: {selectedListing.quantity_kg.toLocaleString()} kg</span>
                       </div>
@@ -458,8 +535,16 @@ export const BuyerPortalView: React.FC = () => {
                     {/* Distance Slider */}
                     <div>
                       <div className="flex justify-between items-center text-xs mb-1.5">
-                        <label className="font-bold text-white">Transit Distance to Destination Hub</label>
-                        <span className="font-mono text-[#C2CBC5] font-bold text-xs bg-[#101513] px-2 py-0.5 rounded border border-[#26332C]">
+                        <label className="font-bold" style={{ color: 'var(--ad-text-primary)' }}>Transit Distance to Destination Hub</label>
+                        <span
+                          className="font-bold text-xs px-2.5 py-0.5 rounded"
+                          style={{
+                            background: 'var(--ad-surface-0)',
+                            color: 'var(--ad-cool-bright)',
+                            border: '1px solid var(--ad-border)',
+                            fontFamily: 'var(--ad-font-display)'
+                          }}
+                        >
                           {transitDistance} km
                         </span>
                       </div>
@@ -470,57 +555,70 @@ export const BuyerPortalView: React.FC = () => {
                         step={10}
                         value={transitDistance}
                         onChange={(e) => setTransitDistance(Number(e.target.value))}
-                        className="w-full h-2 bg-[#101513] rounded-lg appearance-none cursor-pointer accent-[#52796F]"
+                        className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                        style={{ background: 'var(--ad-surface-0)', accentColor: 'var(--ad-cool)' }}
                       />
                     </div>
                   </div>
 
                   {/* Itemized Deductive Landed Cost Matrix */}
                   {breakdown && (
-                    <div className="space-y-2.5 pt-3 border-t border-[#26332C]">
-                      <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider block">
+                    <div className="space-y-2.5 pt-3" style={{ borderTop: '1px solid var(--ad-border)' }}>
+                      <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: 'var(--ad-accent)' }}>
                         Itemized Landed Cost Structure
                       </span>
 
-                      <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-2 text-xs">
-                        <div className="flex justify-between text-[#C2CBC5]">
+                      <div
+                        className="p-3.5 rounded-xl space-y-2 text-xs"
+                        style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border-subtle)' }}
+                      >
+                        <div className="flex justify-between" style={{ color: 'var(--ad-text-secondary)' }}>
                           <span>1. Farmgate Produce Net:</span>
-                          <span className="font-mono text-white">₹{breakdown.total_farmer_payout_direct.toLocaleString()}</span>
+                          <span className="font-semibold" style={{ color: 'var(--ad-text-primary)' }}>₹{breakdown.total_farmer_payout_direct.toLocaleString()}</span>
                         </div>
-                        <div className="flex justify-between text-[#C2CBC5]">
+                        <div className="flex justify-between" style={{ color: 'var(--ad-text-secondary)' }}>
                           <span>2. Cold-Chain Freight ({transitDistance} km):</span>
-                          <span className="font-mono text-[#8E9C93]">+₹{(breakdown.logistics_cost_per_kg * orderQuantity).toLocaleString()}</span>
+                          <span style={{ color: 'var(--ad-text-muted)' }}>+₹{(breakdown.logistics_cost_per_kg * orderQuantity).toLocaleString()}</span>
                         </div>
-                        <div className="flex justify-between text-[#C2CBC5]">
+                        <div className="flex justify-between" style={{ color: 'var(--ad-text-secondary)' }}>
                           <span>3. WDRA Metrology & Assay:</span>
-                          <span className="font-mono text-[#8E9C93]">+₹{(breakdown.platform_fee_per_kg * orderQuantity).toLocaleString()}</span>
+                          <span style={{ color: 'var(--ad-text-muted)' }}>+₹{(breakdown.platform_fee_per_kg * orderQuantity).toLocaleString()}</span>
                         </div>
 
                         {/* Total Landed Price */}
-                        <div className="pt-2.5 border-t border-[#26332C] flex items-baseline justify-between">
+                        <div className="pt-2.5 flex items-baseline justify-between" style={{ borderTop: '1px solid var(--ad-border)' }}>
                           <div>
-                            <strong className="text-sm font-bold text-white block">Total Landed Cost</strong>
-                            <span className="text-[11px] text-[#48BB78] font-mono">
+                            <strong className="text-sm font-bold block" style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}>
+                              Total Landed Cost
+                            </strong>
+                            <span className="text-[11px] font-semibold" style={{ color: 'var(--ad-brand-bright)' }}>
                               ₹{breakdown.direct_consumer_price_per_kg.toFixed(2)}/kg delivered
                             </span>
                           </div>
-                          <strong className="text-2xl font-black text-white font-mono">
+                          <strong className="text-2xl font-extrabold" style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}>
                             ₹{breakdown.total_consumer_cost_direct.toLocaleString()}
                           </strong>
                         </div>
                       </div>
 
                       {/* Mutual Value Realization Box */}
-                      <div className="bg-[#1D2722] border border-[#2D6A4F]/50 p-3.5 rounded-xl space-y-1.5">
+                      <div
+                        className="p-3.5 rounded-xl space-y-1.5"
+                        style={{
+                          background: 'linear-gradient(135deg, var(--ad-surface-1) 0%, var(--ad-surface-2) 100%)',
+                          border: '1px solid var(--ad-border-accent)',
+                          borderLeft: '3px solid var(--ad-accent)',
+                        }}
+                      >
                         <div className="flex justify-between text-xs items-center">
-                          <span className="text-[#52796F] font-bold">Buyer Direct Procurement Savings:</span>
-                          <strong className="text-[#48BB78] font-mono text-sm font-bold">
+                          <span className="font-bold" style={{ color: 'var(--ad-accent)' }}>Buyer Direct Procurement Savings:</span>
+                          <strong className="text-sm font-bold" style={{ color: 'var(--ad-brand-bright)', fontFamily: 'var(--ad-font-display)' }}>
                             ₹{breakdown.consumer_savings_amount.toLocaleString()} ({Math.round(breakdown.consumer_savings_percent)}%)
                           </strong>
                         </div>
-                        <div className="flex justify-between text-[11px] text-[#C2CBC5]">
+                        <div className="flex justify-between text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>
                           <span>Producer FPO Net Uplift:</span>
-                          <span className="text-[#48BB78] font-semibold font-mono">
+                          <span className="font-semibold" style={{ color: 'var(--ad-brand-bright)' }}>
                             +₹{breakdown.farmer_earnings_uplift_amount.toLocaleString()} (+{Math.round(breakdown.farmer_earnings_uplift_percent)}%)
                           </span>
                         </div>
@@ -531,10 +629,16 @@ export const BuyerPortalView: React.FC = () => {
                   {/* Primary Order Action Button */}
                   <div>
                     {orderConfirmed ? (
-                      <div className="bg-[#1D2722] border-2 border-[#2D6A4F] p-4 rounded-xl text-center space-y-1">
-                        <CheckCircle2 className="w-6 h-6 text-[#48BB78] mx-auto" />
-                        <strong className="text-sm font-bold text-white block">Purchase Intent Confirmed</strong>
-                        <span className="text-xs text-[#8E9C93] block">
+                      <div
+                        className="p-4 rounded-xl text-center space-y-1"
+                        style={{
+                          background: 'var(--ad-surface-0)',
+                          border: '2px solid var(--ad-brand)',
+                        }}
+                      >
+                        <CheckCircle2 className="w-6 h-6 mx-auto" style={{ color: 'var(--ad-brand-bright)' }} />
+                        <strong className="text-sm font-bold block" style={{ color: 'var(--ad-text-primary)' }}>Purchase Intent Confirmed</strong>
+                        <span className="text-xs block" style={{ color: 'var(--ad-text-muted)' }}>
                           Contract generated. Scheduled for WDRA farmgate inspection & cold-chain pickup.
                         </span>
                       </div>
@@ -550,7 +654,10 @@ export const BuyerPortalView: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="bg-[#161E1A] border border-[#26332C] rounded-2xl p-10 text-center text-xs text-[#8E9C93]">
+                <div
+                  className="rounded-2xl p-10 text-center text-xs"
+                  style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)', color: 'var(--ad-text-muted)' }}
+                >
                   Select a produce lot from the catalogue to configure your order.
                 </div>
               )}

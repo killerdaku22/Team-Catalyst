@@ -1,7 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 
-export type BadgeVariant = 'neutral' | 'success' | 'warning' | 'error' | 'info';
+export type BadgeVariant = 'neutral' | 'success' | 'warning' | 'error' | 'info' | 'accent' | 'brand';
 
 interface BadgeProps {
   variant?: BadgeVariant;
@@ -17,6 +17,8 @@ const variantClasses: Record<BadgeVariant, string> = {
   warning: 'ad-badge--warning',
   error:   'ad-badge--error',
   info:    'ad-badge--info',
+  accent:  'ad-badge--accent',
+  brand:   'ad-badge--success',
 };
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -32,7 +34,7 @@ export const Badge: React.FC<BadgeProps> = ({
           className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0"
           style={{
             backgroundColor: 'currentColor',
-            opacity: 0.7,
+            opacity: 0.85,
           }}
           aria-hidden="true"
         />
