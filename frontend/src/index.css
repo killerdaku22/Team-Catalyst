@@ -763,6 +763,209 @@
 }
 
 /* ============================================================
+   UI-10: RESPONSIVE BREAKPOINT UTILITIES
+   ============================================================ */
+
+/* Mobile-first container padding adjustments */
+@media (max-width: 640px) {
+  .ad-card-body {
+    padding: var(--ad-space-3);
+  }
+  .ad-card-header {
+    padding: var(--ad-space-3) var(--ad-space-4);
+  }
+  .ad-kpi__value {
+    font-size: 1.375rem;
+  }
+}
+
+/* Mobile table → stacked card transformation */
+@media (max-width: 768px) {
+  .ad-table-responsive thead {
+    display: none;
+  }
+  .ad-table-responsive tbody tr {
+    display: flex;
+    flex-direction: column;
+    padding: var(--ad-space-3);
+    margin-bottom: var(--ad-space-2);
+    border: 1px solid var(--ad-border);
+    border-radius: var(--ad-radius-md);
+    background-color: var(--ad-surface-1);
+  }
+  .ad-table-responsive tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--ad-space-1) 0;
+    border-bottom: none;
+    font-size: var(--ad-text-caption);
+  }
+  .ad-table-responsive tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--ad-text-tertiary);
+    font-size: var(--ad-text-overline);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    margin-right: var(--ad-space-3);
+  }
+}
+
+/* Tablet intermediate breakpoint */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .ad-panel {
+    padding: var(--ad-space-4);
+  }
+}
+
+/* ============================================================
+   UI-10: ENHANCED ACCESSIBILITY — FOCUS MANAGEMENT
+   ============================================================ */
+
+/* High-contrast focus for interactive elements */
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--ad-accent);
+  outline-offset: 2px;
+  border-radius: var(--ad-radius-sm);
+}
+
+/* Focus-within for container elements */
+.ad-card:focus-within {
+  box-shadow: 0 0 0 2px rgba(199, 163, 86, 0.15);
+}
+
+/* High Contrast Mode support */
+@media (forced-colors: active) {
+  .ad-btn--primary,
+  .ad-btn--accent,
+  .ad-btn--secondary {
+    border: 2px solid ButtonText;
+  }
+  .ad-badge {
+    border: 1px solid ButtonText;
+  }
+  :focus-visible {
+    outline: 3px solid Highlight;
+  }
+}
+
+/* ============================================================
+   UI-11: MOTION SYSTEM — MICRO-INTERACTIONS
+   ============================================================ */
+
+/* Staggered entrance for lists and grids */
+@keyframes ad-stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ad-stagger-in > * {
+  animation: ad-stagger-in 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.ad-stagger-in > *:nth-child(1) { animation-delay: 0ms; }
+.ad-stagger-in > *:nth-child(2) { animation-delay: 60ms; }
+.ad-stagger-in > *:nth-child(3) { animation-delay: 120ms; }
+.ad-stagger-in > *:nth-child(4) { animation-delay: 180ms; }
+.ad-stagger-in > *:nth-child(5) { animation-delay: 240ms; }
+.ad-stagger-in > *:nth-child(6) { animation-delay: 300ms; }
+
+/* Subtle scale-in for modals and overlays */
+@keyframes ad-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ad-scale-in {
+  animation: ad-scale-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth value counter pulse (for KPI updates) */
+@keyframes ad-value-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.ad-value-pulse {
+  animation: ad-value-pulse 0.4s ease-in-out;
+}
+
+/* Gentle shimmer for loading placeholders */
+@keyframes ad-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.ad-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--ad-surface-0) 25%,
+    var(--ad-surface-2) 50%,
+    var(--ad-surface-0) 75%
+  );
+  background-size: 200% 100%;
+  animation: ad-shimmer 1.5s ease-in-out infinite;
+}
+
+/* Hover lift effect for interactive cards */
+.ad-hover-lift {
+  transition: transform var(--ad-transition), box-shadow var(--ad-transition);
+}
+.ad-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ad-shadow-md);
+}
+
+/* Subtle border glow on hover */
+.ad-hover-glow {
+  transition: border-color var(--ad-transition), box-shadow var(--ad-transition);
+}
+.ad-hover-glow:hover {
+  border-color: var(--ad-border-strong);
+  box-shadow: var(--ad-shadow-glow-brand);
+}
+
+/* ============================================================
+   UI-12: VISUAL QA — PRINT STYLES
+   ============================================================ */
+
+@media print {
+  header, footer, .skip-to-content, nav {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .ad-card, .ad-panel {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+}
+
+/* ============================================================
    REDUCED MOTION
    ============================================================ */
 
@@ -772,5 +975,13 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .ad-stagger-in > * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ad-shimmer {
+    animation: none !important;
   }
 }

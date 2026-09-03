@@ -204,7 +204,7 @@ export const BuyerPortalView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-10">
+    <div className="space-y-6 animate-fadeIn pb-10" role="main" aria-label="Direct Produce Marketplace">
       {/* Top Editorial Identity Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-[#273029]">
         <div>
@@ -226,6 +226,8 @@ export const BuyerPortalView: React.FC = () => {
         <div
           className="flex items-center space-x-1.5 p-1 rounded-xl shrink-0 self-start lg:self-auto"
           style={{ backgroundColor: '#141A17', border: '1px solid #273029' }}
+          role="tablist"
+          aria-label="Marketplace view switcher"
         >
           <button
             onClick={() => setActiveTab('MARKETPLACE')}
@@ -273,6 +275,7 @@ export const BuyerPortalView: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full rounded-xl pl-10 pr-3 py-2 text-xs transition-colors"
+                aria-label="Search marketplace listings"
                 style={{
                   backgroundColor: '#1B2320',
                   border: '1px solid #273029',

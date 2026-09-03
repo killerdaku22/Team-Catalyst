@@ -167,7 +167,7 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
     : Number((grossDestPrice - freightCostPerKg - spoilageCostPerKg).toFixed(2));
 
   return (
-    <div className="space-y-8 animate-fadeIn pb-12">
+    <div className="space-y-8 animate-fadeIn pb-12" role="main" aria-label="Produce Decision Engine">
       {/* ============================================================
           SECTION 1 — TOP EDITORIAL IDENTITY & BATCH SUMMARY
           ============================================================ */}
@@ -193,6 +193,7 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           ============================================================ */}
       <section
         className="p-6 sm:p-8 shadow-xl relative overflow-hidden rounded-2xl border border-[#273029] bg-[#141A17]"
+        aria-label="Commodity recommendation and batch analysis"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           {/* Left Batch Identity & Prominent Recommendation */}
@@ -378,7 +379,7 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
       {/* ============================================================
           SECTION 3 — THREE-OPTION ECONOMIC SCENARIOS COMPARISON
           ============================================================ */}
-      <section id="scenarios-comparison-section" className="space-y-4">
+      <section id="scenarios-comparison-section" className="space-y-4" aria-label="Comparative scenario analysis">
         <div>
           <span className="text-[10px] font-bold text-[#7F8F85] uppercase tracking-wider">
             Comparative Scenario Analysis
@@ -394,7 +395,7 @@ export const DecisionCenterView: React.FC<DecisionCenterViewProps> = ({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch ad-stagger-in">
           {/* Scenario 1: SELL NOW */}
           <div className={`p-5 rounded-2xl border transition-all flex flex-col justify-between space-y-4 ${
             optimalAction === 'SELL_NOW'

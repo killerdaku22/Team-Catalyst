@@ -88,7 +88,7 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <div
         ref={dialogRef}
-        className="ad-modal animate-ad-fade-in"
+        className="ad-modal animate-ad-fade-in ad-scale-in"
         style={maxWidth ? { maxWidth } : undefined}
       >
         <div className="ad-modal__header">

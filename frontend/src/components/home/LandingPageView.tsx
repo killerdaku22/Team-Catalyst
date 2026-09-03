@@ -412,7 +412,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 ad-stagger-in">
           {/* Panel A: Traditional Fragmented Chain */}
           <div
             className="p-6 rounded-2xl border border-[#273029] space-y-4 bg-[#141A17]"

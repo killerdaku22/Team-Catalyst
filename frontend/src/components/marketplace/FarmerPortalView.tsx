@@ -105,7 +105,7 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
   const estimatedUplift = directGross - mandiGross;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" role="main" aria-label="Farmer and FPO Producer Portal">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#273029]">
         <div>
@@ -125,7 +125,7 @@ export const FarmerPortalView: React.FC<FarmerPortalViewProps> = ({ onNavigateTo
         </div>
 
         {/* Action Tabs */}
-        <div className="flex items-center space-x-1.5 bg-[#101613] p-1 rounded-xl border border-[#273029] shrink-0">
+        <div className="flex items-center space-x-1.5 bg-[#101613] p-1 rounded-xl border border-[#273029] shrink-0" role="tablist" aria-label="Portal sections">
           <button
             onClick={() => setActiveTab('LISTING')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer ${

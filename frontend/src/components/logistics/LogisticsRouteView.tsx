@@ -143,7 +143,7 @@ export const LogisticsRouteView: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-10">
+    <div className="space-y-6 animate-fadeIn pb-10" role="main" aria-label="Pooled Logistics and Route Optimizer">
       {/* Top Header: Operational Transport Identity */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-[#273029]">
         <div>
@@ -190,6 +190,7 @@ export const LogisticsRouteView: React.FC = () => {
           {/* Section 1: Carrier Vehicle Selection */}
           <div
             className="p-5 space-y-4 shadow-sm bg-[#141A17] border border-[#273029] rounded-2xl"
+            aria-label="Carrier vehicle selection and destination"
           >
             <h2
               className="text-xs font-bold uppercase tracking-wider pb-2 flex items-center justify-between border-b border-[#273029] text-[#F2F4F3]"
