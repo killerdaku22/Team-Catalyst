@@ -13,6 +13,8 @@ interface FooterProps {
   onNavigate?: (tab: string, role?: string) => void;
 }
 
+// AgriDirect Design 2 Lock: Warm Ivory (#FAF8F3) + Forest Green (#12281E / #1E4D34) + Muted Sage (#557061)
+
 type ModalType = 'ABOUT' | 'TERMS' | 'PRIVACY' | 'SECURITY' | 'SUPPORT' | null;
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
