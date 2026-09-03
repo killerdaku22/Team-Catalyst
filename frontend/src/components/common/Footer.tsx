@@ -4,11 +4,7 @@ import {
   PhoneCall,
   ChevronDown,
   ChevronUp,
-  FileText,
-  Lock,
-  Info,
   ShieldCheck,
-  CheckCircle2,
   LifeBuoy
 } from 'lucide-react';
 import { Modal } from '../ui/Modal';
@@ -37,7 +33,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const handleNavClick = (tab: string, role?: string) => {
     if (onNavigate) {
       onNavigate(tab, role);
-      // Smooth scroll to top when navigating across modules
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -45,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
     <>
       <footer
-        className="w-full relative mt-20 border-t print:hidden"
+        className="w-full relative mt-10 sm:mt-12 border-t print:hidden"
         style={{
           backgroundColor: '#FAF8F3', // Warm ivory / off-white
           borderColor: '#E3EAE4',
@@ -55,46 +50,46 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       >
         <h2 id="footer-heading" className="sr-only">AgriDirect Platform Footer</h2>
 
-        {/* Minimal decorative contour line — elegant agricultural horizon contour */}
-        <div className="w-full h-2 overflow-hidden opacity-40 pointer-events-none" aria-hidden="true">
+        {/* Minimal agricultural horizon contour line */}
+        <div className="w-full h-1.5 overflow-hidden opacity-35 pointer-events-none" aria-hidden="true">
           <svg
             className="w-full h-full"
-            viewBox="0 0 1440 8"
+            viewBox="0 0 1440 6"
             fill="none"
             preserveAspectRatio="none"
           >
             <path
-              d="M0 6 C240 2, 480 7, 720 4 C960 1, 1200 6, 1440 3"
+              d="M0 4 C240 1, 480 5, 720 3 C960 1, 1200 5, 1440 2"
               stroke="#BACBBF"
-              strokeWidth="1.2"
+              strokeWidth="1"
               strokeDasharray="4 6"
             />
           </svg>
         </div>
 
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-7 pb-5">
           
           {/* =========================================================================
-              PRIMARY NAVIGATION GRID (12 Columns)
+              COMPACT 12-COLUMN PRIMARY GRID
               ========================================================================= */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
             
-            {/* BRAND & POSITIONING SECTION (Cols 1–4 on Desktop) */}
-            <div className="lg:col-span-4 space-y-5 pr-0 lg:pr-6">
-              <div className="flex items-center space-x-3">
+            {/* BRAND & DIRECT INFO (Cols 1–4 on Desktop) */}
+            <div className="lg:col-span-4 space-y-3 pr-0 lg:pr-4">
+              <div className="flex items-center space-x-2.5">
                 <div
-                  className="w-9 h-9 rounded-lg flex items-center justify-center shadow-sm"
+                  className="w-7 h-7 rounded-lg flex items-center justify-center shadow-xs"
                   style={{
-                    backgroundColor: '#1E4D34', // Deep forest green badge
+                    backgroundColor: '#1E4D34', // Deep forest green
                     color: '#FAF8F3',
                   }}
                   aria-hidden="true"
                 >
-                  <Sprout className="w-5 h-5" style={{ color: '#E8D5A3' }} />
+                  <Sprout className="w-4 h-4" style={{ color: '#E8D5A3' }} />
                 </div>
                 <div>
                   <span
-                    className="font-bold text-xl tracking-tight leading-none block"
+                    className="font-bold text-lg tracking-tight leading-none block"
                     style={{
                       fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
                       color: '#12281E',
@@ -103,8 +98,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     AgriDirect
                   </span>
                   <span
-                    className="text-[10px] font-semibold tracking-wider uppercase block mt-0.5"
-                    style={{ color: '#557061' }}
+                    className="text-[9px] font-semibold tracking-wider uppercase block text-[#557061]"
                   >
                     Agricultural Commerce
                   </span>
@@ -112,46 +106,36 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </div>
 
               <p
-                className="text-xs leading-relaxed max-w-sm"
-                style={{ color: '#455D4F' }}
+                className="text-[11px] leading-relaxed max-w-xs text-[#455D4F]"
               >
-                Building transparent, efficient, and sustainable agricultural commerce infrastructure. Direct market access, spatial price intelligence, and pooled cold freight for India's farm producers.
+                Transparent, efficient, and sustainable agricultural infrastructure. Direct market access, spatial price discovery, and shared cold freight.
               </p>
 
-              {/* Understated Contact Block */}
-              <div
-                className="pt-4 space-y-1.5"
-                style={{ borderTop: '1px solid #E8EFE9' }}
-              >
-                <div className="flex items-center space-x-2 text-xs font-semibold" style={{ color: '#12281E' }}>
-                  <PhoneCall className="w-3.5 h-3.5" style={{ color: '#1E4D34' }} aria-hidden="true" />
-                  <span className="font-mono text-sm tracking-wide">1800-AGRI-DIRECT</span>
-                </div>
-                <div className="text-[11px]" style={{ color: '#5A7364' }}>
-                  Toll Free · 7 Regional Languages · Mon–Sat 06:00–20:00 IST
-                </div>
+              {/* Lean Contact & Assistance */}
+              <div className="flex items-center space-x-2 text-[11px] font-medium text-[#12281E] pt-1">
+                <PhoneCall className="w-3 h-3 text-[#1E4D34]" aria-hidden="true" />
+                <span className="font-mono font-semibold tracking-wide">1800-AGRI-DIRECT</span>
+                <span className="text-[#88A291]">·</span>
+                <span className="text-[#5A7364]">Toll Free (7 Languages)</span>
               </div>
             </div>
 
             {/* 4 NAVIGATION COLUMNS (Cols 5–12 on Desktop) */}
             <div className="lg:col-span-8">
               
-              {/* DESKTOP VIEW: Clean 4-Column Grid */}
-              <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs">
+              {/* DESKTOP VIEW: Clean 4-Column Grid with tight spacing */}
+              <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-4 gap-6 text-[11px]">
                 
                 {/* Column 1: Platform */}
-                <nav aria-labelledby="footer-nav-platform" className="space-y-3">
+                <nav aria-labelledby="footer-nav-platform" className="space-y-2">
                   <h3
                     id="footer-nav-platform"
-                    className="font-bold text-[11px] uppercase tracking-wider block"
-                    style={{
-                      fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
-                      color: '#12281E',
-                    }}
+                    className="font-bold text-[10px] uppercase tracking-wider block text-[#12281E]"
+                    style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
                   >
                     Platform
                   </h3>
-                  <ul className="space-y-2.5" style={{ color: '#455D4F' }}>
+                  <ul className="space-y-1.5 text-[#455D4F]">
                     <li>
                       <button
                         onClick={() => handleNavClick('farmer')}
@@ -204,18 +188,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </nav>
 
                 {/* Column 2: Solutions */}
-                <nav aria-labelledby="footer-nav-solutions" className="space-y-3">
+                <nav aria-labelledby="footer-nav-solutions" className="space-y-2">
                   <h3
                     id="footer-nav-solutions"
-                    className="font-bold text-[11px] uppercase tracking-wider block"
-                    style={{
-                      fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
-                      color: '#12281E',
-                    }}
+                    className="font-bold text-[10px] uppercase tracking-wider block text-[#12281E]"
+                    style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
                   >
                     Solutions
                   </h3>
-                  <ul className="space-y-2.5" style={{ color: '#455D4F' }}>
+                  <ul className="space-y-1.5 text-[#455D4F]">
                     <li>
                       <button
                         onClick={() => handleNavClick('farmer', 'FARMER')}
@@ -260,18 +241,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </nav>
 
                 {/* Column 3: Resources */}
-                <nav aria-labelledby="footer-nav-resources" className="space-y-3">
+                <nav aria-labelledby="footer-nav-resources" className="space-y-2">
                   <h3
                     id="footer-nav-resources"
-                    className="font-bold text-[11px] uppercase tracking-wider block"
-                    style={{
-                      fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
-                      color: '#12281E',
-                    }}
+                    className="font-bold text-[10px] uppercase tracking-wider block text-[#12281E]"
+                    style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
                   >
                     Resources
                   </h3>
-                  <ul className="space-y-2.5" style={{ color: '#455D4F' }}>
+                  <ul className="space-y-1.5 text-[#455D4F]">
                     <li>
                       <button
                         onClick={() => handleNavClick('intelligence')}
@@ -293,7 +271,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                         onClick={() => handleNavClick('storage')}
                         className="hover:text-[#1E4D34] transition-colors text-left focus:outline-none focus-visible:underline"
                       >
-                        Cold Chamber Telemetry
+                        Cold Chamber IoT
                       </button>
                     </li>
                     <li>
@@ -316,18 +294,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </nav>
 
                 {/* Column 4: Company */}
-                <nav aria-labelledby="footer-nav-company" className="space-y-3">
+                <nav aria-labelledby="footer-nav-company" className="space-y-2">
                   <h3
                     id="footer-nav-company"
-                    className="font-bold text-[11px] uppercase tracking-wider block"
-                    style={{
-                      fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
-                      color: '#12281E',
-                    }}
+                    className="font-bold text-[10px] uppercase tracking-wider block text-[#12281E]"
+                    style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
                   >
                     Company
                   </h3>
-                  <ul className="space-y-2.5" style={{ color: '#455D4F' }}>
+                  <ul className="space-y-1.5 text-[#455D4F]">
                     <li>
                       <button
                         onClick={() => setActiveModal('ABOUT')}
@@ -365,92 +340,88 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </div>
 
               {/* MOBILE VIEW: Collapsible Accordion Navigation */}
-              <div className="sm:hidden space-y-2 text-xs divide-y divide-[#EAEFEA]">
+              <div className="sm:hidden space-y-1 text-xs divide-y divide-[#EAEFEA]">
                 
                 {/* Mobile Section 1: Platform */}
-                <div className="pt-2">
+                <div className="pt-1.5">
                   <button
                     onClick={() => toggleMobileSection('platform')}
-                    className="w-full flex items-center justify-between py-2 text-left font-bold uppercase tracking-wider text-[11px]"
-                    style={{ color: '#12281E' }}
+                    className="w-full flex items-center justify-between py-1.5 text-left font-bold uppercase tracking-wider text-[10px] text-[#12281E]"
                     aria-expanded={mobileSectionsOpen.platform}
                   >
                     <span>Platform</span>
-                    {mobileSectionsOpen.platform ? <ChevronUp className="w-4 h-4 text-[#557061]" /> : <ChevronDown className="w-4 h-4 text-[#557061]" />}
+                    {mobileSectionsOpen.platform ? <ChevronUp className="w-3.5 h-3.5 text-[#557061]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#557061]" />}
                   </button>
                   {mobileSectionsOpen.platform && (
-                    <ul className="py-2 pl-2 space-y-2.5 text-xs" style={{ color: '#455D4F' }}>
-                      <li><button onClick={() => handleNavClick('farmer')} className="py-1">My Produce</button></li>
-                      <li><button onClick={() => handleNavClick('decision')} className="py-1">Decisions</button></li>
-                      <li><button onClick={() => handleNavClick('best-market')} className="py-1">Markets</button></li>
-                      <li><button onClick={() => handleNavClick('marketplace')} className="py-1">Marketplace</button></li>
-                      <li><button onClick={() => handleNavClick('logistics')} className="py-1">Transport</button></li>
-                      <li><button onClick={() => handleNavClick('forecasting')} className="py-1">Analytics</button></li>
+                    <ul className="py-1.5 pl-2 space-y-1.5 text-[11px] text-[#455D4F]">
+                      <li><button onClick={() => handleNavClick('farmer')} className="py-0.5">My Produce</button></li>
+                      <li><button onClick={() => handleNavClick('decision')} className="py-0.5">Decisions</button></li>
+                      <li><button onClick={() => handleNavClick('best-market')} className="py-0.5">Markets</button></li>
+                      <li><button onClick={() => handleNavClick('marketplace')} className="py-0.5">Marketplace</button></li>
+                      <li><button onClick={() => handleNavClick('logistics')} className="py-0.5">Transport</button></li>
+                      <li><button onClick={() => handleNavClick('forecasting')} className="py-0.5">Analytics</button></li>
                     </ul>
                   )}
                 </div>
 
                 {/* Mobile Section 2: Solutions */}
-                <div className="pt-2">
+                <div className="pt-1.5">
                   <button
                     onClick={() => toggleMobileSection('solutions')}
-                    className="w-full flex items-center justify-between py-2 text-left font-bold uppercase tracking-wider text-[11px]"
-                    style={{ color: '#12281E' }}
+                    className="w-full flex items-center justify-between py-1.5 text-left font-bold uppercase tracking-wider text-[10px] text-[#12281E]"
                     aria-expanded={mobileSectionsOpen.solutions}
                   >
                     <span>Solutions</span>
-                    {mobileSectionsOpen.solutions ? <ChevronUp className="w-4 h-4 text-[#557061]" /> : <ChevronDown className="w-4 h-4 text-[#557061]" />}
+                    {mobileSectionsOpen.solutions ? <ChevronUp className="w-3.5 h-3.5 text-[#557061]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#557061]" />}
                   </button>
                   {mobileSectionsOpen.solutions && (
-                    <ul className="py-2 pl-2 space-y-2.5 text-xs" style={{ color: '#455D4F' }}>
-                      <li><button onClick={() => handleNavClick('farmer', 'FARMER')} className="py-1">For Farmers & FPOs</button></li>
-                      <li><button onClick={() => handleNavClick('marketplace', 'BUYER')} className="py-1">For Institutional Buyers</button></li>
-                      <li><button onClick={() => handleNavClick('logistics', 'LOGISTICS')} className="py-1">For Logistics Partners</button></li>
-                      <li><button onClick={() => handleNavClick('ministry', 'DOCA_OBSERVER')} className="py-1">For Government Observers</button></li>
-                      <li><button onClick={() => handleNavClick('design-system')} className="py-1">Data System & Tokens</button></li>
+                    <ul className="py-1.5 pl-2 space-y-1.5 text-[11px] text-[#455D4F]">
+                      <li><button onClick={() => handleNavClick('farmer', 'FARMER')} className="py-0.5">For Farmers & FPOs</button></li>
+                      <li><button onClick={() => handleNavClick('marketplace', 'BUYER')} className="py-0.5">For Institutional Buyers</button></li>
+                      <li><button onClick={() => handleNavClick('logistics', 'LOGISTICS')} className="py-0.5">For Logistics Partners</button></li>
+                      <li><button onClick={() => handleNavClick('ministry', 'DOCA_OBSERVER')} className="py-0.5">For Government Observers</button></li>
+                      <li><button onClick={() => handleNavClick('design-system')} className="py-0.5">Data System & Tokens</button></li>
                     </ul>
                   )}
                 </div>
 
                 {/* Mobile Section 3: Resources */}
-                <div className="pt-2">
+                <div className="pt-1.5">
                   <button
                     onClick={() => toggleMobileSection('resources')}
-                    className="w-full flex items-center justify-between py-2 text-left font-bold uppercase tracking-wider text-[11px]"
-                    style={{ color: '#12281E' }}
+                    className="w-full flex items-center justify-between py-1.5 text-left font-bold uppercase tracking-wider text-[10px] text-[#12281E]"
                     aria-expanded={mobileSectionsOpen.resources}
                   >
                     <span>Resources</span>
-                    {mobileSectionsOpen.resources ? <ChevronUp className="w-4 h-4 text-[#557061]" /> : <ChevronDown className="w-4 h-4 text-[#557061]" />}
+                    {mobileSectionsOpen.resources ? <ChevronUp className="w-3.5 h-3.5 text-[#557061]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#557061]" />}
                   </button>
                   {mobileSectionsOpen.resources && (
-                    <ul className="py-2 pl-2 space-y-2.5 text-xs" style={{ color: '#455D4F' }}>
-                      <li><button onClick={() => handleNavClick('intelligence')} className="py-1">Market Insights</button></li>
-                      <li><button onClick={() => handleNavClick('forecasting')} className="py-1">Price Trends</button></li>
-                      <li><button onClick={() => handleNavClick('storage')} className="py-1">Cold Chamber Telemetry</button></li>
-                      <li><button onClick={() => handleNavClick('buffer')} className="py-1">Buffer Silo Reserves</button></li>
-                      <li><button onClick={() => setActiveModal('SUPPORT')} className="py-1">Assistance & Support</button></li>
+                    <ul className="py-1.5 pl-2 space-y-1.5 text-[11px] text-[#455D4F]">
+                      <li><button onClick={() => handleNavClick('intelligence')} className="py-0.5">Market Insights</button></li>
+                      <li><button onClick={() => handleNavClick('forecasting')} className="py-0.5">Price Trends</button></li>
+                      <li><button onClick={() => handleNavClick('storage')} className="py-0.5">Cold Chamber Telemetry</button></li>
+                      <li><button onClick={() => handleNavClick('buffer')} className="py-0.5">Buffer Silo Reserves</button></li>
+                      <li><button onClick={() => setActiveModal('SUPPORT')} className="py-0.5">Assistance & Support</button></li>
                     </ul>
                   )}
                 </div>
 
                 {/* Mobile Section 4: Company */}
-                <div className="pt-2">
+                <div className="pt-1.5">
                   <button
                     onClick={() => toggleMobileSection('company')}
-                    className="w-full flex items-center justify-between py-2 text-left font-bold uppercase tracking-wider text-[11px]"
-                    style={{ color: '#12281E' }}
+                    className="w-full flex items-center justify-between py-1.5 text-left font-bold uppercase tracking-wider text-[10px] text-[#12281E]"
                     aria-expanded={mobileSectionsOpen.company}
                   >
                     <span>Company</span>
-                    {mobileSectionsOpen.company ? <ChevronUp className="w-4 h-4 text-[#557061]" /> : <ChevronDown className="w-4 h-4 text-[#557061]" />}
+                    {mobileSectionsOpen.company ? <ChevronUp className="w-3.5 h-3.5 text-[#557061]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#557061]" />}
                   </button>
                   {mobileSectionsOpen.company && (
-                    <ul className="py-2 pl-2 space-y-2.5 text-xs" style={{ color: '#455D4F' }}>
-                      <li><button onClick={() => setActiveModal('ABOUT')} className="py-1">About AgriDirect</button></li>
-                      <li><button onClick={() => setActiveModal('TERMS')} className="py-1">Terms of Service</button></li>
-                      <li><button onClick={() => setActiveModal('PRIVACY')} className="py-1">Privacy Policy</button></li>
-                      <li><button onClick={() => setActiveModal('SECURITY')} className="py-1">Security & Provenance</button></li>
+                    <ul className="py-1.5 pl-2 space-y-1.5 text-[11px] text-[#455D4F]">
+                      <li><button onClick={() => setActiveModal('ABOUT')} className="py-0.5">About AgriDirect</button></li>
+                      <li><button onClick={() => setActiveModal('TERMS')} className="py-0.5">Terms of Service</button></li>
+                      <li><button onClick={() => setActiveModal('PRIVACY')} className="py-0.5">Privacy Policy</button></li>
+                      <li><button onClick={() => setActiveModal('SECURITY')} className="py-0.5">Security & Provenance</button></li>
                     </ul>
                   )}
                 </div>
@@ -460,75 +431,49 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           {/* =========================================================================
-              OPERATIONAL / ANALYTICAL HUBS STRIP (Restrained & Accurate)
+              CONSOLIDATED BOTTOM STRIP (Single Line: Hubs + Copyright + Legal)
               ========================================================================= */}
           <div
-            className="pt-6 mt-10 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs"
+            className="pt-4 mt-5 flex flex-col md:flex-row md:items-center justify-between gap-2.5 text-[11px]"
             style={{
               borderTop: '1px solid #E6ECE7',
               color: '#526B5C',
             }}
           >
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="font-semibold" style={{ color: '#12281E' }}>
-                Operational & Analytical Hubs:
-              </span>
-              <span>Kolar (KA)</span>
-              <span style={{ color: '#BACBBF' }}>·</span>
-              <span>Nashik (MH)</span>
-              <span style={{ color: '#BACBBF' }}>·</span>
-              <span>Agra (UP)</span>
-              <span style={{ color: '#BACBBF' }}>·</span>
-              <span>Khanna (PB)</span>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <span>© 2026 AgriDirect Inc.</span>
+              <span className="text-[#BACBBF]">·</span>
+              <span className="font-medium text-[#12281E]">Analytical Hubs:</span>
+              <span>Kolar · Nashik · Agra · Khanna</span>
+              <span className="hidden sm:inline text-[#BACBBF]">·</span>
+              <span className="hidden sm:inline text-[#688273]">Telemetry Active</span>
             </div>
 
-            <div className="flex items-center space-x-2 text-[11px]" style={{ color: '#688273' }}>
-              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#2D7A52' }} aria-hidden="true" />
-              <span>Production Telemetry Active</span>
-              <span style={{ color: '#BACBBF' }}>·</span>
-              <span>SHA-256 Audit Verification</span>
-            </div>
-          </div>
-
-          {/* =========================================================================
-              BOTTOM LEGAL BAR
-              ========================================================================= */}
-          <div
-            className="pt-6 mt-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]"
-            style={{
-              borderTop: '1px solid #EBF1EC',
-              color: '#5D7768',
-            }}
-          >
-            <div>
-              © 2026 AgriDirect Inc. All rights reserved.
-            </div>
-
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[#5D7768]">
               <button
                 onClick={() => setActiveModal('TERMS')}
-                className="hover:text-[#12281E] transition-colors focus:outline-none focus-visible:underline"
+                className="hover:text-[#12281E] transition-colors focus:outline-none focus-visible:underline cursor-pointer"
               >
-                Terms of Service
+                Terms
               </button>
-              <span style={{ color: '#D2DED4' }}>·</span>
+              <span className="text-[#D2DED4]">·</span>
               <button
                 onClick={() => setActiveModal('PRIVACY')}
-                className="hover:text-[#12281E] transition-colors focus:outline-none focus-visible:underline"
+                className="hover:text-[#12281E] transition-colors focus:outline-none focus-visible:underline cursor-pointer"
               >
-                Privacy Policy
+                Privacy
               </button>
-              <span style={{ color: '#D2DED4' }}>·</span>
+              <span className="text-[#D2DED4]">·</span>
               <button
                 onClick={() => setActiveModal('SECURITY')}
-                className="hover:text-[#12281E] transition-colors focus:outline-none focus-visible:underline"
+                className="hover:text-[#12281E] transition-colors focus:outline-none focus-visible:underline cursor-pointer"
               >
-                Security & Integrity
+                Security
               </button>
-              <span style={{ color: '#D2DED4' }}>·</span>
+              <span className="text-[#D2DED4]">·</span>
               <button
                 onClick={() => setActiveModal('ABOUT')}
-                className="hover:text-[#12281E] transition-colors focus:outline-none focus-visible:underline"
+                className="hover:text-[#12281E] transition-colors focus:outline-none focus-visible:underline cursor-pointer"
               >
                 About
               </button>
@@ -539,7 +484,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       </footer>
 
       {/* =========================================================================
-          MODAL 1: ABOUT AGRIDIRECT
+          MODALS
           ========================================================================= */}
       <Modal
         open={activeModal === 'ABOUT'}
@@ -572,9 +517,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
       </Modal>
 
-      {/* =========================================================================
-          MODAL 2: TERMS OF SERVICE
-          ========================================================================= */}
       <Modal
         open={activeModal === 'TERMS'}
         onClose={() => setActiveModal(null)}
@@ -603,9 +545,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
       </Modal>
 
-      {/* =========================================================================
-          MODAL 3: PRIVACY POLICY
-          ========================================================================= */}
       <Modal
         open={activeModal === 'PRIVACY'}
         onClose={() => setActiveModal(null)}
@@ -634,9 +573,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
       </Modal>
 
-      {/* =========================================================================
-          MODAL 4: SECURITY & DATA CHARTER
-          ========================================================================= */}
       <Modal
         open={activeModal === 'SECURITY'}
         onClose={() => setActiveModal(null)}
@@ -659,9 +595,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
       </Modal>
 
-      {/* =========================================================================
-          MODAL 5: ASSISTANCE & SUPPORT
-          ========================================================================= */}
       <Modal
         open={activeModal === 'SUPPORT'}
         onClose={() => setActiveModal(null)}
