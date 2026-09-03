@@ -145,35 +145,38 @@ export const LogisticsRouteView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn pb-10">
       {/* Top Header: Operational Transport Identity */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5" style={{ borderBottom: '1px solid var(--ad-border)' }}>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-[#273029]">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ad-accent)' }}>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#C7A356]">
               2-Opt CVRP Multi-Stop Operations
             </span>
             <DataProvenance source="OpenStreetMap Routing & Heuristic VRP Engine" status="MODEL_OUTPUT" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+          <h1
+            className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1 text-[#F2F4F3]"
+            style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+          >
             Pooled Logistics & Route Optimizer
           </h1>
-          <p className="text-sm max-w-2xl mt-1" style={{ color: 'var(--ad-text-tertiary)' }}>
+          <p className="text-sm max-w-2xl mt-1 text-[#8E9C93]">
             Combines distributed FPO harvest lots into scheduled shared cold-chain runs. Eliminates empty dead mileage and cuts freight costs by up to 38%.
           </p>
         </div>
 
         {/* Real-time Status Badge */}
         <div
-          className="flex items-center space-x-3 px-4 py-2.5 rounded-xl shrink-0 text-xs shadow-md"
-          style={{
-            background: 'var(--ad-surface-0)',
-            border: '1px solid var(--ad-border-accent)',
-            borderLeft: '3px solid var(--ad-accent)',
-          }}
+          className="flex items-center space-x-3 px-4 py-2.5 rounded-xl shrink-0 text-xs shadow-md bg-[#141A17] border border-[#273029]"
         >
-          <Truck className="w-4 h-4" style={{ color: 'var(--ad-accent)' }} />
+          <Truck className="w-4 h-4 text-[#C7A356]" />
           <div>
-            <span className="text-[10px] block leading-tight" style={{ color: 'var(--ad-text-muted)' }}>Active Carrier Mode</span>
-            <span className="font-bold" style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}>{selectedVehicle.type}</span>
+            <span className="text-[10px] block leading-tight text-[#7F8F85]">Active Carrier Mode</span>
+            <span
+              className="font-bold text-[#F2F4F3]"
+              style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+            >
+              {selectedVehicle.type}
+            </span>
           </div>
         </div>
       </div>
@@ -186,20 +189,14 @@ export const LogisticsRouteView: React.FC = () => {
           
           {/* Section 1: Carrier Vehicle Selection */}
           <div
-            className="p-5 space-y-4 shadow-sm"
-            style={{
-              background: 'var(--ad-surface-0)',
-              border: '1px solid var(--ad-border)',
-              borderRadius: 'var(--ad-radius-xl)',
-            }}
+            className="p-5 space-y-4 shadow-sm bg-[#141A17] border border-[#273029] rounded-2xl"
           >
-            <h2 className="text-xs font-bold uppercase tracking-wider pb-2 flex items-center justify-between" style={{
-              borderBottom: '1px solid var(--ad-border-subtle)',
-              fontFamily: 'var(--ad-font-display)',
-              color: 'var(--ad-text-primary)'
-            }}>
+            <h2
+              className="text-xs font-bold uppercase tracking-wider pb-2 flex items-center justify-between border-b border-[#273029] text-[#F2F4F3]"
+              style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+            >
               <span>1. Vehicle Fleet & Destination</span>
-              <span className="text-[10px] font-bold" style={{ color: 'var(--ad-accent)' }}>CVRP Spec</span>
+              <span className="text-[10px] font-bold text-[#C7A356]">CVRP Spec</span>
             </h2>
 
             {/* Vehicle Selection Cards */}
@@ -212,17 +209,26 @@ export const LogisticsRouteView: React.FC = () => {
                     onClick={() => setSelectedVehicle(v)}
                     className="p-3.5 rounded-xl border transition-all cursor-pointer"
                     style={{
-                      background: isSelected ? 'var(--ad-surface-1)' : 'var(--ad-surface-muted)',
-                      border: isSelected ? '1px solid var(--ad-border-accent)' : '1px solid var(--ad-border-subtle)',
-                      borderLeft: isSelected ? '3px solid var(--ad-accent)' : '1px solid var(--ad-border-subtle)',
-                      boxShadow: isSelected ? '0 2px 8px rgba(199, 163, 86, 0.12)' : 'none',
+                      backgroundColor: isSelected ? '#1B2320' : '#101613',
+                      borderColor: isSelected ? '#C7A356' : '#273029',
+                      boxShadow: isSelected ? '0 2px 8px rgba(0, 0, 0, 0.4)' : 'none',
                     }}
                   >
                     <div className="flex justify-between items-start">
-                      <span className="font-bold text-xs block" style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}>{v.name}</span>
-                      <span className="text-xs font-bold" style={{ color: 'var(--ad-accent-bright)', fontFamily: 'var(--ad-font-display)' }}>₹{v.costPerKm}/km</span>
+                      <span
+                        className="font-bold text-xs block text-[#F2F4F3]"
+                        style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+                      >
+                        {v.name}
+                      </span>
+                      <span
+                        className="text-xs font-bold text-[#C7A356]"
+                        style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+                      >
+                        ₹{v.costPerKm}/km
+                      </span>
                     </div>
-                    <span className="text-[10px] block mt-1" style={{ color: 'var(--ad-text-muted)' }}>{v.desc}</span>
+                    <span className="text-[10px] block mt-1 text-[#7F8F85]">{v.desc}</span>
                   </div>
                 );
               })}
@@ -230,20 +236,15 @@ export const LogisticsRouteView: React.FC = () => {
 
             {/* Destination Selector */}
             <div>
-              <label className="ad-label text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>Destination Terminal Market</label>
+              <label className="text-[11px] font-medium text-[#7F8F85] block mb-1">Destination Terminal Market</label>
               <select
                 value={selectedDestination.id}
                 onChange={(e) => {
                   const d = DESTINATION_HUBS.find(item => item.id === e.target.value);
                   if (d) setSelectedDestination(d);
                 }}
-                className="w-full rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none cursor-pointer"
-                style={{
-                  background: 'var(--ad-surface-1)',
-                  border: '1px solid var(--ad-border)',
-                  color: 'var(--ad-text-primary)',
-                  fontFamily: 'var(--ad-font-display)'
-                }}
+                className="w-full rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none cursor-pointer bg-[#101613] border border-[#273029] text-[#F2F4F3]"
+                style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
               >
                 {DESTINATION_HUBS.map(d => (
                   <option key={d.id} value={d.id} style={{ background: '#141A17', color: '#F2F4F3' }}>
@@ -255,33 +256,35 @@ export const LogisticsRouteView: React.FC = () => {
 
             {/* Vehicle Capacity Meter */}
             <div
-              className="p-4 rounded-xl space-y-2"
-              style={{ background: 'var(--ad-surface-muted)', border: '1px solid var(--ad-border-subtle)' }}
+              className="p-4 rounded-xl space-y-2 bg-[#101613] border border-[#273029]"
             >
               <div className="flex justify-between text-xs items-center">
-                <span style={{ color: 'var(--ad-text-muted)' }}>Carrier Axle Payload:</span>
-                <span className="font-bold text-xs" style={{
-                  color: isOverCapacity ? 'var(--ad-danger-text)' : 'var(--ad-brand-bright)',
-                  fontFamily: 'var(--ad-font-display)'
-                }}>
+                <span className="text-[#7F8F85]">Carrier Axle Payload:</span>
+                <span
+                  className="font-bold text-xs"
+                  style={{
+                    color: isOverCapacity ? '#E84F4F' : '#34C772',
+                    fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)'
+                  }}
+                >
                   {totalCargoKg.toLocaleString()} / {selectedVehicle.capacity_kg.toLocaleString()} kg ({capacityPct}%)
                 </span>
               </div>
-              <div className="w-full h-2.5 rounded-full overflow-hidden" style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border-subtle)' }}>
+              <div className="w-full h-2.5 rounded-full overflow-hidden bg-[#141A17] border border-[#273029]">
                 <div
                   className="h-full transition-all duration-300 rounded-full"
                   style={{
                     width: `${Math.min(100, capacityPct)}%`,
-                    background: isOverCapacity
-                      ? 'var(--ad-danger)'
+                    backgroundColor: isOverCapacity
+                      ? '#E84F4F'
                       : capacityPct > 85
-                        ? 'var(--ad-warning)'
-                        : 'linear-gradient(90deg, var(--ad-brand), var(--ad-accent))'
+                        ? '#C7A356'
+                        : '#34C772'
                   }}
                 />
               </div>
               {isOverCapacity && (
-                <div className="flex items-center space-x-1.5 text-[11px] pt-1" style={{ color: 'var(--ad-danger-text)' }}>
+                <div className="flex items-center space-x-1.5 text-[11px] pt-1 text-[#E84F4F]">
                   <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
                   <span>Exceeds vehicle rating by {(totalCargoKg - selectedVehicle.capacity_kg).toLocaleString()} kg!</span>
                 </div>
@@ -290,12 +293,15 @@ export const LogisticsRouteView: React.FC = () => {
           </div>
 
           {/* Section 2: Available Farm Lots for Pooling */}
-          <div className="bg-[#161E1A] border border-[#26332C] rounded-2xl p-5 space-y-4 shadow-sm">
-            <div className="flex items-center justify-between pb-2 border-b border-[#26332C]">
-              <h2 className="text-xs font-bold text-white uppercase tracking-wider">
+          <div className="bg-[#141A17] border border-[#273029] rounded-2xl p-5 space-y-4 shadow-sm">
+            <div className="flex items-center justify-between pb-2 border-b border-[#273029]">
+              <h2
+                className="text-xs font-bold text-[#F2F4F3] uppercase tracking-wider"
+                style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+              >
                 2. Select Farmgate Lots to Pool
               </h2>
-              <span className="text-[10px] text-[#48BB78] font-bold bg-[#101513] px-2 py-0.5 rounded border border-[#26332C]">
+              <span className="text-[10px] text-[#34C772] font-bold bg-[#101613] px-2 py-0.5 rounded border border-[#273029]">
                 {selectedIds.length} Lots Checked
               </span>
             </div>
@@ -309,13 +315,13 @@ export const LogisticsRouteView: React.FC = () => {
                     onClick={() => handleToggleListing(lot.id)}
                     className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                       isChecked
-                        ? 'bg-[#1D2722] border-[#2D6A4F]'
-                        : 'bg-[#101513] border-[#26332C] hover:border-[#384A41]'
+                        ? 'bg-[#1B2320] border-[#34C772]'
+                        : 'bg-[#101613] border-[#273029] hover:border-[#384A41]'
                     }`}
                   >
                     <div className="flex items-center space-x-2.5">
-                      <div className="text-[#48BB78]">
-                        {isChecked ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4 text-[#8E9C93]" />}
+                      <div className="text-[#34C772]">
+                        {isChecked ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4 text-[#7F8F85]" />}
                       </div>
                       <div>
                         <span className="font-bold text-white block">{lot.crop_name}</span>
@@ -325,7 +331,7 @@ export const LogisticsRouteView: React.FC = () => {
 
                     <div className="text-right shrink-0">
                       <strong className="text-white font-mono block text-xs">{lot.quantity_kg.toLocaleString()} kg</strong>
-                      <span className="text-[10px] text-[#52796F]">₹{lot.price_per_kg}/kg</span>
+                      <span className="text-[10px] text-[#34C772]">₹{lot.price_per_kg}/kg</span>
                     </div>
                   </div>
                 );
@@ -335,7 +341,14 @@ export const LogisticsRouteView: React.FC = () => {
             <button
               onClick={handleRunOptimizer}
               disabled={isOptimizing || selectedIds.length === 0}
-              className="ad-btn-primary w-full text-xs font-bold py-2.5 shadow-md flex items-center justify-center space-x-2"
+              className="w-full text-xs font-bold py-2.5 rounded-lg flex items-center justify-center space-x-2 text-white transition-all shadow-md cursor-pointer"
+              style={{ backgroundColor: '#28724E' }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.backgroundColor = '#1F5C3D';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.backgroundColor = '#28724E';
+              }}
             >
               <Navigation className="w-3.5 h-3.5" />
               <span>{isOptimizing ? 'Computing 2-Opt CVRP Corridor...' : 'Recalculate Optimal Corridor'}</span>
@@ -344,53 +357,58 @@ export const LogisticsRouteView: React.FC = () => {
 
           {/* Section 3: Calculated Operational Metrics */}
           {vrpResult && (
-            <div className="bg-[#161E1A] border border-[#26332C] rounded-2xl p-5 space-y-3.5 shadow-sm">
-              <h2 className="text-xs font-bold text-white uppercase tracking-wider pb-2 border-b border-[#26332C]">
+            <div className="bg-[#141A17] border border-[#273029] rounded-2xl p-5 space-y-3.5 shadow-sm">
+              <h2
+                className="text-xs font-bold text-[#F2F4F3] uppercase tracking-wider pb-2 border-b border-[#273029]"
+                style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+              >
                 3. Calculated Multi-Stop Telemetry
               </h2>
 
               <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C]">
-                  <span className="text-[10px] text-[#8E9C93] block">Optimized Transit Run</span>
+                <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029]">
+                  <span className="text-[10px] text-[#7F8F85] block">Optimized Transit Run</span>
                   <strong className="text-lg font-black text-white font-mono mt-0.5 block">
                     {Math.round(vrpResult.total_distance_km)} km
                   </strong>
-                  <span className="text-[10px] text-[#52796F]">~{vrpResult.estimated_time_hours}h estimated</span>
+                  <span className="text-[10px] text-[#7F8F85]">~{vrpResult.estimated_time_hours}h estimated</span>
                 </div>
 
-                <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C]">
-                  <span className="text-[10px] text-[#8E9C93] block">Direct Pooled Freight</span>
-                  <strong className="text-lg font-black text-[#48BB78] font-mono mt-0.5 block">
+                <div className="bg-[#101613] p-3.5 rounded-xl border border-[#273029]">
+                  <span className="text-[10px] text-[#7F8F85] block">Direct Pooled Freight</span>
+                  <strong className="text-lg font-black text-[#34C772] font-mono mt-0.5 block">
                     ₹{estimatedCost.toLocaleString()}
                   </strong>
-                  <span className="text-[10px] text-[#48BB78]">38% Shared Savings</span>
+                  <span className="text-[10px] text-[#34C772]">38% Shared Savings</span>
                 </div>
               </div>
 
               {/* Carbon Reduction Metric */}
-              <div className="bg-[#1D2722] border border-[#2D6A4F]/50 p-3.5 rounded-xl flex items-center justify-between text-xs">
+              <div className="bg-[#1A2420] border border-[#34C772]/30 p-3.5 rounded-xl flex items-center justify-between text-xs">
                 <div className="flex items-center space-x-2.5">
-                  <Leaf className="w-5 h-5 text-[#48BB78] shrink-0" />
+                  <Leaf className="w-5 h-5 text-[#34C772] shrink-0" />
                   <div>
-                    <span className="text-[10px] text-[#52796F] uppercase block font-bold">Carbon Emissions Avoided</span>
+                    <span className="text-[10px] text-[#34C772] uppercase block font-bold">Carbon Emissions Avoided</span>
                     <strong className="text-xs text-white">
                       -{vrpResult.co2_saved_kg.toFixed(1)} kg CO₂ avoided
                     </strong>
                   </div>
                 </div>
-                <span className="ad-badge ad-badge-success text-[10px]">Eco-Route</span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#34C772]/15 text-[#34C772] border border-[#34C772]/30">
+                  Eco-Route
+                </span>
               </div>
 
               {/* Waypoint Sequence */}
               <div className="text-[11px] text-[#8E9C93] pt-1">
-                <span className="font-bold text-[#C2CBC5] block mb-1.5">Scheduled Stop Sequence:</span>
+                <span className="font-bold text-[#F2F4F3] block mb-1.5">Scheduled Stop Sequence:</span>
                 <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 font-mono text-[10px]">
                   {vrpResult.route_waypoints.map((node, idx) => (
                     <React.Fragment key={idx}>
-                      <span className="px-2.5 py-1 rounded-lg bg-[#101513] text-white border border-[#26332C] whitespace-nowrap shadow-sm">
+                      <span className="px-2.5 py-1 rounded-lg bg-[#101613] text-white border border-[#273029] whitespace-nowrap shadow-sm">
                         {node.name}
                       </span>
-                      {idx < vrpResult.route_waypoints.length - 1 && <span className="text-[#48BB78]">→</span>}
+                      {idx < vrpResult.route_waypoints.length - 1 && <span className="text-[#34C772]">→</span>}
                     </React.Fragment>
                   ))}
                 </div>
@@ -400,20 +418,20 @@ export const LogisticsRouteView: React.FC = () => {
         </div>
 
         {/* Right: Large Interactive HERO Route Map (7 Cols) */}
-        <div className="lg:col-span-7 bg-[#161E1A] border border-[#26332C] rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+        <div className="lg:col-span-7 bg-[#141A17] border border-[#273029] rounded-2xl overflow-hidden shadow-2xl flex flex-col">
           {/* Map Header Bar */}
-          <div className="bg-[#101513] px-5 py-3.5 border-b border-[#26332C] flex items-center justify-between text-xs">
+          <div className="bg-[#101613] px-5 py-3.5 border-b border-[#273029] flex items-center justify-between text-xs">
             <div className="flex items-center space-x-2">
-              <Route className="w-4 h-4 text-[#48BB78]" />
-              <span className="font-extrabold text-white">Live Multi-Stop Geospatial Corridor</span>
+              <Route className="w-4 h-4 text-[#34C772]" />
+              <span className="font-extrabold text-[#F2F4F3]">Live Multi-Stop Geospatial Corridor</span>
             </div>
-            <span className="text-[#8E9C93] font-mono text-[11px] bg-[#161E1A] px-2.5 py-1 rounded-lg border border-[#26332C]">
+            <span className="text-[#8E9C93] font-mono text-[11px] bg-[#141A17] px-2.5 py-1 rounded-lg border border-[#273029]">
               {selectedListings.length} Pickups • Destination: {selectedDestination.city}
             </span>
           </div>
 
           {/* Large Interactive Leaflet Canvas */}
-          <div className="w-full h-[520px] lg:h-[640px] bg-[#0C100E] relative">
+          <div className="w-full h-[520px] lg:h-[640px] bg-[#0E1310] relative">
             <MapContainer
               center={[selectedDestination.latitude, selectedDestination.longitude]}
               zoom={6}
@@ -458,7 +476,7 @@ export const LogisticsRouteView: React.FC = () => {
               {mapPositions.length >= 2 && (
                 <Polyline
                   positions={mapPositions}
-                  color="#2D6A4F"
+                  color="#28724E"
                   weight={4}
                   opacity={0.9}
                   dashArray="6, 8"
@@ -467,13 +485,13 @@ export const LogisticsRouteView: React.FC = () => {
             </MapContainer>
 
             {/* Floating Map Legend Overlay */}
-            <div className="absolute bottom-4 left-4 z-[400] bg-[#101513]/95 backdrop-blur-md border border-[#26332C] p-3 rounded-xl text-[11px] text-[#C2CBC5] space-y-1.5 shadow-2xl">
+            <div className="absolute bottom-4 left-4 z-[400] bg-[#101613]/95 backdrop-blur-md border border-[#273029] p-3 rounded-xl text-[11px] text-[#C2CBC5] space-y-1.5 shadow-2xl">
               <div className="flex items-center space-x-2">
-                <span className="w-3 h-3 rounded-full bg-[#2D6A4F] shadow-sm" />
+                <span className="w-3 h-3 rounded-full bg-[#28724E] shadow-sm" />
                 <span>Pickup Stop Nodes ({selectedListings.length})</span>
               </div>
               <div className="flex items-center space-x-2">
-                <span className="w-3 h-3 rounded-full bg-[#B45309] shadow-sm" />
+                <span className="w-3 h-3 rounded-full bg-[#C7A356] shadow-sm" />
                 <span>Terminal: {selectedDestination.city}</span>
               </div>
             </div>
