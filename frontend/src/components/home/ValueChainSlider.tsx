@@ -102,14 +102,9 @@ interface ValueChainSliderProps {
   onNavigate: (tabId: string, role?: string) => void;
 }
 
-const AUTO_ROTATE_INTERVAL_MS = 6000;
-
 export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
-  const [isHovered, setIsHovered] = useState<boolean>(false);
-  const autoPlayTimerRef = useRef<any>(null);
-
   const stageCount = VALUE_CHAIN_STAGES.length;
 
   const nextStage = () => {
@@ -120,55 +115,31 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
     setActiveIndex((prev) => (prev - 1 + stageCount) % stageCount);
   };
 
-  // Continuous auto-rotation, pauses when user hovers
+  // Continuous auto-advancing rotation (cycles every 4.5s)
   useEffect(() => {
-    if (!isAutoPlaying || isHovered) {
-      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-      return;
-    }
+    if (!isAutoPlaying) return;
 
-    autoPlayTimerRef.current = setInterval(() => {
-      nextStage();
-    }, AUTO_ROTATE_INTERVAL_MS);
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % stageCount);
+    }, 4500);
 
-    return () => {
-      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-    };
-  }, [activeIndex, isAutoPlaying, isHovered]);
+    return () => clearInterval(timer);
+  }, [isAutoPlaying, stageCount]);
 
   const activeData = VALUE_CHAIN_STAGES[activeIndex];
 
   return (
-    <div
-      className="space-y-4"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="space-y-4">
       {/* Top Header & Pill Switcher */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3">
         <div>
-          <div className="flex items-center space-x-2">
-            <span
-              className="text-[10px] font-bold uppercase tracking-wider block"
-              style={{ color: 'var(--ad-accent)', fontFamily: 'var(--ad-font-display)' }}
-            >
-              Connected Produce Ecosystem
-            </span>
-            <span
-              className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px]"
-              style={{ background: 'var(--ad-surface-1)', color: 'var(--ad-text-tertiary)', border: '1px solid var(--ad-border-subtle)' }}
-            >
-              <RotateCw className="w-2.5 h-2.5 animate-spin" style={{ color: 'var(--ad-accent)' }} />
-              <span>{isAutoPlaying && !isHovered ? 'Auto-Advancing' : 'Interactive Gallery'}</span>
-            </span>
-          </div>
           <h2
-            className="text-xl sm:text-2xl font-extrabold tracking-tight mt-1"
+            className="text-xl sm:text-2xl font-extrabold tracking-tight"
             style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}
           >
             The 5-Stage Agricultural Value Chain
           </h2>
-          <p className="text-xs" style={{ color: 'var(--ad-text-muted)' }}>
+          <p className="text-xs mt-1" style={{ color: 'var(--ad-text-muted)' }}>
             Hover or click any stage to expand. Real photographic corridors connecting farmgate harvest to pan-India market stabilization.
           </p>
         </div>
@@ -198,7 +169,7 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
           <div className="flex items-center space-x-1 pl-1">
             <button
               onClick={prevStage}
-              className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+              className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors cursor-pointer"
               style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border)', color: 'var(--ad-text-secondary)' }}
               title="Previous stage"
             >
@@ -206,7 +177,7 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
             </button>
             <button
               onClick={nextStage}
-              className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+              className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors cursor-pointer"
               style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border)', color: 'var(--ad-text-secondary)' }}
               title="Next stage"
             >
@@ -214,7 +185,7 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
             </button>
             <button
               onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-              className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+              className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors cursor-pointer"
               style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border)', color: 'var(--ad-text-secondary)' }}
               title={isAutoPlaying ? "Pause auto-rotation" : "Resume auto-rotation"}
             >
@@ -299,18 +270,17 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
                         {stage.tag}
                       </span>
                     </div>
-
-                    <span
-                      className="text-xs font-mono font-bold"
-                      style={{ color: 'var(--ad-accent-bright)' }}
-                    >
-                      {stage.subtitle}
-                    </span>
                   </div>
 
                   {/* Bottom Content Box inside Active Card */}
                   <div className="space-y-4 max-w-2xl">
                     <div>
+                      <span
+                        className="text-xs font-bold uppercase tracking-wider block mb-1"
+                        style={{ color: 'var(--ad-accent-bright)', fontFamily: 'var(--ad-font-display)' }}
+                      >
+                        {stage.subtitle}
+                      </span>
                       <h3
                         className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight"
                         style={{ fontFamily: 'var(--ad-font-display)', color: '#FFFFFF' }}
@@ -376,13 +346,13 @@ export const ValueChainSlider: React.FC<ValueChainSliderProps> = ({ onNavigate }
                   </div>
 
                   {/* Active Slide Progress Line at Bottom */}
-                  {isAutoPlaying && !isHovered && (
+                  {isAutoPlaying && (
                     <div className="absolute bottom-0 inset-x-0 h-1 bg-black/40">
                       <motion.div
                         key={`prog-${activeIndex}`}
                         initial={{ width: '0%' }}
                         animate={{ width: '100%' }}
-                        transition={{ duration: AUTO_ROTATE_INTERVAL_MS / 1000, ease: 'linear' }}
+                        transition={{ duration: 4.5, ease: 'linear' }}
                         className="h-full"
                         style={{ background: 'var(--ad-accent)' }}
                       />
