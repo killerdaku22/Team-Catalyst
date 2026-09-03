@@ -16,6 +16,7 @@ import { MarketIntelligenceView } from './components/intelligence/MarketIntellig
 import { LoginPageView } from './components/auth/LoginPageView';
 import { DesignSystem } from './components/common/DesignSystem';
 import { VoiceKisanAssistant } from './components/voice/VoiceKisanAssistant';
+import { Footer } from './components/common/Footer';
 import { Sprout } from 'lucide-react';
 
 const pageTransition = {
@@ -130,52 +131,8 @@ export const App: React.FC = () => {
         </AnimatePresence>
       </main>
 
-      {/* Footer — Professional, not generic */}
-      <footer
-        className="mt-10"
-        style={{
-          borderTop: '1px solid var(--ad-border)',
-          background: 'linear-gradient(180deg, var(--ad-surface-0) 0%, var(--ad-bg) 100%)',
-        }}
-      >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            {/* Left: Brand */}
-            <div className="flex items-center space-x-3">
-              <div
-                className="w-7 h-7 rounded-lg flex items-center justify-center"
-                style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border)' }}
-              >
-                <Sprout className="w-3.5 h-3.5" style={{ color: 'var(--ad-brand-bright)' }} />
-              </div>
-              <div>
-                <span className="font-bold text-sm" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
-                  AgriDirect
-                </span>
-                <span className="mx-2 text-xs" style={{ color: 'var(--ad-border-strong)' }}>·</span>
-                <span className="text-xs" style={{ color: 'var(--ad-text-muted)' }}>
-                  Connecting Indian agriculture to fair, transparent markets
-                </span>
-              </div>
-            </div>
-
-            {/* Right: Links */}
-            <div className="flex items-center space-x-4 text-[11px]" style={{ color: 'var(--ad-text-muted)' }}>
-              <button
-                onClick={() => setActiveTab('design-system')}
-                className="transition-colors hover:text-[var(--ad-text-secondary)]"
-                style={{ color: 'var(--ad-text-muted)' }}
-              >
-                Design System
-              </button>
-              <span style={{ color: 'var(--ad-border)' }}>·</span>
-              <span>Verified Data Sources</span>
-              <span style={{ color: 'var(--ad-border)' }}>·</span>
-              <span>v2.0</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* Professional Multi-Column Enterprise Footer */}
+      <Footer onNavigate={setActiveTab} />
 
       {/* Floating Voice Assistant */}
       <VoiceKisanAssistant />
