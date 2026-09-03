@@ -132,7 +132,12 @@ export const App: React.FC = () => {
       </main>
 
       {/* Professional Multi-Column Enterprise Footer */}
-      <Footer onNavigate={setActiveTab} />
+      <Footer
+        onNavigate={(tab, role) => {
+          setActiveTab(tab);
+          if (role) setActiveRole(role as any);
+        }}
+      />
 
       {/* Floating Voice Assistant */}
       <VoiceKisanAssistant />
