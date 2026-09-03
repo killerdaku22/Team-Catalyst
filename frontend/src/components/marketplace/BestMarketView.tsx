@@ -89,34 +89,43 @@ export const BestMarketView: React.FC<BestMarketViewProps> = ({
   return (
     <div className="space-y-6 animate-fadeIn pb-10">
       {/* Top Header: Decision Engine Identity */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#26332C]">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5" style={{ borderBottom: '1px solid var(--ad-border)' }}>
         <div>
           <div className="flex items-center space-x-2">
-            <span className="text-[10px] font-bold text-[#52796F] uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ad-accent)' }}>
               Spatial Price Arbitrage Engine
             </span>
             <DataProvenance source="Agmarknet Benchmark Data & OSRM Logistics" status="MODEL_OUTPUT" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
             Market Destination Optimizer
           </h1>
-          <p className="text-xs text-[#8E9C93] max-w-2xl mt-0.5">
+          <p className="text-sm max-w-2xl mt-1" style={{ color: 'var(--ad-text-tertiary)' }}>
             Evaluates regional mandis vs. institutional buyers. Deducts exact freight, transit heat spoilage, and APMC cess to identify the maximum net cash realization for your cooperative.
           </p>
         </div>
       </div>
 
       {/* Origin Configuration Cockpit */}
-      <div className="bg-[#161E1A] border border-[#26332C] rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs shadow-sm">
+      <div
+        className="p-5 rounded-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs shadow-sm"
+        style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border)' }}
+      >
         <div>
-          <label className="ad-label text-[11px] text-[#C2CBC5]">Origin Producer Cooperative</label>
+          <label className="ad-label text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>Origin Producer Cooperative</label>
           <select
             value={selectedHub.id}
             onChange={(e) => handleHubChange(e.target.value)}
-            className="w-full bg-[#101513] border border-[#26332C] rounded-xl px-3 py-2 text-xs text-white focus:border-[#2D6A4F] focus:outline-none"
+            className="w-full rounded-xl px-3.5 py-2 text-xs font-semibold focus:outline-none cursor-pointer"
+            style={{
+              background: 'var(--ad-surface-1)',
+              border: '1px solid var(--ad-border)',
+              color: 'var(--ad-text-primary)',
+              fontFamily: 'var(--ad-font-display)'
+            }}
           >
             {ORIGIN_HUBS.map(hub => (
-              <option key={hub.id} value={hub.id} className="bg-[#161E1A] text-white">
+              <option key={hub.id} value={hub.id} style={{ background: '#141A17', color: '#F2F4F3' }}>
                 {hub.name} ({hub.location.split(',')[0]})
               </option>
             ))}
@@ -124,13 +133,18 @@ export const BestMarketView: React.FC<BestMarketViewProps> = ({
         </div>
 
         <div>
-          <label className="ad-label text-[11px] text-[#C2CBC5]">Commodity & Batch Size</label>
+          <label className="ad-label text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>Commodity & Batch Size</label>
           <div className="flex items-center space-x-2">
             <input
               type="text"
               value={commodity}
               onChange={(e) => setCommodity(e.target.value)}
-              className="w-full bg-[#101513] border border-[#26332C] rounded-xl px-3 py-2 text-xs text-white focus:border-[#2D6A4F] focus:outline-none"
+              className="w-full rounded-xl px-3.5 py-2 text-xs font-semibold focus:outline-none"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-primary)',
+              }}
             />
             <input
               type="number"
@@ -138,27 +152,39 @@ export const BestMarketView: React.FC<BestMarketViewProps> = ({
               onChange={(e) => setQuantityKg(Number(e.target.value))}
               step={500}
               min={500}
-              className="w-28 bg-[#101513] border border-[#26332C] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#2D6A4F] focus:outline-none"
+              className="w-28 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-accent-bright)',
+                fontFamily: 'var(--ad-font-display)'
+              }}
             />
           </div>
         </div>
 
         <div>
-          <label className="ad-label text-[11px] text-[#C2CBC5]">Local Farmgate Baseline (₹/kg)</label>
+          <label className="ad-label text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>Local Farmgate Baseline (₹/kg)</label>
           <input
             type="number"
             value={baselinePrice}
             onChange={(e) => setBaselinePrice(Number(e.target.value))}
             step={0.5}
             min={1}
-            className="w-full bg-[#101513] border border-[#26332C] rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-[#2D6A4F] focus:outline-none"
+            className="w-full rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none"
+            style={{
+              background: 'var(--ad-surface-1)',
+              border: '1px solid var(--ad-border)',
+              color: 'var(--ad-text-primary)',
+              fontFamily: 'var(--ad-font-display)'
+            }}
           />
         </div>
 
         <div>
           <div className="flex justify-between text-[11px] mb-1">
-            <span className="font-semibold text-[#C2CBC5]">Transit Search Radius</span>
-            <span className="font-mono text-[#48BB78] font-bold">{radiusKm} km</span>
+            <span className="font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Transit Search Radius</span>
+            <span className="font-bold" style={{ color: 'var(--ad-accent-bright)', fontFamily: 'var(--ad-font-display)' }}>{radiusKm} km</span>
           </div>
           <input
             type="range"
@@ -167,86 +193,116 @@ export const BestMarketView: React.FC<BestMarketViewProps> = ({
             step={50}
             value={radiusKm}
             onChange={(e) => setRadiusKm(Number(e.target.value))}
-            className="w-full h-2 bg-[#101513] rounded-lg appearance-none cursor-pointer accent-[#2D6A4F] mt-2"
+            className="w-full h-2 rounded-lg appearance-none cursor-pointer mt-2"
+            style={{ background: 'var(--ad-surface-muted)', accentColor: 'var(--ad-accent)' }}
           />
         </div>
       </div>
 
       {/* Prominent Editorial Decision Hero Card */}
       {rankingResult && topMarket && (
-        <div className="bg-gradient-to-br from-[#1A2620] via-[#161E1A] to-[#121815] border-2 border-[#2D6A4F] rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#2D6A4F]/15 rounded-full blur-3xl pointer-events-none" />
+        <div
+          className="rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 50%, var(--ad-surface-2) 100%)',
+            border: '1px solid var(--ad-border-accent)',
+            borderLeft: '3px solid var(--ad-accent)',
+            boxShadow: 'var(--ad-shadow-lg), var(--ad-shadow-glow-accent)',
+          }}
+        >
+          <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(199, 163, 86, 0.04)' }} />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center relative z-10">
             {/* Left Strategic Guidance */}
             <div className="lg:col-span-7 space-y-3">
               <div className="flex items-center space-x-2">
-                <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#2D6A4F] text-white text-xs font-bold shadow-sm">
+                <span
+                  className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-md"
+                  style={{
+                    background: 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)',
+                    color: '#0B0F0D',
+                    fontFamily: 'var(--ad-font-display)'
+                  }}
+                >
                   <Award className="w-3.5 h-3.5" />
                   <span>RECOMMENDED DESTINATION</span>
                 </span>
-                <span className="text-xs text-[#8E9C93]">
+                <span className="text-xs" style={{ color: 'var(--ad-text-muted)' }}>
                   Rank #1 of {rankingResult.ranked_opportunities.length} Candidate Markets
                 </span>
               </div>
 
               <div>
-                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-                  Route to <span className="text-[#48BB78]">{topMarket.destination_name}</span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                  Route to <span style={{ color: 'var(--ad-accent-bright)' }}>{topMarket.destination_name}</span>
                 </h2>
-                <span className="text-xs text-[#52796F] font-semibold block mt-1">
-                  {topMarket.destination_type} • {topMarket.distance_km} km distance ({topMarket.estimated_transit_hours}h cold transit)
+                <span className="text-xs font-semibold block mt-1" style={{ color: 'var(--ad-accent)' }}>
+                  {topMarket.destination_type} · {topMarket.distance_km} km distance ({topMarket.estimated_transit_hours}h cold transit)
                 </span>
               </div>
 
-              <p className="text-xs text-[#C2CBC5] leading-relaxed max-w-xl">
+              <p className="text-xs sm:text-sm leading-relaxed max-w-xl" style={{ color: 'var(--ad-text-secondary)' }}>
                 Deducting freight, transit respiration losses, and zero broker cess guarantees maximum net cash return for the producer federation.
               </p>
 
               {/* Deductive Deduction Bar Breakdown */}
               <div className="pt-2">
-                <div className="bg-[#101513] p-3.5 rounded-xl border border-[#26332C] space-y-2 text-xs">
-                  <div className="flex justify-between items-center text-[11px] text-[#8E9C93]">
-                    <span>Gross Mandi Ask: <strong className="text-white">₹{topMarket.gross_market_price_per_kg.toFixed(2)}</strong></span>
-                    <span>Freight: <strong className="text-[#F56565]">-₹{topMarket.freight_cost_per_kg.toFixed(2)}</strong></span>
-                    <span>Spoilage: <strong className="text-[#F56565]">-₹{topMarket.transit_spoilage_loss_per_kg.toFixed(2)}</strong></span>
-                    <span>Net: <strong className="text-[#48BB78]">₹{topMarket.net_realization_per_kg.toFixed(2)}/kg</strong></span>
+                <div
+                  className="p-3.5 rounded-xl space-y-2 text-xs"
+                  style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border-subtle)' }}
+                >
+                  <div className="flex justify-between items-center text-[11px]" style={{ color: 'var(--ad-text-muted)' }}>
+                    <span>Gross Mandi Ask: <strong style={{ color: 'var(--ad-text-primary)' }}>₹{topMarket.gross_market_price_per_kg.toFixed(2)}</strong></span>
+                    <span>Freight: <strong style={{ color: 'var(--ad-danger-text)' }}>-₹{topMarket.freight_cost_per_kg.toFixed(2)}</strong></span>
+                    <span>Spoilage: <strong style={{ color: 'var(--ad-danger-text)' }}>-₹{topMarket.transit_spoilage_loss_per_kg.toFixed(2)}</strong></span>
+                    <span>Net: <strong style={{ color: 'var(--ad-brand-bright)' }}>₹{topMarket.net_realization_per_kg.toFixed(2)}/kg</strong></span>
                   </div>
                   {/* Visual Proportional Bar */}
-                  <div className="h-2 w-full bg-[#161E1A] rounded-full overflow-hidden flex">
-                    <div style={{ width: '78%' }} className="bg-[#2D6A4F] h-full" title="Farmer Net Share (78%)" />
-                    <div style={{ width: '15%' }} className="bg-[#A35D38] h-full" title="Freight Cost (15%)" />
-                    <div style={{ width: '7%' }} className="bg-[#991B1B] h-full" title="Transit Spoilage (7%)" />
+                  <div className="h-2 w-full rounded-full overflow-hidden flex" style={{ background: 'var(--ad-surface-muted)' }}>
+                    <div style={{ width: '78%', background: 'var(--ad-brand)' }} className="h-full" title="Farmer Net Share (78%)" />
+                    <div style={{ width: '15%', background: 'var(--ad-accent)' }} className="h-full" title="Freight Cost (15%)" />
+                    <div style={{ width: '7%', background: 'var(--ad-danger)' }} className="h-full" title="Transit Spoilage (7%)" />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Right Financial Uplift Card */}
-            <div className="lg:col-span-5 bg-[#101513] p-6 rounded-2xl border border-[#26332C] space-y-4 shadow-xl">
+            <div
+              className="lg:col-span-5 p-6 rounded-2xl space-y-4 shadow-xl"
+              style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border-accent)', borderLeft: '3px solid var(--ad-accent)' }}
+            >
               <div>
-                <span className="text-[10px] font-bold text-[#8E9C93] uppercase tracking-wider block">
+                <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: 'var(--ad-text-muted)' }}>
                   Best Expected Net Realization
                 </span>
-                <strong className="text-3xl sm:text-4xl font-black text-[#48BB78] font-mono block mt-1">
+                <strong className="text-3xl sm:text-4xl font-extrabold block mt-1" style={{ color: 'var(--ad-brand-bright)', fontFamily: 'var(--ad-font-display)' }}>
                   ₹{topMarket.net_realization_per_kg.toFixed(2)}
-                  <span className="text-sm font-normal text-[#8E9C93]">/kg</span>
+                  <span className="text-sm font-normal" style={{ color: 'var(--ad-text-muted)' }}>/kg</span>
                 </strong>
-                <span className="text-xs text-[#52796F] block mt-0.5">
+                <span className="text-xs block mt-0.5" style={{ color: 'var(--ad-text-muted)' }}>
                   vs Local Mandi: ₹{baselinePrice.toFixed(2)}/kg
                 </span>
               </div>
 
-              <div className="pt-3 border-t border-[#26332C] flex items-center justify-between">
+              <div className="pt-3 flex items-center justify-between" style={{ borderTop: '1px solid var(--ad-border-subtle)' }}>
                 <div>
-                  <span className="text-[10px] text-[#8E9C93] uppercase block">Total Net Batch Payout</span>
-                  <strong className="text-xl font-extrabold text-white font-mono block">
+                  <span className="text-[10px] uppercase block" style={{ color: 'var(--ad-text-muted)' }}>Total Net Batch Payout</span>
+                  <strong className="text-xl font-extrabold block" style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}>
                     ₹{Math.round(topMarket.total_net_payout).toLocaleString()}
                   </strong>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-[#52796F] uppercase block font-semibold">Net Extra Margin</span>
-                  <span className="text-sm font-bold text-[#48BB78] bg-[#1D2722] px-2 py-0.5 rounded border border-[#2D6A4F] font-mono">
+                  <span className="text-[10px] uppercase block font-semibold" style={{ color: 'var(--ad-accent)' }}>Net Extra Margin</span>
+                  <span
+                    className="text-sm font-bold px-2.5 py-1 rounded"
+                    style={{
+                      background: 'var(--ad-accent-light)',
+                      color: 'var(--ad-accent-bright)',
+                      border: '1px solid var(--ad-border-accent)',
+                      fontFamily: 'var(--ad-font-display)'
+                    }}
+                  >
                     +₹{Math.round(rankingResult.max_net_uplift_total).toLocaleString()} (+{rankingResult.max_net_uplift_pct}%)
                   </span>
                 </div>

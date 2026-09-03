@@ -122,30 +122,52 @@ export const ColdStorageView: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#161E1A] p-6 rounded-2xl border border-[#26332C] items-center shadow-lg">
-        <div className="lg:col-span-8 space-y-3">
+      {/* Top Banner */}
+      <div
+        className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 sm:p-8 rounded-2xl items-center shadow-lg relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 100%)',
+          border: '1px solid var(--ad-border)',
+        }}
+      >
+        <div className="lg:col-span-8 space-y-4">
           <div className="flex items-center space-x-2">
-            <span className="bg-[#222C27] text-[#48BB78] text-xs px-2.5 py-1 rounded-full font-mono font-semibold border border-[#2B3731]">
+            <span
+              className="text-[10px] px-3 py-1 rounded-full font-bold tracking-wider uppercase"
+              style={{
+                background: 'var(--ad-cool-light)',
+                color: 'var(--ad-cool-bright)',
+                border: '1px solid rgba(88, 134, 160, 0.2)',
+                fontFamily: 'var(--ad-font-display)'
+              }}
+            >
               WDRA Standard Cold Logistics & IoT Simulation
             </span>
             <DataProvenance source="WDRA Environmental Chamber Simulator" status="MODEL_OUTPUT" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Cold Storage IoT Telemetry & Early Warning</h1>
-          <p className="text-xs text-[#8E9C93] leading-relaxed max-w-xl">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+            Cold Storage IoT Telemetry & Early Warning
+          </h1>
+          <p className="text-sm max-w-xl leading-relaxed" style={{ color: 'var(--ad-text-tertiary)' }}>
             Chamber environmental telemetry simulation (Temperature, Humidity, Ethylene, CO₂) with automated DoCA power tariff subsidies for FPOs.
           </p>
 
           {/* State Filter Buttons */}
-          <div className="flex items-center space-x-1.5 bg-[#101513] p-1.5 rounded-xl border border-[#26332C] text-xs w-fit">
+          <div
+            className="flex items-center space-x-1.5 p-1 rounded-xl text-xs w-fit"
+            style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border)' }}
+          >
             {['ALL', 'KARNATAKA', 'MAHARASHTRA', 'UTTAR PRADESH'].map(st => (
               <button
                 key={st}
                 onClick={() => setFilterState(st)}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                  filterState === st
-                    ? 'bg-[#2D6A4F] text-white shadow-md'
-                    : 'text-[#8E9C93] hover:text-white'
-                }`}
+                className="px-3.5 py-1.5 rounded-lg text-[11px] font-bold transition-all"
+                style={{
+                  background: filterState === st ? 'linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%)' : 'transparent',
+                  color: filterState === st ? '#FFFFFF' : 'var(--ad-text-tertiary)',
+                  boxShadow: filterState === st ? '0 2px 6px rgba(40, 114, 78, 0.2)' : 'none',
+                  fontFamily: 'var(--ad-font-display)',
+                }}
               >
                 {st}
               </button>
@@ -154,17 +176,30 @@ export const ColdStorageView: React.FC = () => {
         </div>
 
         {/* Contextual Facility Image */}
-        <div className="lg:col-span-4 relative rounded-xl overflow-hidden border border-[#26332C] bg-[#101513] aspect-[16/10] shadow-md group">
+        <div
+          className="lg:col-span-4 relative rounded-xl overflow-hidden aspect-[16/10] shadow-md group"
+          style={{ background: 'var(--ad-surface-muted)', border: '1px solid var(--ad-border)' }}
+        >
           <img
             src="/assets/agridirect-cold-storage-facility.jpg"
             alt="Cold Storage Facility"
             loading="lazy"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0C100E]/80 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute bottom-2 left-2 right-2 bg-[#121815]/90 border border-[#26332C] px-2.5 py-1 rounded text-[10px] text-[#C2CBC5] flex justify-between">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(to top, var(--ad-surface-0) 0%, transparent 40%)' }}
+          />
+          <div
+            className="absolute bottom-2.5 left-2.5 right-2.5 px-3 py-1.5 rounded-lg text-[10px] flex justify-between items-center"
+            style={{
+              background: 'rgba(11, 15, 13, 0.88)',
+              border: '1px solid var(--ad-border)',
+              backdropFilter: 'blur(4px)',
+            }}
+          >
             <span className="font-bold text-white">WDRA Chamber #3</span>
-            <span className="text-[#48BB78] font-mono">2.4°C • 91% RH</span>
+            <span className="font-bold" style={{ color: 'var(--ad-cool-bright)' }}>2.4°C · 91% RH</span>
           </div>
         </div>
       </div>
@@ -183,61 +218,72 @@ export const ColdStorageView: React.FC = () => {
                     setSelectedFacility(fac);
                     setBookingConfirmed(null);
                   }}
-                  className={`glass-panel p-5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
-                    isSelected
-                      ? 'border-cyan-500 bg-cyan-950/20 shadow-lg shadow-cyan-500/10'
-                      : 'border-slate-800 hover:border-slate-700 hover:bg-slate-800/40'
-                  }`}
+                  className="p-5 rounded-2xl transition-all cursor-pointer relative overflow-hidden"
+                  style={{
+                    background: 'var(--ad-surface-0)',
+                    border: isSelected ? '1px solid var(--ad-border-accent)' : '1px solid var(--ad-border)',
+                    borderLeft: isSelected ? '3px solid var(--ad-accent)' : '1px solid var(--ad-border)',
+                    boxShadow: isSelected ? 'var(--ad-shadow-md), var(--ad-shadow-glow-accent)' : 'var(--ad-shadow-sm)',
+                  }}
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <span className="bg-slate-800 text-slate-300 font-mono text-[10px] px-2 py-0.5 rounded">
+                      <span
+                        className="text-[10px] px-2 py-0.5 rounded font-semibold"
+                        style={{ background: 'var(--ad-surface-1)', color: 'var(--ad-text-tertiary)', border: '1px solid var(--ad-border-subtle)' }}
+                      >
                         {fac.id}
                       </span>
-                      <h3 className="font-extrabold text-white text-base mt-1">{fac.name}</h3>
-                      <p className="text-xs text-slate-400 flex items-center space-x-1 mt-0.5">
-                        <MapPin className="w-3 h-3 text-cyan-400 shrink-0" />
+                      <h3 className="font-bold text-base mt-1.5" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                        {fac.name}
+                      </h3>
+                      <p className="text-xs flex items-center space-x-1 mt-0.5" style={{ color: 'var(--ad-text-muted)' }}>
+                        <MapPin className="w-3 h-3 shrink-0" style={{ color: 'var(--ad-cool)' }} />
                         <span>{fac.location}, {fac.state}</span>
                       </p>
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold font-mono ${
-                      fac.telemetry.chamber_status === 'OPTIMAL'
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                        : 'bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse'
-                    }`}>
+                    <span
+                      className="px-2.5 py-1 rounded-full text-[10px] font-bold"
+                      style={{
+                        background: fac.telemetry.chamber_status === 'OPTIMAL' ? 'var(--ad-brand-light)' : 'var(--ad-warning-bg)',
+                        color: fac.telemetry.chamber_status === 'OPTIMAL' ? 'var(--ad-brand-bright)' : 'var(--ad-warning-text)',
+                        border: `1px solid ${fac.telemetry.chamber_status === 'OPTIMAL' ? 'rgba(52, 199, 114, 0.2)' : 'rgba(230, 153, 42, 0.2)'}`,
+                        fontFamily: 'var(--ad-font-display)'
+                      }}
+                    >
                       {fac.telemetry.chamber_status}
                     </span>
                   </div>
 
                   {/* IoT Telemetry Gauges */}
-                  <div className="mt-4 pt-3 border-t border-slate-800/80 grid grid-cols-4 gap-2 text-center">
-                    <div className="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
-                      <Thermometer className="w-3.5 h-3.5 text-blue-400 mx-auto mb-1" />
-                      <div className="font-mono font-black text-white text-xs">{fac.telemetry.temperature_celsius}°C</div>
-                      <span className="text-[9px] text-slate-400">Target {fac.telemetry.target_temperature_celsius}°</span>
+                  <div className="mt-4 pt-3 grid grid-cols-4 gap-2 text-center" style={{ borderTop: '1px solid var(--ad-border-subtle)' }}>
+                    <div className="p-2 rounded-xl" style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border-subtle)' }}>
+                      <Thermometer className="w-3.5 h-3.5 mx-auto mb-1" style={{ color: 'var(--ad-cool-bright)' }} />
+                      <div className="font-bold text-xs" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>{fac.telemetry.temperature_celsius}°C</div>
+                      <span className="text-[9px]" style={{ color: 'var(--ad-text-muted)' }}>Target {fac.telemetry.target_temperature_celsius}°</span>
                     </div>
 
-                    <div className="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
-                      <Droplets className="w-3.5 h-3.5 text-cyan-400 mx-auto mb-1" />
-                      <div className="font-mono font-black text-white text-xs">{fac.telemetry.relative_humidity_percent}%</div>
-                      <span className="text-[9px] text-slate-400">Humidity</span>
+                    <div className="p-2 rounded-xl" style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border-subtle)' }}>
+                      <Droplets className="w-3.5 h-3.5 mx-auto mb-1" style={{ color: 'var(--ad-cool)' }} />
+                      <div className="font-bold text-xs" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>{fac.telemetry.relative_humidity_percent}%</div>
+                      <span className="text-[9px]" style={{ color: 'var(--ad-text-muted)' }}>Humidity</span>
                     </div>
 
-                    <div className="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
-                      <Activity className="w-3.5 h-3.5 text-amber-400 mx-auto mb-1" />
-                      <div className="font-mono font-black text-white text-xs">{fac.telemetry.ethylene_ppm}</div>
-                      <span className="text-[9px] text-slate-400">Ethylene ppm</span>
+                    <div className="p-2 rounded-xl" style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border-subtle)' }}>
+                      <Activity className="w-3.5 h-3.5 mx-auto mb-1" style={{ color: 'var(--ad-warning-text)' }} />
+                      <div className="font-bold text-xs" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>{fac.telemetry.ethylene_ppm}</div>
+                      <span className="text-[9px]" style={{ color: 'var(--ad-text-muted)' }}>Ethylene</span>
                     </div>
 
-                    <div className="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 mx-auto mb-1" />
-                      <div className="font-mono font-black text-emerald-400 text-xs">{fac.telemetry.spoilage_risk_index_percent}%</div>
-                      <span className="text-[9px] text-slate-400">Spoilage Risk</span>
+                    <div className="p-2 rounded-xl" style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border-subtle)' }}>
+                      <ShieldCheck className="w-3.5 h-3.5 mx-auto mb-1" style={{ color: 'var(--ad-brand-bright)' }} />
+                      <div className="font-bold text-xs" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-brand-bright)' }}>{fac.telemetry.spoilage_risk_index_percent}%</div>
+                      <span className="text-[9px]" style={{ color: 'var(--ad-text-muted)' }}>Spoilage</span>
                     </div>
                   </div>
 
-                  <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/40">
-                    <div>Available: <strong className="text-white">{fac.available_capacity_tonnes.toLocaleString()} / {fac.total_capacity_tonnes.toLocaleString()} T</strong></div>
+                  <div className="mt-3 flex items-center justify-between text-[11px] pt-2" style={{ borderTop: '1px solid var(--ad-border-subtle)', color: 'var(--ad-text-muted)' }}>
+                    <div>Available: <strong style={{ color: 'var(--ad-text-primary)' }}>{fac.available_capacity_tonnes.toLocaleString()} / {fac.total_capacity_tonnes.toLocaleString()} T</strong></div>
                     <div className="text-cyan-400 font-bold font-mono">₹{fac.doca_subsidized_rate_per_kg_day}/kg/day Subsidized</div>
                   </div>
                 </div>

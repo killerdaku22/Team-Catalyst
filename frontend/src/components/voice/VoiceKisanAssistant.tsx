@@ -205,30 +205,74 @@ export const VoiceKisanAssistant: React.FC = () => {
 
   return (
     <>
-      {/* Compact Bottom-Right Floating Trigger (38px Height) */}
+      {/* Refined Bottom-Right Floating Trigger */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-4 right-4 z-40 bg-[#2D6A4F] hover:bg-[#245740] text-white px-3 py-2 rounded-full shadow-lg border border-[#3D4D45] flex items-center space-x-2 text-xs font-semibold transition-all hover:scale-105"
+          className="fixed bottom-5 right-5 z-40 px-3.5 py-2.5 rounded-full shadow-2xl flex items-center space-x-2.5 text-xs font-bold transition-all duration-200"
+          style={{
+            background: 'linear-gradient(135deg, var(--ad-surface-1) 0%, var(--ad-surface-0) 100%)',
+            border: '1px solid var(--ad-border-accent)',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4), var(--ad-shadow-glow-accent)',
+            color: 'var(--ad-accent-bright)',
+            fontFamily: 'var(--ad-font-display)'
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
+            (e.currentTarget as HTMLElement).style.borderColor = 'var(--ad-accent)';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+            (e.currentTarget as HTMLElement).style.borderColor = 'var(--ad-border-accent)';
+          }}
           aria-label="Open Voice Kisan Assistant"
         >
-          <Mic className="w-3.5 h-3.5 text-white" />
-          <span className="hidden sm:inline">Voice Assistant</span>
+          <div
+            className="w-5 h-5 rounded-full flex items-center justify-center"
+            style={{ background: 'var(--ad-accent-light)' }}
+          >
+            <Mic className="w-3 h-3" style={{ color: 'var(--ad-accent)' }} />
+          </div>
+          <span className="hidden sm:inline" style={{ color: 'var(--ad-text-primary)' }}>Kisan Voice</span>
+          <span
+            className="text-[9px] px-1.5 py-0.5 rounded font-bold"
+            style={{ background: 'var(--ad-brand-light)', color: 'var(--ad-brand-bright)' }}
+          >
+            AI Audio
+          </span>
         </button>
       )}
 
       {/* Interactive Voice Modal Dialog */}
       {isOpen && (
-        <div className="fixed bottom-4 right-4 z-50 w-full max-w-sm bg-[#1A221E] border border-[#2B3731] rounded-2xl shadow-2xl p-4 space-y-3 text-xs animate-fadeIn">
+        <div
+          className="fixed bottom-5 right-5 z-50 w-full max-w-sm rounded-2xl p-5 space-y-3.5 text-xs shadow-2xl animate-fadeIn"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border-accent)',
+            borderLeft: '3px solid var(--ad-accent)',
+            boxShadow: 'var(--ad-shadow-xl), var(--ad-shadow-glow-accent)',
+          }}
+        >
           {/* Header */}
-          <div className="flex items-center justify-between pb-2 border-b border-[#2B3731]">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 rounded-md bg-[#2D6A4F] flex items-center justify-center text-white">
+          <div className="flex items-center justify-between pb-2.5" style={{ borderBottom: '1px solid var(--ad-border)' }}>
+            <div className="flex items-center space-x-2.5">
+              <div
+                className="w-7 h-7 rounded-lg flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)',
+                  color: '#0B0F0D',
+                }}
+              >
                 <Mic className="w-3.5 h-3.5" />
               </div>
               <div>
-                <span className="font-bold text-white text-sm block leading-tight">Voice Kisan Assistant</span>
-                <span className="text-[10px] text-[#8E9C93]">Multilingual Decision Support</span>
+                <span className="font-bold text-sm block leading-tight" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                  Kisan Voice Assistant
+                </span>
+                <span className="text-[10px]" style={{ color: 'var(--ad-text-muted)' }}>
+                  Multilingual Mandi Intelligence
+                </span>
               </div>
             </div>
             <button
@@ -237,7 +281,8 @@ export const VoiceKisanAssistant: React.FC = () => {
                 if ('speechSynthesis' in window) window.speechSynthesis.cancel();
                 if (recognitionRef.current && isListening) recognitionRef.current.stop();
               }}
-              className="text-[#8E9C93] hover:text-white p-1"
+              className="p-1 rounded transition-colors"
+              style={{ color: 'var(--ad-text-muted)' }}
             >
               <X className="w-4 h-4" />
             </button>
@@ -245,8 +290,8 @@ export const VoiceKisanAssistant: React.FC = () => {
 
           {/* Language Selector */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-1.5 text-xs text-[#C2CBC5]">
-              <Globe className="w-3.5 h-3.5 text-[#52796F] shrink-0" />
+            <div className="flex items-center space-x-1.5 text-xs" style={{ color: 'var(--ad-text-secondary)' }}>
+              <Globe className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--ad-accent)' }} />
               <span>Language:</span>
             </div>
             <select
@@ -256,10 +301,17 @@ export const VoiceKisanAssistant: React.FC = () => {
                 const l = LANGUAGES.find(item => item.code === e.target.value);
                 if (l) setQueryText(l.prompt);
               }}
-              className="ad-input h-7 text-xs py-0 w-auto text-right"
+              className="h-7 text-xs py-0 px-2 rounded-md font-medium"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-primary)',
+                fontFamily: 'var(--ad-font-display)',
+                outline: 'none',
+              }}
             >
               {LANGUAGES.map(l => (
-                <option key={l.code} value={l.code} className="bg-[#1A221E] text-white">
+                <option key={l.code} value={l.code} style={{ background: '#141A17', color: '#F2F4F3' }}>
                   {l.name}
                 </option>
               ))}
@@ -274,19 +326,26 @@ export const VoiceKisanAssistant: React.FC = () => {
                 onChange={(e) => setQueryText(e.target.value)}
                 placeholder="Speak or type your question..."
                 rows={2}
-                className="w-full bg-[#121815] border border-[#2B3731] rounded-md p-2 text-xs text-white focus:outline-none focus:border-[#52796F] resize-none pr-8"
+                className="w-full rounded-lg p-2.5 text-xs resize-none pr-9 transition-colors"
+                style={{
+                  background: 'var(--ad-surface-1)',
+                  border: '1px solid var(--ad-border)',
+                  color: 'var(--ad-text-primary)',
+                  outline: 'none',
+                }}
               />
               <button
                 type="button"
                 onClick={toggleListening}
-                className={`absolute right-2 top-2 p-1.5 rounded-full transition-all ${
-                  isListening
-                    ? 'bg-[#991B1B] text-white animate-pulse'
-                    : 'text-[#8E9C93] hover:text-white hover:bg-[#222C27]'
-                }`}
+                className="absolute right-2 top-2 p-1.5 rounded-full transition-all"
+                style={{
+                  background: isListening ? 'var(--ad-danger)' : 'var(--ad-surface-0)',
+                  color: isListening ? '#FFFFFF' : 'var(--ad-text-tertiary)',
+                  border: '1px solid var(--ad-border)',
+                }}
                 title={isListening ? "Listening... click to stop" : "Click to speak"}
               >
-                {isListening ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
+                {isListening ? <MicOff className="w-3.5 h-3.5 animate-pulse" /> : <Mic className="w-3.5 h-3.5" />}
               </button>
             </div>
 
@@ -294,9 +353,15 @@ export const VoiceKisanAssistant: React.FC = () => {
               <button
                 onClick={() => handleQuerySubmit(queryText)}
                 disabled={isLoading || !queryText.trim()}
-                className="ad-btn-primary flex-1 h-8 text-xs"
+                className="flex-1 h-8 text-xs font-bold rounded-lg transition-all flex items-center justify-center space-x-1.5"
+                style={{
+                  background: 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)',
+                  color: '#0B0F0D',
+                  boxShadow: '0 2px 8px rgba(199, 163, 86, 0.2)',
+                  fontFamily: 'var(--ad-font-display)'
+                }}
               >
-                <span>{isLoading ? 'Processing Query...' : 'Ask Assistant'}</span>
+                <span>{isLoading ? 'Analyzing Mandi Rates...' : 'Ask Assistant'}</span>
                 <ArrowRight className="w-3 h-3" />
               </button>
 
@@ -306,7 +371,12 @@ export const VoiceKisanAssistant: React.FC = () => {
                     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
                     setIsSpeaking(false);
                   }}
-                  className="ad-btn-secondary h-8 px-2 text-xs text-[#ED8936]"
+                  className="h-8 px-2.5 text-xs rounded-lg flex items-center justify-center"
+                  style={{
+                    background: 'var(--ad-surface-1)',
+                    border: '1px solid var(--ad-border)',
+                    color: 'var(--ad-warning-text)',
+                  }}
                   title="Stop audio playback"
                 >
                   <VolumeX className="w-3.5 h-3.5" />
@@ -317,18 +387,34 @@ export const VoiceKisanAssistant: React.FC = () => {
 
           {/* Assistant Response Output */}
           {response && (
-            <div className="bg-[#121815] border border-[#2B3731] rounded-lg p-3 space-y-1.5">
+            <div
+              className="p-3.5 rounded-xl space-y-2"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border-subtle)',
+              }}
+            >
               <div className="flex items-center justify-between">
-                <span className="ad-badge ad-badge-success text-[10px]">
+                <span
+                  className="px-2 py-0.5 rounded text-[10px] font-bold"
+                  style={{
+                    background: 'var(--ad-brand-light)',
+                    color: 'var(--ad-brand-bright)',
+                    border: '1px solid rgba(52, 199, 114, 0.2)',
+                    fontFamily: 'var(--ad-font-display)'
+                  }}
+                >
                   {response.actionable_recommendation}
                 </span>
-                <span className="text-[10px] text-[#8E9C93]">{response.detected_commodity} • {response.detected_intent}</span>
+                <span className="text-[10px]" style={{ color: 'var(--ad-text-muted)' }}>
+                  {response.detected_commodity} · {response.detected_intent}
+                </span>
               </div>
-              <p className="text-xs text-white leading-relaxed font-medium">
+              <p className="text-xs leading-relaxed font-medium" style={{ color: 'var(--ad-text-primary)' }}>
                 {response.vernacular_response_text}
               </p>
-              <p className="text-[10px] text-[#8E9C93] italic border-t border-[#1F2723] pt-1">
-                Translation: {response.english_translation}
+              <p className="text-[10px] italic pt-1.5" style={{ color: 'var(--ad-text-muted)', borderTop: '1px solid var(--ad-border-subtle)' }}>
+                English: {response.english_translation}
               </p>
             </div>
           )}

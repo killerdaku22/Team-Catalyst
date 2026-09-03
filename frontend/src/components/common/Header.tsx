@@ -16,7 +16,8 @@ import {
   Building2,
   TrendingUp,
   ShieldCheck,
-  Inbox
+  Inbox,
+  ChevronDown
 } from 'lucide-react';
 import { AuthModal } from './AuthModal';
 
@@ -31,7 +32,7 @@ interface HeaderProps {
 interface NavItemConfig {
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -86,6 +87,17 @@ export const Header: React.FC<HeaderProps> = ({
 
   const navItems = getNavItemsForRole(activeRole);
 
+  const roleDisplayNames: Record<string, string> = {
+    FARMER: 'Farmer / FPO',
+    FPO: 'Farmer / FPO',
+    BUYER: 'Institutional Buyer',
+    LOGISTICS: 'Transport Operator',
+    TRANSPORTER: 'Transport Operator',
+    DOCA_OBSERVER: 'DoCA Observer',
+    GOVT_AUDITOR: 'Govt Auditor',
+    MINISTRY_ADMIN: 'Ministry Admin',
+  };
+
   const handleRoleSelect = (role: UserRole) => {
     setActiveRole(role);
     if (role === 'DOCA_OBSERVER' || role === 'MINISTRY_ADMIN' || role === 'GOVT_AUDITOR') {
@@ -100,28 +112,45 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#121815] border-b border-[#2B3731] shadow-sm">
+    <header className="sticky top-0 z-40 border-b" style={{
+      background: 'linear-gradient(180deg, #121815 0%, #0E1310 100%)',
+      borderColor: 'var(--ad-border)',
+      backdropFilter: 'blur(12px)',
+    }}>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-[56px]">
           
           {/* Left: Brand Identity */}
           <div className="flex items-center space-x-3 shrink-0">
             <button
               onClick={() => setActiveTab('home')}
-              className="flex items-center space-x-2 text-left focus:outline-none"
+              className="flex items-center space-x-2.5 text-left focus:outline-none group"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#2D6A4F] flex items-center justify-center text-white shadow-sm">
-                <Sprout className="w-4 h-4" />
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg"
+                style={{
+                  background: 'linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%)',
+                  boxShadow: '0 0 16px rgba(40, 114, 78, 0.2)',
+                }}
+              >
+                <Sprout className="w-[18px] h-[18px]" />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-white text-base leading-none tracking-tight">AgriDirect</span>
-                <span className="text-[10px] text-[#8E9C93] font-medium leading-tight">Agricultural Commerce</span>
+                <span
+                  className="font-bold text-white text-[15px] leading-none tracking-tight"
+                  style={{ fontFamily: 'var(--ad-font-display)' }}
+                >
+                  AgriDirect
+                </span>
+                <span className="text-[10px] font-medium leading-tight" style={{ color: 'var(--ad-text-muted)' }}>
+                  Agricultural Commerce
+                </span>
               </div>
             </button>
           </div>
 
-          {/* Center: Role-Aware Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-1" aria-label="Main Navigation">
+          {/* Center: Desktop Navigation — Underline-style active indicator */}
+          <nav className="hidden lg:flex items-center space-x-0.5" aria-label="Main Navigation">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -129,48 +158,97 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
-                    isActive
-                      ? 'bg-[#222C27] text-[#48BB78] border border-[#2B3731]'
-                      : 'text-[#C2CBC5] hover:text-white hover:bg-[#1A221E]'
-                  }`}
+                  className="relative flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200"
+                  style={{
+                    color: isActive ? 'var(--ad-text-primary)' : 'var(--ad-text-tertiary)',
+                    background: isActive ? 'var(--ad-surface-1)' : 'transparent',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLElement).style.color = 'var(--ad-text-secondary)';
+                      (e.currentTarget as HTMLElement).style.background = 'var(--ad-surface-0)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLElement).style.color = 'var(--ad-text-tertiary)';
+                      (e.currentTarget as HTMLElement).style.background = 'transparent';
+                    }
+                  }}
                 >
-                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-[#48BB78]' : 'text-[#8E9C93]'}`} />
+                  <Icon className="w-3.5 h-3.5 shrink-0" style={{
+                    color: isActive ? 'var(--ad-accent)' : 'inherit'
+                  }} />
                   <span className="whitespace-nowrap">{item.label}</span>
+                  {/* Active underline indicator */}
+                  {isActive && (
+                    <span
+                      className="absolute bottom-[-13px] left-3 right-3 h-[2px] rounded-full"
+                      style={{ background: 'var(--ad-accent)' }}
+                    />
+                  )}
                 </button>
               );
             })}
           </nav>
 
-          {/* Right Action: Role Selector & Auth Button */}
-          <div className="flex items-center space-x-2.5 shrink-0">
+          {/* Right: Status + Role + Auth */}
+          <div className="flex items-center space-x-2 shrink-0">
             {/* Connection Indicator */}
-            <div className="hidden sm:flex items-center space-x-1.5 px-2 py-1 rounded bg-[#1A221E] border border-[#2B3731] text-[10px]">
-              <span className={`w-1.5 h-1.5 rounded-full ${isBackendConnected ? 'bg-[#48BB78]' : 'bg-[#ED8936]'}`} />
-              <span className="text-[#8E9C93]">{isBackendConnected ? 'Online' : 'Calibrated'}</span>
+            <div
+              className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[10px]"
+              style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border-subtle)' }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: isBackendConnected ? 'var(--ad-success-text)' : 'var(--ad-warning-text)' }}
+              />
+              <span style={{ color: 'var(--ad-text-muted)' }}>
+                {isBackendConnected ? 'Online' : 'Calibrated'}
+              </span>
             </div>
 
-            {/* Compact Demo Role Selector */}
-            <div className="flex items-center space-x-1.5 bg-[#1A221E] border border-[#2B3731] px-2.5 py-1 rounded-md text-xs" title="Demo role simulation">
-              <span className="text-[10px] text-[#52796F] font-bold uppercase tracking-wider hidden xl:inline">Demo Role:</span>
-              <UserCheck className="w-3.5 h-3.5 text-[#52796F] shrink-0" />
+            {/* Role Selector — Styled custom dropdown look */}
+            <div
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs cursor-pointer"
+              style={{
+                background: 'var(--ad-surface-0)',
+                border: '1px solid var(--ad-border)',
+              }}
+              title="Demo role simulation"
+            >
+              <UserCheck className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--ad-accent)' }} />
               <select
                 value={activeRole}
                 onChange={(e) => handleRoleSelect(e.target.value as UserRole)}
-                className="bg-transparent text-[#F5F7F5] font-semibold text-xs focus:outline-none cursor-pointer pr-1"
+                className="bg-transparent font-semibold text-xs focus:outline-none cursor-pointer pr-1"
+                style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}
                 aria-label="Demo active role"
               >
-                <option value="FARMER" className="bg-[#1A221E] text-white">Farmer / FPO</option>
-                <option value="BUYER" className="bg-[#1A221E] text-white">Institutional Buyer</option>
-                <option value="LOGISTICS" className="bg-[#1A221E] text-white">Transport Operator</option>
-                <option value="DOCA_OBSERVER" className="bg-[#1A221E] text-white">DoCA Market Observer</option>
+                <option value="FARMER" style={{ background: '#141A17', color: '#F2F4F3' }}>Farmer / FPO</option>
+                <option value="BUYER" style={{ background: '#141A17', color: '#F2F4F3' }}>Institutional Buyer</option>
+                <option value="LOGISTICS" style={{ background: '#141A17', color: '#F2F4F3' }}>Transport Operator</option>
+                <option value="DOCA_OBSERVER" style={{ background: '#141A17', color: '#F2F4F3' }}>DoCA Market Observer</option>
               </select>
             </div>
 
-            {/* Sign In / Switch Button */}
+            {/* Sign In Button — Gold accent, distinctive */}
             <button
               onClick={() => setAuthModalOpen(true)}
-              className="bg-[#2D6A4F] hover:bg-[#245740] text-white px-2.5 py-1 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1"
+              className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center space-x-1.5"
+              style={{
+                background: 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)',
+                color: '#0B0F0D',
+                boxShadow: '0 2px 8px rgba(199, 163, 86, 0.2)',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(199, 163, 86, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(199, 163, 86, 0.2)';
+              }}
               title="Sign In with Seeded RBAC Accounts"
             >
               <KeyRound className="w-3.5 h-3.5" />
@@ -180,7 +258,12 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Mobile Hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-1.5 rounded-md bg-[#1A221E] border border-[#2B3731] text-[#C2CBC5] hover:text-white"
+              className="lg:hidden p-1.5 rounded-lg transition-colors"
+              style={{
+                background: 'var(--ad-surface-0)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-secondary)',
+              }}
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -200,7 +283,13 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#151B18] border-b border-[#2B3731] px-4 py-3 space-y-1">
+        <div
+          className="lg:hidden px-4 py-3 space-y-1"
+          style={{
+            background: 'var(--ad-surface-0)',
+            borderBottom: '1px solid var(--ad-border)',
+          }}
+        >
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -211,13 +300,13 @@ export const Header: React.FC<HeaderProps> = ({
                   setActiveTab(item.id);
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full flex items-center space-x-2 px-3 py-2 rounded-md text-xs font-semibold ${
-                  isActive
-                    ? 'bg-[#222C27] text-[#48BB78]'
-                    : 'text-[#C2CBC5] hover:bg-[#1A221E]'
-                }`}
+                className="w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-xs font-semibold transition-colors"
+                style={{
+                  background: isActive ? 'var(--ad-surface-1)' : 'transparent',
+                  color: isActive ? 'var(--ad-text-primary)' : 'var(--ad-text-tertiary)',
+                }}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-4 h-4" style={{ color: isActive ? 'var(--ad-accent)' : 'inherit' }} />
                 <span>{item.label}</span>
               </button>
             );

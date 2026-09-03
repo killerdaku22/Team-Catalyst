@@ -1,76 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================================
-   AGRIDIRECT ENTERPRISE DESIGN SYSTEM
-   Visual Identity: Deep Forest, Earth, Sage & Warm Stone
+   AGRIDIRECT DESIGN SYSTEM v2.0
+   "Kill the AI Look" — Bold, Professional, Proprietary
    ============================================================ */
 
 :root {
-  /* Surface & Background — Natural Warm Charcoal & Deep Forest */
-  --ad-bg:             #0F1412;
-  --ad-bg-alt:         #151B18;
-  --ad-surface:        #1A221E;
-  --ad-surface-elevated: #222C27;
-  --ad-surface-muted:  #121815;
+  /* ── Surface & Background ── Deep layered depth system */
+  --ad-bg:               #0B0F0D;
+  --ad-bg-alt:           #101613;
+  --ad-surface-0:        #141A17;
+  --ad-surface-1:        #1B2320;
+  --ad-surface-2:        #232D28;
+  --ad-surface-elevated: #2A3530;
+  --ad-surface-muted:    #0E1310;
 
-  /* Borders — Muted Natural Slate/Forest */
-  --ad-border:         #2B3731;
-  --ad-border-strong:  #3D4D45;
-  --ad-border-subtle:  #1F2723;
+  /* Legacy aliases */
+  --ad-surface:          var(--ad-surface-1);
 
-  /* Typography — High Contrast Natural Scale */
-  --ad-text-primary:   #F5F7F5;
-  --ad-text-secondary: #C2CBC5;
-  --ad-text-tertiary:  #8E9C93;
-  --ad-text-muted:     #637068;
+  /* ── Borders ── Subtle, not dominating */
+  --ad-border:           #273029;
+  --ad-border-strong:    #3A4A42;
+  --ad-border-subtle:    #1C241F;
+  --ad-border-accent:    rgba(199, 163, 86, 0.25);
 
-  /* Brand Colors — Forest, Sage & Earth */
-  --ad-brand:          #2D6A4F;
-  --ad-brand-hover:    #245740;
-  --ad-brand-light:    rgba(45, 106, 79, 0.15);
-  --ad-forest:         #1B4332;
-  --ad-sage:           #52796F;
-  --ad-sage-light:     rgba(82, 121, 111, 0.15);
-  --ad-earth:          #A35D38;
-  --ad-earth-light:    rgba(163, 93, 56, 0.15);
-  --ad-clay:           #8C4E2D;
+  /* ── Typography — High Contrast, Clean */
+  --ad-text-primary:     #F2F4F3;
+  --ad-text-secondary:   #B8C4BC;
+  --ad-text-tertiary:    #7F8F85;
+  --ad-text-muted:       #566258;
 
-  /* Semantic Status Tokens (Muted, Accessible, Zero-Neon) */
-  --ad-success:        #2D6A4F;
-  --ad-success-bg:     rgba(45, 106, 79, 0.15);
-  --ad-warning:        #B45309;
-  --ad-warning-bg:     rgba(180, 83, 9, 0.15);
-  --ad-danger:         #991B1B;
-  --ad-danger-bg:      rgba(153, 27, 27, 0.15);
-  --ad-info:           #3B5B66;
-  --ad-info-bg:        rgba(59, 91, 102, 0.15);
+  /* ── Brand — Forest Green (used sparingly, not everywhere) */
+  --ad-brand:            #28724E;
+  --ad-brand-hover:      #1F5C3D;
+  --ad-brand-bright:     #34C772;
+  --ad-brand-light:      rgba(40, 114, 78, 0.12);
 
-  /* Strict Spacing Scale */
+  /* ── Accent — Warm Gold (primary differentiator, CTAs, highlights) */
+  --ad-accent:           #C7A356;
+  --ad-accent-hover:     #B8913D;
+  --ad-accent-bright:    #E0BE6A;
+  --ad-accent-light:     rgba(199, 163, 86, 0.12);
+
+  /* ── Cool — Slate Blue (informational, charts, secondary data) */
+  --ad-cool:             #5886A0;
+  --ad-cool-hover:       #4A7590;
+  --ad-cool-bright:      #6DA3C2;
+  --ad-cool-light:       rgba(88, 134, 160, 0.12);
+
+  /* ── Semantic Status — Bold, not washed out */
+  --ad-success:          #28724E;
+  --ad-success-text:     #34C772;
+  --ad-success-bg:       rgba(40, 114, 78, 0.14);
+  --ad-warning:          #C47B1A;
+  --ad-warning-text:     #E6992A;
+  --ad-warning-bg:       rgba(196, 123, 26, 0.14);
+  --ad-danger:           #B82A2A;
+  --ad-danger-text:      #E84F4F;
+  --ad-danger-bg:        rgba(184, 42, 42, 0.14);
+  --ad-info:             #4272A8;
+  --ad-info-text:        #5A9AD4;
+  --ad-info-bg:          rgba(66, 114, 168, 0.14);
+
+  /* ── Typography Scale */
+  --ad-font-display:     'DM Sans', sans-serif;
+  --ad-font-body:        'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --ad-text-display:     clamp(2rem, 4vw, 2.75rem);
+  --ad-text-heading-xl:  clamp(1.5rem, 3vw, 2rem);
+  --ad-text-heading-lg:  1.375rem;
+  --ad-text-heading-md:  1.125rem;
+  --ad-text-heading-sm:  0.9375rem;
+  --ad-text-body-lg:     0.9375rem;
+  --ad-text-body:        0.8125rem;
+  --ad-text-caption:     0.75rem;
+  --ad-text-overline:    0.625rem;
+
+  /* ── Spacing */
   --ad-space-1: 4px;
   --ad-space-2: 8px;
   --ad-space-3: 12px;
   --ad-space-4: 16px;
+  --ad-space-5: 20px;
   --ad-space-6: 24px;
   --ad-space-8: 32px;
   --ad-space-10: 40px;
   --ad-space-12: 48px;
+  --ad-space-16: 64px;
 
-  /* Restrained Border Radii */
+  /* ── Border Radii — Softer, more premium */
   --ad-radius-sm: 6px;
-  --ad-radius-md: 8px;
-  --ad-radius-lg: 12px;
-  --ad-radius-xl: 16px;
+  --ad-radius-md: 10px;
+  --ad-radius-lg: 14px;
+  --ad-radius-xl: 20px;
+  --ad-radius-full: 9999px;
 
-  /* Subtle Shadows */
-  --ad-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
-  --ad-shadow-md: 0 2px 6px rgba(0, 0, 0, 0.3);
-  --ad-shadow-lg: 0 6px 16px rgba(0, 0, 0, 0.35);
+  /* ── Shadows — Layered depth, not flat */
+  --ad-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --ad-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+  --ad-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.15);
+  --ad-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0, 0, 0, 0.2);
+  --ad-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.4), 0 8px 16px rgba(0, 0, 0, 0.2);
+  --ad-shadow-glow-brand: 0 0 20px rgba(40, 114, 78, 0.15);
+  --ad-shadow-glow-accent: 0 0 20px rgba(199, 163, 86, 0.12);
 
-  /* Transitions */
-  --ad-transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* ── Transitions */
+  --ad-transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ad-transition-spring: 280ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ad-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ============================================================
+   BASE LAYER
+   ============================================================ */
 
 @layer base {
   *, *::before, *::after {
@@ -81,105 +127,252 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
   }
 
   body {
     background-color: var(--ad-bg);
     color: var(--ad-text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--ad-font-body);
     font-size: 0.875rem;
-    line-height: 1.5;
+    line-height: 1.6;
     margin: 0;
     min-height: 100vh;
+    /* Subtle noise texture for depth — not flat */
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(40, 114, 78, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(88, 134, 160, 0.02) 0%, transparent 40%);
+    background-attachment: fixed;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: inherit;
+  h1, h2, h3, h4 {
+    font-family: var(--ad-font-display);
     font-weight: 700;
     color: var(--ad-text-primary);
-    line-height: 1.25;
-    letter-spacing: -0.015em;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  h5, h6 {
+    font-family: var(--ad-font-body);
+    font-weight: 600;
+    color: var(--ad-text-primary);
+    line-height: 1.3;
   }
 
   /* Accessible Focus Rings */
   :focus-visible {
-    outline: 2px solid var(--ad-sage);
+    outline: 2px solid var(--ad-accent);
     outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: rgba(199, 163, 86, 0.3);
+    color: var(--ad-text-primary);
   }
 }
 
 /* ============================================================
-   UTILITY & COMPONENT CLASSES
+   TYPOGRAPHY UTILITY CLASSES
    ============================================================ */
 
-/* Surface Panel */
+.text-ad-display {
+  font-family: var(--ad-font-display);
+  font-size: var(--ad-text-display);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.text-ad-heading-xl {
+  font-family: var(--ad-font-display);
+  font-size: var(--ad-text-heading-xl);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.text-ad-heading-lg {
+  font-family: var(--ad-font-display);
+  font-size: var(--ad-text-heading-lg);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.text-ad-heading-md {
+  font-family: var(--ad-font-display);
+  font-size: var(--ad-text-heading-md);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.text-ad-heading-sm {
+  font-family: var(--ad-font-display);
+  font-size: var(--ad-text-heading-sm);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.text-ad-body-lg {
+  font-size: var(--ad-text-body-lg);
+  line-height: 1.6;
+}
+
+.text-ad-body {
+  font-size: var(--ad-text-body);
+  line-height: 1.5;
+}
+
+.text-ad-caption {
+  font-size: var(--ad-text-caption);
+  line-height: 1.4;
+  color: var(--ad-text-tertiary);
+}
+
+.text-ad-overline {
+  font-size: var(--ad-text-overline);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ad-text-muted);
+}
+
+/* Legacy compat */
+.text-ad-heading { font-family: var(--ad-font-display); font-size: var(--ad-text-heading-lg); font-weight: 700; }
+
+/* ============================================================
+   SURFACE PANELS — 3-Tier Depth
+   ============================================================ */
+
 .ad-panel {
-  background-color: var(--ad-surface);
+  background-color: var(--ad-surface-1);
   border: 1px solid var(--ad-border);
   border-radius: var(--ad-radius-lg);
 }
 
 .ad-panel-elevated {
-  background-color: var(--ad-surface-elevated);
+  background-color: var(--ad-surface-2);
   border: 1px solid var(--ad-border-strong);
   border-radius: var(--ad-radius-lg);
+  box-shadow: var(--ad-shadow-sm);
 }
 
 .ad-panel-subtle {
-  background-color: var(--ad-surface-muted);
+  background-color: var(--ad-surface-0);
   border: 1px solid var(--ad-border-subtle);
   border-radius: var(--ad-radius-md);
 }
 
-/* Legacy glass-panel alias mapping to solid, professional surface */
+/* Legacy glass-panel alias */
 .glass-panel {
-  background-color: var(--ad-surface);
+  background-color: var(--ad-surface-1);
   border: 1px solid var(--ad-border);
 }
 
-/* Compact Table */
+/* ============================================================
+   CARD SYSTEM — Multiple Variants (NOT uniform boxes)
+   ============================================================ */
+
+.ad-card {
+  background-color: var(--ad-surface-1);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius-lg);
+  transition: box-shadow var(--ad-transition), transform var(--ad-transition), border-color var(--ad-transition);
+}
+
+.ad-card:hover {
+  border-color: var(--ad-border-strong);
+}
+
+.ad-card--elevated {
+  background-color: var(--ad-surface-2);
+  border-color: var(--ad-border-strong);
+  box-shadow: var(--ad-shadow-sm);
+}
+
+.ad-card--featured {
+  background: linear-gradient(135deg, var(--ad-surface-1) 0%, var(--ad-surface-2) 100%);
+  border: 1px solid var(--ad-border-accent);
+  border-left: 3px solid var(--ad-accent);
+  box-shadow: var(--ad-shadow-md), var(--ad-shadow-glow-accent);
+}
+
+.ad-card--ghost {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.ad-card--interactive {
+  cursor: pointer;
+}
+
+.ad-card--interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ad-shadow-md);
+  border-color: var(--ad-border-strong);
+}
+
+.ad-card-header {
+  padding: var(--ad-space-4) var(--ad-space-5);
+  border-bottom: 1px solid var(--ad-border-subtle);
+}
+
+.ad-card-body {
+  padding: var(--ad-space-5);
+}
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
 .ad-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8125rem;
+  font-size: var(--ad-text-body);
 }
 
 .ad-table th {
-  padding: 8px 12px;
+  padding: 10px 14px;
   text-align: left;
   font-weight: 600;
   color: var(--ad-text-tertiary);
   border-bottom: 1px solid var(--ad-border);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: var(--ad-text-caption);
+  letter-spacing: 0.03em;
 }
 
 .ad-table td {
-  padding: 10px 12px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--ad-border-subtle);
   color: var(--ad-text-secondary);
 }
 
 .ad-table tr:hover td {
-  background-color: var(--ad-surface-elevated);
+  background-color: var(--ad-surface-2);
 }
 
-/* Form Controls */
+/* ============================================================
+   FORM CONTROLS
+   ============================================================ */
+
 .ad-input {
-  height: 42px;
-  padding: 0 12px;
-  background-color: var(--ad-surface-muted);
+  height: 44px;
+  padding: 0 14px;
+  background-color: var(--ad-surface-0);
   border: 1px solid var(--ad-border);
   border-radius: var(--ad-radius-md);
   color: var(--ad-text-primary);
-  font-size: 0.8125rem;
+  font-size: var(--ad-text-body);
   width: 100%;
-  transition: border-color var(--ad-transition);
+  transition: border-color var(--ad-transition), box-shadow var(--ad-transition);
 }
 
 .ad-input:focus {
-  border-color: var(--ad-sage);
+  border-color: var(--ad-accent);
+  box-shadow: 0 0 0 3px rgba(199, 163, 86, 0.1);
   outline: none;
 }
 
@@ -189,21 +382,113 @@
 
 .ad-label {
   display: block;
-  font-size: 0.75rem;
+  font-size: var(--ad-text-caption);
   font-weight: 600;
   color: var(--ad-text-secondary);
   margin-bottom: 6px;
   letter-spacing: 0.01em;
 }
 
-/* Buttons */
-.ad-btn-primary {
-  height: 40px;
-  padding: 0 16px;
-  background-color: var(--ad-brand);
-  color: #FFFFFF;
+/* ============================================================
+   BUTTONS — Bold, Rich, Shadowed
+   ============================================================ */
+
+.ad-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--ad-font-display);
   font-weight: 600;
-  font-size: 0.8125rem;
+  font-size: var(--ad-text-body);
+  border: none;
+  cursor: pointer;
+  transition: all var(--ad-transition);
+  white-space: nowrap;
+}
+
+.ad-btn--primary {
+  height: 42px;
+  padding: 0 20px;
+  background: linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%);
+  color: #FFFFFF;
+  border-radius: var(--ad-radius-md);
+  box-shadow: var(--ad-shadow-sm), 0 0 12px rgba(40, 114, 78, 0.15);
+}
+
+.ad-btn--primary:hover {
+  background: linear-gradient(135deg, #348C5E 0%, #256A45 100%);
+  box-shadow: var(--ad-shadow-md), 0 0 16px rgba(40, 114, 78, 0.2);
+  transform: translateY(-1px);
+}
+
+.ad-btn--secondary {
+  height: 42px;
+  padding: 0 20px;
+  background-color: var(--ad-surface-2);
+  color: var(--ad-text-primary);
+  border-radius: var(--ad-radius-md);
+  border: 1px solid var(--ad-border-strong);
+}
+
+.ad-btn--secondary:hover {
+  background-color: var(--ad-surface-elevated);
+  border-color: var(--ad-text-muted);
+}
+
+.ad-btn--accent {
+  height: 42px;
+  padding: 0 20px;
+  background: linear-gradient(135deg, #C7A356 0%, #A88940 100%);
+  color: #0B0F0D;
+  border-radius: var(--ad-radius-md);
+  font-weight: 700;
+  box-shadow: var(--ad-shadow-sm), 0 0 12px rgba(199, 163, 86, 0.15);
+}
+
+.ad-btn--accent:hover {
+  background: linear-gradient(135deg, #D4B266 0%, #B89848 100%);
+  box-shadow: var(--ad-shadow-md), 0 0 16px rgba(199, 163, 86, 0.2);
+  transform: translateY(-1px);
+}
+
+.ad-btn--ghost {
+  height: 42px;
+  padding: 0 16px;
+  background: transparent;
+  color: var(--ad-text-secondary);
+  border-radius: var(--ad-radius-md);
+}
+
+.ad-btn--ghost:hover {
+  background-color: var(--ad-surface-1);
+  color: var(--ad-text-primary);
+}
+
+.ad-btn--danger {
+  height: 42px;
+  padding: 0 20px;
+  background: linear-gradient(135deg, #B82A2A 0%, #8F1F1F 100%);
+  color: #FFFFFF;
+  border-radius: var(--ad-radius-md);
+  box-shadow: var(--ad-shadow-sm);
+}
+
+.ad-btn--sm {
+  height: 34px;
+  padding: 0 14px;
+  font-size: var(--ad-text-caption);
+}
+
+/* Legacy button compat */
+.ad-btn-primary {
+  height: 42px;
+  padding: 0 20px;
+  background: linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%);
+  color: #FFFFFF;
+  font-family: var(--ad-font-display);
+  font-weight: 600;
+  font-size: var(--ad-text-body);
   border-radius: var(--ad-radius-md);
   border: none;
   display: inline-flex;
@@ -211,83 +496,214 @@
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: background-color var(--ad-transition);
+  transition: all var(--ad-transition);
+  box-shadow: var(--ad-shadow-sm), 0 0 12px rgba(40, 114, 78, 0.15);
 }
 
 .ad-btn-primary:hover {
-  background-color: var(--ad-brand-hover);
+  background: linear-gradient(135deg, #348C5E 0%, #256A45 100%);
+  box-shadow: var(--ad-shadow-md), 0 0 16px rgba(40, 114, 78, 0.2);
+  transform: translateY(-1px);
 }
 
 .ad-btn-secondary {
-  height: 40px;
-  padding: 0 16px;
-  background-color: var(--ad-surface-elevated);
+  height: 42px;
+  padding: 0 20px;
+  background-color: var(--ad-surface-2);
   color: var(--ad-text-primary);
+  font-family: var(--ad-font-display);
   font-weight: 600;
-  font-size: 0.8125rem;
+  font-size: var(--ad-text-body);
   border-radius: var(--ad-radius-md);
-  border: 1px solid var(--ad-border);
+  border: 1px solid var(--ad-border-strong);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: background-color var(--ad-transition);
+  transition: all var(--ad-transition);
 }
 
 .ad-btn-secondary:hover {
-  background-color: var(--ad-border-strong);
+  background-color: var(--ad-surface-elevated);
+  border-color: var(--ad-text-muted);
+  transform: translateY(-1px);
 }
 
-/* Badges */
+/* ============================================================
+   BADGES — Color-coded, not monotone green
+   ============================================================ */
+
 .ad-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: 4px;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--ad-radius-sm);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
+.ad-badge--neutral {
+  background-color: var(--ad-surface-2);
+  color: var(--ad-text-secondary);
+  border: 1px solid var(--ad-border);
+}
+
+.ad-badge--success {
+  background-color: var(--ad-success-bg);
+  color: var(--ad-success-text);
+  border: 1px solid rgba(52, 199, 114, 0.2);
+}
+
+.ad-badge--warning {
+  background-color: var(--ad-warning-bg);
+  color: var(--ad-warning-text);
+  border: 1px solid rgba(230, 153, 42, 0.2);
+}
+
+.ad-badge--error {
+  background-color: var(--ad-danger-bg);
+  color: var(--ad-danger-text);
+  border: 1px solid rgba(232, 79, 79, 0.2);
+}
+
+.ad-badge--info {
+  background-color: var(--ad-info-bg);
+  color: var(--ad-info-text);
+  border: 1px solid rgba(90, 154, 212, 0.2);
+}
+
+.ad-badge--accent {
+  background-color: var(--ad-accent-light);
+  color: var(--ad-accent-bright);
+  border: 1px solid rgba(199, 163, 86, 0.2);
+}
+
+/* Legacy badge compat */
 .ad-badge-success {
   background-color: var(--ad-success-bg);
-  color: #48BB78;
-  border: 1px solid rgba(72, 187, 120, 0.3);
+  color: var(--ad-success-text);
+  border: 1px solid rgba(52, 199, 114, 0.2);
 }
 
 .ad-badge-warning {
   background-color: var(--ad-warning-bg);
-  color: #ED8936;
-  border: 1px solid rgba(237, 137, 54, 0.3);
+  color: var(--ad-warning-text);
+  border: 1px solid rgba(230, 153, 42, 0.2);
 }
 
 .ad-badge-danger {
   background-color: var(--ad-danger-bg);
-  color: #F56565;
-  border: 1px solid rgba(245, 101, 101, 0.3);
+  color: var(--ad-danger-text);
+  border: 1px solid rgba(232, 79, 79, 0.2);
 }
 
 .ad-badge-earth {
-  background-color: var(--ad-earth-light);
-  color: #DD6B20;
-  border: 1px solid rgba(221, 107, 32, 0.3);
+  background-color: var(--ad-accent-light);
+  color: var(--ad-accent-bright);
+  border: 1px solid rgba(199, 163, 86, 0.2);
 }
 
 .ad-badge-sage {
-  background-color: var(--ad-sage-light);
-  color: #9AE6B4;
-  border: 1px solid rgba(154, 230, 180, 0.3);
+  background-color: var(--ad-brand-light);
+  color: var(--ad-brand-bright);
+  border: 1px solid rgba(52, 199, 114, 0.15);
 }
 
-/* Accessibility Skip Link */
+/* ============================================================
+   KPI CARDS
+   ============================================================ */
+
+.ad-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ad-kpi__label {
+  font-size: var(--ad-text-caption);
+  font-weight: 600;
+  color: var(--ad-text-tertiary);
+  letter-spacing: 0.02em;
+}
+
+.ad-kpi__value {
+  font-family: var(--ad-font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ad-text-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.ad-kpi__change {
+  font-size: var(--ad-text-caption);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.ad-kpi__change--positive { color: var(--ad-success-text); }
+.ad-kpi__change--negative { color: var(--ad-danger-text); }
+.ad-kpi__change--neutral  { color: var(--ad-text-muted); }
+
+/* ============================================================
+   LOADING STATES
+   ============================================================ */
+
+.ad-loading-spinner {
+  display: inline-block;
+  border: 2px solid var(--ad-border);
+  border-top: 2px solid var(--ad-accent);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: ad-spin 0.7s linear infinite;
+}
+
+.ad-loading-spinner--sm {
+  width: 14px;
+  height: 14px;
+  border-width: 1.5px;
+}
+
+@keyframes ad-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   PAGE ENTRANCE ANIMATIONS
+   ============================================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+
 .skip-to-content {
   position: absolute;
   top: -40px;
   left: 0;
-  background: var(--ad-brand);
-  color: #FFFFFF;
+  background: var(--ad-accent);
+  color: #0B0F0D;
   padding: 8px 16px;
   font-weight: 700;
   z-index: 9999;
@@ -298,7 +714,6 @@
   top: 0;
 }
 
-/* Screen Reader Utilities */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -311,7 +726,32 @@
   border-width: 0;
 }
 
-/* Prefers-reduced-motion media guard */
+/* ============================================================
+   SCROLLBAR CUSTOMIZATION
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ad-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ad-border-strong);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ad-text-muted);
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
