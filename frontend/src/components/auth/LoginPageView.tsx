@@ -29,7 +29,7 @@ interface DemoRoleConfig {
   subtitle: string;
   email: string;
   password: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
 }
 
 const DEMO_PRESETS: DemoRoleConfig[] = [
@@ -140,18 +140,26 @@ export const LoginPageView: React.FC<LoginPageViewProps> = ({
   };
 
   return (
-    <div className="min-h-[calc(100vh-140px)] flex items-center justify-center py-4 animate-fadeIn">
-      <div className="w-full max-w-5xl rounded-3xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
-        
+    <div className="min-h-[calc(100vh-160px)] flex items-center justify-center py-6 px-4 animate-fadeIn">
+      <div
+        className="w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-12 min-h-[540px]"
+        style={{
+          background: 'var(--ad-surface-0)',
+          border: '1px solid var(--ad-border-accent)',
+          boxShadow: 'var(--ad-shadow-2xl), 0 0 32px rgba(199, 163, 86, 0.15)',
+        }}
+      >
         {/* LEFT SIDE: Agricultural Visual (55% on Desktop) */}
-        <div className="lg:col-span-7 relative bg-slate-900 overflow-hidden flex flex-col justify-between p-8 sm:p-10 min-h-[260px] lg:min-h-full">
+        <div
+          className="lg:col-span-7 relative overflow-hidden flex flex-col justify-between p-8 sm:p-10 min-h-[260px] lg:min-h-full"
+          style={{ background: 'var(--ad-surface-1)' }}
+        >
           {/* Background Farm Image */}
           <img
             src="/assets/agridirect-login-farm.webp"
             alt="Indian agricultural farm harvest"
-            className="absolute inset-0 w-full h-full object-cover object-center opacity-75"
+            className="absolute inset-0 w-full h-full object-cover object-center opacity-60"
             onError={(e) => {
-              // Fallback to jpeg extension if needed
               const target = e.target as HTMLImageElement;
               if (!target.src.endsWith('.jpeg')) {
                 target.src = '/assets/agridirect-login-farm.webp.jpeg';
@@ -160,64 +168,96 @@ export const LoginPageView: React.FC<LoginPageViewProps> = ({
           />
 
           {/* Natural Vignette Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/20" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(to top, rgba(11, 15, 13, 0.95) 0%, rgba(11, 15, 13, 0.5) 50%, rgba(11, 15, 13, 0.3) 100%)'
+            }}
+          />
 
           {/* Top Brand Mark */}
           <div className="relative z-10 flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center shadow-md shadow-emerald-700/30">
+            <div
+              className="w-8 h-8 rounded-xl flex items-center justify-center shadow-md"
+              style={{ background: 'linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%)' }}
+            >
               <Sprout className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="font-extrabold text-white text-base tracking-tight block leading-none">AgriDirect</span>
-              <span className="text-[10px] font-mono font-medium text-emerald-400">SIH26033 Platform</span>
+              <span
+                className="font-extrabold text-base tracking-tight block leading-none"
+                style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}
+              >
+                Agri<span style={{ color: 'var(--ad-accent-bright)' }}>Direct</span>
+              </span>
+              <span className="text-[10px] font-mono font-medium" style={{ color: 'var(--ad-accent)' }}>
+                SIH26033 Platform
+              </span>
             </div>
           </div>
 
           {/* Bottom Editorial Content */}
           <div className="relative z-10 space-y-4 pt-12">
             <div className="space-y-1.5 max-w-lg">
-              <blockquote className="text-xl sm:text-2xl font-black text-white leading-tight tracking-tight">
+              <blockquote
+                className="text-xl sm:text-2xl font-extrabold leading-tight tracking-tight text-white"
+                style={{ fontFamily: 'var(--ad-font-display)' }}
+              >
                 “From the hands that grow it,
                 <br />
-                <span className="text-emerald-400">to the markets that need it.”</span>
+                <span style={{ color: 'var(--ad-accent-bright)' }}>to the markets that need it.”</span>
               </blockquote>
-              <p className="text-xs text-slate-300 max-w-md">
+              <p className="text-xs max-w-md leading-relaxed" style={{ color: 'var(--ad-text-secondary)' }}>
                 Direct agricultural market intelligence, price realization optimization, and pooled cold-chain logistics for India's farm producers.
               </p>
             </div>
 
-            {/* Subtle Value Chain Journey */}
-            <div className="pt-2 border-t border-slate-700/50 flex items-center space-x-2 text-[11px] font-mono text-slate-300">
-              <span className="text-emerald-400 font-bold">Farm</span>
-              <span className="text-slate-500">→</span>
+            {/* Value Chain Journey */}
+            <div
+              className="pt-2 flex items-center space-x-2 text-[11px] font-mono"
+              style={{ borderTop: '1px solid var(--ad-border-subtle)', color: 'var(--ad-text-tertiary)' }}
+            >
+              <span className="font-bold" style={{ color: 'var(--ad-brand-bright)' }}>Farm</span>
+              <span>→</span>
               <span>Intelligence</span>
-              <span className="text-slate-500">→</span>
+              <span>→</span>
               <span>Decision</span>
-              <span className="text-slate-500">→</span>
-              <span className="text-cyan-400 font-bold">Market</span>
+              <span>→</span>
+              <span className="font-bold" style={{ color: 'var(--ad-accent-bright)' }}>Market</span>
             </div>
           </div>
         </div>
 
         {/* RIGHT SIDE: Authentication Interface (45% on Desktop) */}
-        <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between space-y-6 bg-slate-950">
+        <div
+          className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between space-y-6"
+          style={{ background: 'var(--ad-surface-0)' }}
+        >
           <div className="space-y-5">
             {/* Header Title */}
             <div>
-              <span className="text-emerald-400 font-mono text-[10px] font-bold uppercase tracking-widest block mb-1">
+              <span
+                className="text-[10px] font-bold uppercase tracking-widest block mb-1"
+                style={{ color: 'var(--ad-accent)', fontFamily: 'var(--ad-font-display)' }}
+              >
                 Enterprise Authentication
               </span>
-              <h1 className="text-2xl font-black text-white tracking-tight">Welcome back</h1>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <h1
+                className="text-2xl font-extrabold tracking-tight"
+                style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}
+              >
+                Welcome back
+              </h1>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--ad-text-muted)' }}>
                 Access your AgriDirect workspace and live intelligence feeds.
               </p>
             </div>
 
             {/* Restrained Demo Access for SIH Presentation */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                <span>Demo Workspace Access</span>
-                <span className="text-emerald-400 font-mono">1-Click Fast Fill</span>
+              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider">
+                <span style={{ color: 'var(--ad-text-muted)' }}>Demo Workspace Access</span>
+                <span className="font-mono" style={{ color: 'var(--ad-accent-bright)' }}>1-Click Fast Fill</span>
               </div>
 
               <div className="grid grid-cols-2 gap-1.5">
@@ -229,16 +269,31 @@ export const LoginPageView: React.FC<LoginPageViewProps> = ({
                       key={p.role}
                       type="button"
                       onClick={() => handleSelectDemo(p)}
-                      className={`p-2 rounded-xl text-left border transition-all flex items-start space-x-2 ${
-                        isSelected
-                          ? 'border-emerald-500 bg-emerald-950/30 text-white shadow-sm shadow-emerald-950'
-                          : 'border-slate-800 bg-slate-900/60 text-slate-400 hover:border-slate-700 hover:text-slate-200'
-                      }`}
+                      className="p-2.5 rounded-xl text-left transition-all flex items-start space-x-2 cursor-pointer"
+                      style={{
+                        background: isSelected ? 'var(--ad-surface-1)' : 'var(--ad-surface-0)',
+                        border: isSelected ? '1px solid var(--ad-border-accent)' : '1px solid var(--ad-border)',
+                        borderLeft: isSelected ? '3px solid var(--ad-accent)' : '1px solid var(--ad-border)',
+                        boxShadow: isSelected ? '0 0 10px rgba(199, 163, 86, 0.15)' : 'none',
+                      }}
                     >
-                      <Icon className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${isSelected ? 'text-emerald-400' : 'text-slate-500'}`} />
+                      <Icon
+                        className="w-3.5 h-3.5 mt-0.5 shrink-0"
+                        style={{ color: isSelected ? 'var(--ad-accent-bright)' : 'var(--ad-text-muted)' }}
+                      />
                       <div className="truncate">
-                        <strong className="text-[11px] block truncate text-slate-200">{p.title}</strong>
-                        <span className="text-[9px] text-slate-500 block truncate">{p.subtitle}</span>
+                        <strong
+                          className="text-[11px] block truncate"
+                          style={{
+                            color: isSelected ? 'var(--ad-text-primary)' : 'var(--ad-text-secondary)',
+                            fontFamily: 'var(--ad-font-display)'
+                          }}
+                        >
+                          {p.title}
+                        </strong>
+                        <span className="text-[9px] block truncate" style={{ color: 'var(--ad-text-muted)' }}>
+                          {p.subtitle}
+                        </span>
                       </div>
                     </button>
                   );
@@ -247,7 +302,7 @@ export const LoginPageView: React.FC<LoginPageViewProps> = ({
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleLoginSubmit} className="space-y-3 pt-1 border-t border-slate-800/80 text-xs">
+            <form onSubmit={handleLoginSubmit} className="space-y-3 pt-2 text-xs" style={{ borderTop: '1px solid var(--ad-border)' }}>
               <div className="space-y-1">
                 <label className="block text-slate-300 font-semibold">Email Address</label>
                 <div className="relative">
