@@ -9,7 +9,9 @@ import {
   Pause,
   TrendingUp,
   Truck,
-  BarChart3
+  BarChart3,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { ValueChainSlider } from './ValueChainSlider';
 
@@ -19,21 +21,39 @@ interface LandingPageViewProps {
 
 export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) => {
   const [heroVideoPlaying, setHeroVideoPlaying] = useState(true);
+  const [heroMuted, setHeroMuted] = useState(true);
   const [journeyVideoPlaying, setJourneyVideoPlaying] = useState(true);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const journeyVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Guarantee browser muted autoplay compliance
+  // Guarantee browser muted autoplay compliance & respect prefers-reduced-motion
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     if (heroVideoRef.current) {
       heroVideoRef.current.muted = true;
-      heroVideoRef.current.play().catch(() => setHeroVideoPlaying(false));
+      if (!prefersReducedMotion) {
+        heroVideoRef.current.play().catch(() => setHeroVideoPlaying(false));
+      } else {
+        setHeroVideoPlaying(false);
+      }
     }
     if (journeyVideoRef.current) {
       journeyVideoRef.current.muted = true;
-      journeyVideoRef.current.play().catch(() => setJourneyVideoPlaying(false));
+      if (!prefersReducedMotion) {
+        journeyVideoRef.current.play().catch(() => setJourneyVideoPlaying(false));
+      } else {
+        setJourneyVideoPlaying(false);
+      }
     }
   }, []);
+
+  const toggleHeroAudio = () => {
+    if (heroVideoRef.current) {
+      heroVideoRef.current.muted = !heroVideoRef.current.muted;
+      setHeroMuted(heroVideoRef.current.muted);
+    }
+  };
 
   const toggleHeroVideo = () => {
     if (heroVideoRef.current) {
@@ -62,57 +82,102 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
   return (
     <div className="space-y-14 animate-fadeIn pb-10">
       {/* ============================================================
-          SECTION 1 — HERO
+          SECTION 1 — HERO (Template B Cinematic 10-Sec Loop)
           ============================================================ */}
       <section
-        className="relative overflow-hidden shadow-xl"
+        className="relative overflow-hidden shadow-2xl rounded-2xl border"
         style={{
-          borderRadius: 'var(--ad-radius-xl)',
-          background: 'var(--ad-surface-0)',
-          border: '1px solid var(--ad-border)',
+          borderColor: 'var(--ad-border, #273029)',
+          backgroundColor: '#0B0F0D',
         }}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
-          {/* Left Hero Content */}
-          <div className="lg:col-span-7 p-8 sm:p-12 flex flex-col justify-between z-10 space-y-8">
-            <div className="space-y-5">
+        {/* Cinematic Background Video Layer */}
+        <video
+          ref={heroVideoRef}
+          autoPlay
+          loop
+          muted={heroMuted}
+          playsInline
+          preload="auto"
+          poster="/assets/agridirect-farm-hero.webp.png"
+          className="absolute inset-0 w-full h-full object-cover"
+          aria-hidden="true"
+        >
+          <source src="/assets/agridirect-farm-hero-video.mp4" type="video/mp4" />
+          <source src="/assets/Wheat_and_vegetable_fields_moving_202608280019.mp4" type="video/mp4" />
+        </video>
+
+        {/* Text Readability Gradient Overlays */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none hidden sm:block"
+          style={{
+            background: 'linear-gradient(90deg, rgba(11, 15, 13, 0.96) 0%, rgba(11, 15, 13, 0.88) 45%, rgba(11, 15, 13, 0.45) 75%, rgba(11, 15, 13, 0.25) 100%)',
+          }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 z-0 pointer-events-none sm:hidden"
+          style={{
+            background: 'linear-gradient(180deg, rgba(11, 15, 13, 0.96) 0%, rgba(11, 15, 13, 0.88) 60%, rgba(11, 15, 13, 0.5) 100%)',
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Foreground Content Grid */}
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 min-h-[500px] lg:min-h-[540px] p-6 sm:p-10 lg:p-12 items-center">
+          
+          {/* Left Content Column (Cols 1–8 on Desktop) */}
+          <div className="lg:col-span-8 flex flex-col justify-between h-full space-y-7">
+            <div className="space-y-4">
+              
+              {/* Eyebrow Pill */}
               <div
-                className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold"
+                className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-semibold w-fit"
                 style={{
-                  background: 'var(--ad-accent-light)',
-                  border: '1px solid var(--ad-border-accent)',
-                  color: 'var(--ad-accent)',
+                  background: 'rgba(40, 114, 78, 0.16)',
+                  border: '1px solid rgba(52, 199, 114, 0.3)',
+                  color: '#34C772',
                 }}
               >
                 <Sprout className="w-3.5 h-3.5" />
-                <span>Agricultural Commerce & Market Intelligence</span>
+                <span>Powering India's Agri-Commerce Infrastructure</span>
               </div>
 
+              {/* Main Headline */}
               <h1
                 className="text-3xl sm:text-4xl lg:text-[3.25rem] font-extrabold tracking-tight leading-[1.08]"
                 style={{
-                  fontFamily: 'var(--ad-font-display)',
-                  color: 'var(--ad-text-primary)',
+                  fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
+                  color: '#F2F4F3',
                 }}
               >
                 Real Farmers.<br />
-                <span style={{ color: 'var(--ad-accent)' }}>Real Markets.</span><br />
+                <span style={{ color: 'var(--ad-accent, #C7A356)' }}>Real Markets.</span><br />
                 Real Impact.
               </h1>
 
+              {/* Subtext */}
               <p
-                className="text-sm sm:text-base max-w-lg font-normal leading-relaxed"
-                style={{ color: 'var(--ad-text-secondary)' }}
+                className="text-sm sm:text-base max-w-xl font-normal leading-relaxed text-[#B8C4BC]"
               >
-                Direct agricultural trade, 14-day price forecasting, and shared cold-chain logistics connecting producers with the markets that need them most.
+                Direct trade, 14-day price forecasting, and shared cold-chain logistics connecting producers with the markets that need them most.
               </p>
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 pt-1">
               <button
                 onClick={() => onNavigate('marketplace', 'BUYER')}
-                className="ad-btn-primary px-6 py-3 text-sm"
+                className="px-6 py-3 rounded-lg font-bold text-xs sm:text-sm text-white flex items-center space-x-2 transition-all duration-150 shadow-md cursor-pointer"
+                style={{
+                  backgroundColor: '#28724E',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor = '#1F5C3D';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor = '#28724E';
+                }}
               >
                 <span>Explore Marketplace</span>
                 <ArrowRight className="w-4 h-4" />
@@ -123,73 +188,100 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
                   const el = document.getElementById('farm-gallery-section');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="ad-btn-secondary px-5 py-3 text-sm"
+                className="px-5 py-3 rounded-lg font-semibold text-xs sm:text-sm text-[#F2F4F3] flex items-center space-x-2 transition-all duration-150 border border-[#273029] cursor-pointer"
+                style={{
+                  backgroundColor: 'rgba(20, 26, 23, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(27, 35, 32, 0.95)';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(20, 26, 23, 0.85)';
+                }}
               >
-                See How It Works
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>See How It Works</span>
               </button>
             </div>
 
-            {/* Trust Indicators — Not just green checkmarks */}
+            {/* 3 Core Value Pillars */}
             <div
-              className="grid grid-cols-3 gap-4 pt-5"
-              style={{ borderTop: '1px solid var(--ad-border)' }}
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5 mt-2 border-t"
+              style={{ borderColor: 'rgba(39, 48, 41, 0.8)' }}
             >
-              {[
-                { icon: ShieldCheck, label: 'Direct FPO Trade', color: 'var(--ad-brand-bright)' },
-                { icon: TrendingUp, label: '14-Day Forecasting', color: 'var(--ad-accent)' },
-                { icon: Truck, label: 'Pooled Logistics', color: 'var(--ad-cool-bright)' },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center space-x-2 text-xs" style={{ color: 'var(--ad-text-tertiary)' }}>
-                  <item.icon className="w-4 h-4 shrink-0" style={{ color: item.color }} />
-                  <span className="font-medium">{item.label}</span>
+              <div className="flex items-start space-x-2.5 text-xs">
+                <ShieldCheck className="w-4 h-4 text-[#C7A356] shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-semibold text-white">Direct FPO Trade</div>
+                  <div className="text-[11px] text-[#7F8F85]">Transparent & Fair</div>
                 </div>
-              ))}
+              </div>
+
+              <div className="flex items-start space-x-2.5 text-xs">
+                <TrendingUp className="w-4 h-4 text-[#34C772] shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-semibold text-white">14-Day Forecasting</div>
+                  <div className="text-[11px] text-[#7F8F85]">AI-Powered Insights</div>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-2.5 text-xs">
+                <Truck className="w-4 h-4 text-[#C7A356] shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-semibold text-white">Pooled Logistics</div>
+                  <div className="text-[11px] text-[#7F8F85]">Lower Cost, Higher Reach.</div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Right Hero Video */}
-          <div
-            className="lg:col-span-5 relative min-h-[280px] lg:min-h-full overflow-hidden flex items-center justify-center cursor-pointer group"
-            style={{ background: 'var(--ad-bg)' }}
-            onClick={toggleHeroVideo}
-          >
-            <video
-              ref={heroVideoRef}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              poster="/assets/agridirect-farm-hero.webp.png"
-              className="absolute inset-0 w-full h-full object-cover opacity-80"
-            >
-              <source src="/assets/agridirect-farm-hero-video.mp4" type="video/mp4" />
-              <source src="/assets/Wheat_and_vegetable_fields_moving_202608280019.mp4" type="video/mp4" />
-            </video>
-
-            <div className="absolute inset-0 lg:block hidden" style={{
-              background: 'linear-gradient(to right, var(--ad-surface-0) 0%, rgba(20, 26, 23, 0.4) 30%, transparent 100%)'
-            }} />
-            <div className="absolute inset-0 lg:hidden block" style={{
-              background: 'linear-gradient(to top, var(--ad-surface-0) 0%, transparent 50%)'
-            }} />
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleHeroVideo();
-              }}
-              className="absolute bottom-4 right-4 z-20 p-2 rounded-full text-white transition-all shadow-lg"
+          {/* Right Floating Market Pulse Card (Cols 9–12 on Desktop) */}
+          <div className="hidden lg:flex lg:col-span-4 justify-end items-center pr-2">
+            <div
+              className="p-5 rounded-xl border border-[#273029] space-y-3 w-[250px] shadow-2xl backdrop-blur-md"
               style={{
-                background: 'rgba(11, 15, 13, 0.85)',
-                border: '1px solid var(--ad-border)',
+                backgroundColor: 'rgba(20, 26, 23, 0.88)',
               }}
-              aria-label={heroVideoPlaying ? "Pause video" : "Play video"}
             >
-              {heroVideoPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            </button>
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-xs text-white tracking-wide">Market Pulse</span>
+                <div className="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-[#34C772]/15 border border-[#34C772]/30 text-[10px] text-[#34C772] font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#34C772] animate-pulse" />
+                  <span>Live</span>
+                </div>
+              </div>
+
+              <div className="pt-1">
+                <div className="text-[11px] text-[#7F8F85] font-medium">Tomato Price (₹/Quintal)</div>
+                <div className="flex items-baseline space-x-2 mt-0.5">
+                  <span className="font-mono text-2xl font-bold text-white tracking-tight">₹1,245</span>
+                  <span className="text-xs font-semibold text-[#34C772]">+3.2%</span>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-[#273029] text-[11px] text-[#B8C4BC] flex items-center justify-between">
+                <span>Nashik APMC</span>
+                <span className="text-[10px] text-[#7F8F85]">Updated 2 min ago</span>
+              </div>
+            </div>
           </div>
+
         </div>
+
+        {/* Ambient Video Mute Toggle */}
+        <button
+          onClick={toggleHeroAudio}
+          className="absolute bottom-4 right-4 z-20 p-2 rounded-full text-[#B8C4BC] hover:text-white transition-all shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C7A356] cursor-pointer"
+          style={{
+            backgroundColor: 'rgba(11, 15, 13, 0.8)',
+            border: '1px solid #273029',
+          }}
+          aria-label={heroMuted ? "Unmute video audio" : "Mute video audio"}
+          title={heroMuted ? "Unmute video audio" : "Mute video audio"}
+        >
+          {heroMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+        </button>
       </section>
 
       {/* ============================================================
