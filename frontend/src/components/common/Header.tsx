@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { UserRole } from '../../types';
 import {
   Sprout,
-  BarChart3,
   Truck,
   ShoppingCart,
   Landmark,
-  UserCheck,
   Menu,
   X,
   Radio,
@@ -15,8 +13,7 @@ import {
   Scale,
   Building2,
   TrendingUp,
-  ShieldCheck,
-  Inbox,
+  User,
   ChevronDown
 } from 'lucide-react';
 import { AuthModal } from './AuthModal';
@@ -45,13 +42,13 @@ export const Header: React.FC<HeaderProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
-  // Role-adaptive Compact Navigation Items
+  // Role-adaptive Navigation Configuration
   const getNavItemsForRole = (role: UserRole): NavItemConfig[] => {
     switch (role) {
       case 'FPO':
       case 'FARMER':
         return [
-          { id: 'farmer', label: 'My Produce', icon: Sprout },
+          { id: 'farmer', label: 'Produce', icon: Sprout },
           { id: 'decision', label: 'Decisions', icon: Scale },
           { id: 'best-market', label: 'Markets', icon: Building2 },
           { id: 'marketplace', label: 'Marketplace', icon: ShoppingCart },
@@ -112,207 +109,295 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b" style={{
-      background: 'linear-gradient(180deg, #121815 0%, #0E1310 100%)',
-      borderColor: 'var(--ad-border)',
-      backdropFilter: 'blur(12px)',
-    }}>
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[56px]">
-          
-          {/* Left: Brand Identity */}
-          <div className="flex items-center space-x-3 shrink-0">
-            <button
-              onClick={() => setActiveTab('home')}
-              className="flex items-center space-x-2.5 text-left focus:outline-none group"
-            >
+    <>
+      <header
+        className="sticky top-0 z-40 w-full border-b backdrop-blur-md print:hidden"
+        style={{
+          backgroundColor: 'rgba(11, 15, 13, 0.94)',
+          borderColor: 'var(--ad-border, #273029)',
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            
+            {/* =========================================================
+                LEFT: BRAND IDENTITY (Template B Specification)
+                ========================================================= */}
+            <div className="flex items-center space-x-3 shrink-0">
+              {/* Mobile Menu Trigger (Left on mobile) */}
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="lg:hidden p-1.5 -ml-1.5 text-[#B8C4BC] hover:text-white rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C7A356]"
+                aria-label="Open mobile navigation menu"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+
+              <button
+                onClick={() => setActiveTab('home')}
+                className="flex items-center space-x-2.5 text-left focus:outline-none group"
+              >
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm shrink-0"
+                  style={{
+                    backgroundColor: '#1E4D34', // Deep forest badge
+                  }}
+                  aria-hidden="true"
+                >
+                  <Sprout className="w-4 h-4" style={{ color: '#E8D5A3' }} />
+                </div>
+                <div className="flex flex-col">
+                  <span
+                    className="font-bold text-white text-base leading-none tracking-tight"
+                    style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+                  >
+                    AgriDirect
+                  </span>
+                  <span
+                    className="text-[9px] font-semibold tracking-wider uppercase block mt-0.5 text-[#7F8F85]"
+                  >
+                    Agricultural Commerce
+                  </span>
+                </div>
+              </button>
+            </div>
+
+            {/* =========================================================
+                CENTER: DESKTOP NAVIGATION (Quiet Typography & Subtlety)
+                ========================================================= */}
+            <nav className="hidden lg:flex items-center space-x-1" aria-label="Main Navigation">
+              {navItems.map((item) => {
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className="relative px-3.5 py-2 text-xs font-semibold tracking-wide transition-colors duration-150 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#C7A356] rounded-md"
+                    style={{
+                      color: isActive ? '#F2F4F3' : '#8E9E94',
+                      fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) (e.currentTarget as HTMLElement).style.color = '#F2F4F3';
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) (e.currentTarget as HTMLElement).style.color = '#8E9E94';
+                    }}
+                  >
+                    <span>{item.label}</span>
+
+                    {/* Active underline cue (Quiet wheat gold) */}
+                    {isActive && (
+                      <span
+                        className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full"
+                        style={{ backgroundColor: 'var(--ad-accent, #C7A356)' }}
+                        aria-hidden="true"
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* =========================================================
+                RIGHT: ROLE SELECTOR + RESTRAINED GOLD SIGN IN
+                ========================================================= */}
+            <div className="flex items-center space-x-2.5 shrink-0">
+              
+              {/* Telemetry Status Dot (Quiet & Understated) */}
               <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg"
+                className="hidden xl:flex items-center space-x-1.5 px-2 py-1 rounded-md text-[10px] text-[#7F8F85]"
+                style={{ backgroundColor: '#141A17', border: '1px solid #273029' }}
+                title={isBackendConnected ? "Local API connected" : "Calibrated simulation mode"}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: isBackendConnected ? '#34C772' : '#C7A356' }}
+                  aria-hidden="true"
+                />
+                <span className="font-mono text-[10px]">{isBackendConnected ? 'Online' : 'Sim'}</span>
+              </div>
+
+              {/* Compact Role Selector (Template B) */}
+              <div
+                className="relative flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-xs cursor-pointer transition-colors"
                 style={{
-                  background: 'linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%)',
-                  boxShadow: '0 0 16px rgba(40, 114, 78, 0.2)',
+                  backgroundColor: '#141A17',
+                  border: '1px solid #273029',
                 }}
               >
-                <Sprout className="w-[18px] h-[18px]" />
-              </div>
-              <div className="flex flex-col">
-                <span
-                  className="font-bold text-white text-[15px] leading-none tracking-tight"
-                  style={{ fontFamily: 'var(--ad-font-display)' }}
-                >
-                  AgriDirect
+                <User className="w-3.5 h-3.5 text-[#C7A356] shrink-0" aria-hidden="true" />
+                <span className="font-semibold text-xs text-[#F2F4F3] pr-1">
+                  {roleDisplayNames[activeRole] || activeRole}
                 </span>
-                <span className="text-[10px] font-medium leading-tight" style={{ color: 'var(--ad-text-muted)' }}>
-                  Agricultural Commerce
-                </span>
-              </div>
-            </button>
-          </div>
-
-          {/* Center: Desktop Navigation — Underline-style active indicator */}
-          <nav className="hidden lg:flex items-center space-x-0.5" aria-label="Main Navigation">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className="relative flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200"
-                  style={{
-                    color: isActive ? 'var(--ad-text-primary)' : 'var(--ad-text-tertiary)',
-                    background: isActive ? 'var(--ad-surface-1)' : 'transparent',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      (e.currentTarget as HTMLElement).style.color = 'var(--ad-text-secondary)';
-                      (e.currentTarget as HTMLElement).style.background = 'var(--ad-surface-0)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      (e.currentTarget as HTMLElement).style.color = 'var(--ad-text-tertiary)';
-                      (e.currentTarget as HTMLElement).style.background = 'transparent';
-                    }
-                  }}
+                <ChevronDown className="w-3 h-3 text-[#7F8F85] shrink-0" aria-hidden="true" />
+                
+                {/* Native Accessible Select Overlay */}
+                <select
+                  value={activeRole}
+                  onChange={(e) => handleRoleSelect(e.target.value as UserRole)}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  aria-label="Switch simulation user role"
                 >
-                  <Icon className="w-3.5 h-3.5 shrink-0" style={{
-                    color: isActive ? 'var(--ad-accent)' : 'inherit'
-                  }} />
-                  <span className="whitespace-nowrap">{item.label}</span>
-                  {/* Active underline indicator */}
-                  {isActive && (
-                    <span
-                      className="absolute bottom-[-13px] left-3 right-3 h-[2px] rounded-full"
-                      style={{ background: 'var(--ad-accent)' }}
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </nav>
+                  <option value="FARMER">Farmer / FPO</option>
+                  <option value="BUYER">Institutional Buyer</option>
+                  <option value="LOGISTICS">Transport Operator</option>
+                  <option value="DOCA_OBSERVER">DoCA Market Observer</option>
+                </select>
+              </div>
 
-          {/* Right: Status + Role + Auth */}
-          <div className="flex items-center space-x-2 shrink-0">
-            {/* Connection Indicator */}
-            <div
-              className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[10px]"
-              style={{ background: 'var(--ad-surface-0)', border: '1px solid var(--ad-border-subtle)' }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: isBackendConnected ? 'var(--ad-success-text)' : 'var(--ad-warning-text)' }}
-              />
-              <span style={{ color: 'var(--ad-text-muted)' }}>
-                {isBackendConnected ? 'Online' : 'Calibrated'}
-              </span>
-            </div>
-
-            {/* Role Selector — Styled custom dropdown look */}
-            <div
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs cursor-pointer"
-              style={{
-                background: 'var(--ad-surface-0)',
-                border: '1px solid var(--ad-border)',
-              }}
-              title="Demo role simulation"
-            >
-              <UserCheck className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--ad-accent)' }} />
-              <select
-                value={activeRole}
-                onChange={(e) => handleRoleSelect(e.target.value as UserRole)}
-                className="bg-transparent font-semibold text-xs focus:outline-none cursor-pointer pr-1"
-                style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}
-                aria-label="Demo active role"
+              {/* Restrained Wheat / Gold Sign In Button */}
+              <button
+                onClick={() => setAuthModalOpen(true)}
+                className="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 flex items-center space-x-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C7A356] cursor-pointer shadow-xs"
+                style={{
+                  backgroundColor: '#C7A356', // Wheat gold
+                  color: '#0B0F0D',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor = '#D4B36A';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor = '#C7A356';
+                }}
+                title="Sign In with Seeded RBAC Accounts"
               >
-                <option value="FARMER" style={{ background: '#141A17', color: '#F2F4F3' }}>Farmer / FPO</option>
-                <option value="BUYER" style={{ background: '#141A17', color: '#F2F4F3' }}>Institutional Buyer</option>
-                <option value="LOGISTICS" style={{ background: '#141A17', color: '#F2F4F3' }}>Transport Operator</option>
-                <option value="DOCA_OBSERVER" style={{ background: '#141A17', color: '#F2F4F3' }}>DoCA Market Observer</option>
-              </select>
+                <KeyRound className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                <span className="hidden sm:inline">Sign In</span>
+              </button>
             </div>
 
-            {/* Sign In Button — Gold accent, distinctive */}
-            <button
-              onClick={() => setAuthModalOpen(true)}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 flex items-center space-x-1.5"
-              style={{
-                background: 'linear-gradient(135deg, #C7A356 0%, #A88940 100%)',
-                color: '#0B0F0D',
-                boxShadow: '0 2px 8px rgba(199, 163, 86, 0.2)',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(199, 163, 86, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(199, 163, 86, 0.2)';
-              }}
-              title="Sign In with Seeded RBAC Accounts"
-            >
-              <KeyRound className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Sign In</span>
-            </button>
-
-            {/* Mobile Hamburger */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-1.5 rounded-lg transition-colors"
-              style={{
-                background: 'var(--ad-surface-0)',
-                border: '1px solid var(--ad-border)',
-                color: 'var(--ad-text-secondary)',
-              }}
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-            </button>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Authentication Modal */}
+      {/* =========================================================
+          MOBILE MENU (DRAWER — Template B Specification 05)
+          ========================================================= */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/75 backdrop-blur-xs transition-opacity"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+
+          {/* Slide-out Drawer Panel */}
+          <div
+            className="relative w-full max-w-xs h-full flex flex-col justify-between p-6 z-10 shadow-2xl border-r"
+            style={{
+              backgroundColor: '#141A17',
+              borderColor: '#273029',
+            }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation"
+          >
+            <div>
+              {/* Drawer Top Header */}
+              <div className="flex items-center justify-between pb-5 border-b border-[#273029]">
+                <div className="flex items-center space-x-2.5">
+                  <div
+                    className="w-7 h-7 rounded-lg flex items-center justify-center"
+                    style={{ backgroundColor: '#1E4D34' }}
+                    aria-hidden="true"
+                  >
+                    <Sprout className="w-4 h-4 text-[#E8D5A3]" />
+                  </div>
+                  <span
+                    className="font-bold text-white text-base"
+                    style={{ fontFamily: 'var(--ad-font-display)' }}
+                  >
+                    AgriDirect
+                  </span>
+                </div>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1.5 text-[#7F8F85] hover:text-white rounded-lg focus:outline-none"
+                  aria-label="Close navigation menu"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Drawer Navigation List with Clean Icons */}
+              <nav className="py-5 space-y-1" aria-label="Mobile Menu Links">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-colors text-left"
+                      style={{
+                        color: isActive ? '#C7A356' : '#B8C4BC',
+                        backgroundColor: isActive ? 'rgba(199, 163, 86, 0.12)' : 'transparent',
+                      }}
+                    >
+                      <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+
+            {/* Drawer Bottom Actions */}
+            <div className="pt-4 border-t border-[#273029] space-y-3">
+              {/* Mobile Role Switcher */}
+              <div
+                className="relative flex items-center justify-between px-3 py-2 rounded-lg text-xs"
+                style={{ backgroundColor: '#1B2320', border: '1px solid #273029' }}
+              >
+                <div className="flex items-center space-x-2">
+                  <User className="w-3.5 h-3.5 text-[#C7A356]" aria-hidden="true" />
+                  <span className="text-white font-medium">{roleDisplayNames[activeRole]}</span>
+                </div>
+                <ChevronDown className="w-3.5 h-3.5 text-[#7F8F85]" aria-hidden="true" />
+                <select
+                  value={activeRole}
+                  onChange={(e) => {
+                    handleRoleSelect(e.target.value as UserRole);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  aria-label="Switch active role"
+                >
+                  <option value="FARMER">Farmer / FPO</option>
+                  <option value="BUYER">Institutional Buyer</option>
+                  <option value="LOGISTICS">Transport Operator</option>
+                  <option value="DOCA_OBSERVER">DoCA Market Observer</option>
+                </select>
+              </div>
+
+              {/* Mobile Sign In */}
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setAuthModalOpen(true);
+                }}
+                className="w-full py-2.5 rounded-lg text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm"
+                style={{ backgroundColor: '#C7A356', color: '#0B0F0D' }}
+              >
+                <KeyRound className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Sign In</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Auth Quick Modal (React Portal) */}
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
-        onLoginSuccess={(role) => {
-          handleRoleSelect(role);
-        }}
+        onLoginSuccess={(role) => handleRoleSelect(role)}
       />
-
-      {/* Mobile Navigation Drawer */}
-      {mobileMenuOpen && (
-        <div
-          className="lg:hidden px-4 py-3 space-y-1"
-          style={{
-            background: 'var(--ad-surface-0)',
-            borderBottom: '1px solid var(--ad-border)',
-          }}
-        >
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-xs font-semibold transition-colors"
-                style={{
-                  background: isActive ? 'var(--ad-surface-1)' : 'transparent',
-                  color: isActive ? 'var(--ad-text-primary)' : 'var(--ad-text-tertiary)',
-                }}
-              >
-                <Icon className="w-4 h-4" style={{ color: isActive ? 'var(--ad-accent)' : 'inherit' }} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </header>
+    </>
   );
 };
