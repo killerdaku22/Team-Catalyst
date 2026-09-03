@@ -47,11 +47,19 @@ export default {
         // Navigation
         'ad-nav-bg':     'var(--ad-nav-bg)',
         'ad-nav-border': 'var(--ad-nav-border)',
+
+        // Locked Visual Identity Tokens (UI-01)
+        'ad-ivory':      'var(--color-ivory)',
+        'ad-forest':     'var(--color-forest)',
+        'ad-sage':       'var(--color-sage)',
+        'ad-gold':       'var(--color-gold)',
+        'ad-green-brand':'var(--color-green)',
       },
 
       fontFamily: {
-        sans:  ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono:  ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        sans:    ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"DM Sans"', 'sans-serif'],
+        mono:    ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
 
       fontSize: {

@@ -19,6 +19,20 @@
   --ad-surface-elevated: #2A3530;
   --ad-surface-muted:    #0E1310;
 
+  /* ── Protocol Locked Visual Identity Aliases (UI-01) ── */
+  --color-bg:            #0B0F0D;
+  --color-surface:       #141A17;
+  --color-surface-muted: #0E1310;
+  --color-forest:        #12281E;
+  --color-green:         #28724E;
+  --color-sage:          #557061;
+  --color-sage-muted:    #455D4F;
+  --color-gold:          #C7A356;
+  --color-ivory:         #FAF8F3;
+  --color-border:        #273029;
+  --color-text:          #F2F4F3;
+  --color-text-muted:    #B8C4BC;
+
   /* Legacy aliases */
   --ad-surface:          var(--ad-surface-1);
 
