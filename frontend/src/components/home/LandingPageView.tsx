@@ -294,175 +294,194 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({ onNavigate }) 
       {/* ============================================================
           SECTION 3 — SUPPLY CHAIN CINEMATIC JOURNEY
           ============================================================ */}
-      <section className="space-y-5">
+      <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
           <div>
             <span
-              className="text-[11px] font-bold uppercase tracking-wider"
-              style={{ color: 'var(--ad-cool)' }}
+              className="text-[10px] font-bold uppercase tracking-wider text-[#7F8F85]"
             >
-              Transit & Cold Chain Traceability
+              Cold Chain & Logistics Traceability
             </span>
             <h2
-              className="text-xl sm:text-2xl font-bold tracking-tight mt-1"
-              style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}
+              className="text-xl sm:text-2xl font-bold tracking-tight mt-0.5 text-[#F2F4F3]"
+              style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
             >
-              Continuous Supply Chain Journey
+              Continuous Farmgate-to-Buyer Pipeline
             </h2>
+          </div>
+          <div className="text-xs text-[#7F8F85]">
+            Telemetry-monitored harvest & cold transport
           </div>
         </div>
 
+        {/* Video Canvas Container */}
         <div
-          className="relative overflow-hidden aspect-video max-h-[400px] w-full shadow-lg cursor-pointer group"
-          style={{
-            borderRadius: 'var(--ad-radius-xl)',
-            background: 'var(--ad-surface-0)',
-            border: '1px solid var(--ad-border)',
-          }}
-          onClick={toggleJourneyVideo}
+          className="relative overflow-hidden rounded-2xl border border-[#273029] bg-[#141A17] shadow-xl"
         >
-          <video
-            ref={journeyVideoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            poster="/assets/agridirect-farmer-harvest.webp.png"
-            className="w-full h-full object-cover"
+          <div
+            className="relative aspect-[16/8] sm:aspect-[21/9] max-h-[360px] w-full cursor-pointer group"
+            onClick={toggleJourneyVideo}
           >
-            <source src="/assets/agridirect-supply-chain-journey.mp4" type="video/mp4" />
-            <source src="/assets/AgriDirect_supply_chain_video_pr._202608280027.mp4" type="video/mp4" />
-          </video>
+            <video
+              ref={journeyVideoRef}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              poster="/assets/agridirect-farmer-harvest.webp.png"
+              className="w-full h-full object-cover"
+              aria-hidden="true"
+            >
+              <source src="/assets/agridirect-supply-chain-journey.mp4" type="video/mp4" />
+              <source src="/assets/AgriDirect_supply_chain_video_pr._202608280027.mp4" type="video/mp4" />
+            </video>
 
-          <div className="absolute inset-0" style={{
-            background: 'linear-gradient(to top, var(--ad-bg) 0%, transparent 40%)'
-          }} />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'linear-gradient(to top, rgba(14, 19, 16, 0.95) 0%, rgba(14, 19, 16, 0.2) 60%, transparent 100%)',
+              }}
+              aria-hidden="true"
+            />
 
-          {/* Overlay Step Badges — Color-coded, not monotone */}
-          <div className="absolute bottom-4 inset-x-4 sm:inset-x-6 z-10 flex items-center justify-between overflow-x-auto pb-1 gap-2 pointer-events-none">
+            {/* Subtle Video Play/Pause Control */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleJourneyVideo();
+              }}
+              className="absolute top-4 right-4 z-20 p-2 rounded-full text-[#B8C4BC] hover:text-white transition-all shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C7A356] cursor-pointer"
+              style={{
+                backgroundColor: 'rgba(11, 15, 13, 0.8)',
+                border: '1px solid #273029',
+              }}
+              aria-label={journeyVideoPlaying ? "Pause journey video" : "Play journey video"}
+            >
+              {journeyVideoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+            </button>
+          </div>
+
+          {/* Clean Horizontal 7-Stage Stepper Bar */}
+          <div
+            className="p-3.5 sm:p-4 border-t border-[#273029] flex items-center justify-between overflow-x-auto gap-2 text-xs"
+            style={{ backgroundColor: '#101613' }}
+          >
             {[
-              { step: '01', label: 'Grow', color: 'var(--ad-brand-bright)' },
-              { step: '02', label: 'Harvest', color: 'var(--ad-brand-bright)' },
-              { step: '03', label: 'Collect', color: 'var(--ad-accent)' },
-              { step: '04', label: 'Predict', color: 'var(--ad-cool-bright)' },
-              { step: '05', label: 'Decide', color: 'var(--ad-accent)' },
-              { step: '06', label: 'Move', color: 'var(--ad-cool-bright)' },
-              { step: '07', label: 'Settle', color: 'var(--ad-brand-bright)' },
-            ].map((st) => (
+              { step: '01', label: 'Grow', status: 'Origin' },
+              { step: '02', label: 'Harvest', status: 'Grading' },
+              { step: '03', label: 'Collect', status: 'FPO Hub' },
+              { step: '04', label: 'Predict', status: '14-Day' },
+              { step: '05', label: 'Decide', status: 'Optimal' },
+              { step: '06', label: 'Move', status: 'Cold Chain' },
+              { step: '07', label: 'Settle', status: 'Verified' },
+            ].map((st, i) => (
               <div
                 key={st.step}
-                className="px-3 py-1.5 rounded-lg shrink-0 text-[11px] font-bold"
-                style={{
-                  background: 'rgba(11, 15, 13, 0.88)',
-                  border: '1px solid var(--ad-border)',
-                  color: st.color,
-                  fontFamily: 'var(--ad-font-display)',
-                }}
+                className="flex items-center space-x-2 shrink-0 px-2 py-1 rounded-md"
               >
-                <span style={{ opacity: 0.6 }}>{st.step}.</span> {st.label}
+                <div className="flex flex-col">
+                  <div className="flex items-center space-x-1.5">
+                    <span className="font-mono text-[10px] text-[#C7A356] font-semibold">{st.step}</span>
+                    <span className="font-semibold text-xs text-[#F2F4F3]">{st.label}</span>
+                  </div>
+                  <span className="text-[10px] text-[#7F8F85]">{st.status}</span>
+                </div>
+                {i < 6 && (
+                  <span className="text-[#3A4A42] text-xs font-mono pl-2 hidden md:inline">→</span>
+                )}
               </div>
             ))}
           </div>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleJourneyVideo();
-            }}
-            className="absolute top-4 right-4 z-20 p-2 rounded-full text-white transition-all shadow-lg"
-            style={{
-              background: 'rgba(11, 15, 13, 0.85)',
-              border: '1px solid var(--ad-border)',
-            }}
-            aria-label={journeyVideoPlaying ? "Pause video" : "Play video"}
-          >
-            {journeyVideoPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-          </button>
         </div>
       </section>
 
       {/* ============================================================
-          SECTION 4 — VALUE REALIZATION COMPARISON
+          SECTION 4 — VALUE REALIZATION COMPARISON (Editorial Layout)
           ============================================================ */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* Fragmented Chain — Danger accent */}
-        <div
-          className="p-6 space-y-4"
-          style={{
-            borderRadius: 'var(--ad-radius-lg)',
-            background: 'var(--ad-surface-0)',
-            border: '1px solid rgba(184, 42, 42, 0.2)',
-            borderLeft: '3px solid var(--ad-danger)',
-          }}
-        >
-          <div className="flex items-center space-x-2 font-bold text-sm" style={{ color: 'var(--ad-danger-text)' }}>
-            <AlertTriangle className="w-4 h-4" />
-            <span>Traditional Fragmented Chain</span>
-          </div>
-          <p className="text-xs" style={{ color: 'var(--ad-text-muted)' }}>3–5 intermediary middlemen</p>
-          <div className="space-y-2 text-xs">
-            <div
-              className="p-3 rounded-lg flex justify-between items-center"
-              style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border-subtle)' }}
-            >
-              <span style={{ color: 'var(--ad-text-secondary)' }}>Farmer Farmgate Realization</span>
-              <strong style={{ color: 'var(--ad-danger-text)', fontFamily: 'var(--ad-font-display)' }}>₹21.00/kg (30%)</strong>
-            </div>
-            <div className="text-center text-[10px] py-1" style={{ color: 'var(--ad-text-muted)' }}>
-              ↓ Trader Margin (8%) + Wholesaler (10%) + Broker (12%)
-            </div>
-            <div
-              className="p-3 rounded-lg flex justify-between items-center"
-              style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border-subtle)' }}
-            >
-              <span style={{ color: 'var(--ad-text-secondary)' }}>Urban Consumer Retail</span>
-              <strong style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}>₹70.00/kg (100%)</strong>
-            </div>
-          </div>
-          <p className="text-[11px] leading-relaxed" style={{ color: 'var(--ad-text-muted)' }}>
-            Uncoordinated distress selling and physical mandi handling losses erode farmer margins.
-          </p>
+      <section className="space-y-4">
+        <div>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#7F8F85]">
+            Market Efficiency & Economic Realization
+          </span>
+          <h2
+            className="text-xl sm:text-2xl font-bold tracking-tight mt-0.5 text-[#F2F4F3]"
+            style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
+          >
+            Transparent Unit Economics per Kilogram
+          </h2>
         </div>
 
-        {/* AgriDirect Chain — Gold accent */}
-        <div
-          className="p-6 space-y-4"
-          style={{
-            borderRadius: 'var(--ad-radius-lg)',
-            background: 'linear-gradient(135deg, var(--ad-surface-0) 0%, var(--ad-surface-1) 100%)',
-            border: '1px solid var(--ad-border-accent)',
-            borderLeft: '3px solid var(--ad-accent)',
-            boxShadow: 'var(--ad-shadow-glow-accent)',
-          }}
-        >
-          <div className="flex items-center space-x-2 font-bold text-sm" style={{ color: 'var(--ad-accent)' }}>
-            <ShieldCheck className="w-4 h-4" />
-            <span>AgriDirect Direct Trade Ecosystem</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Panel A: Traditional Fragmented Chain */}
+          <div
+            className="p-6 rounded-2xl border border-[#273029] space-y-4 bg-[#141A17]"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 font-bold text-sm text-[#E6992A]">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>Traditional Intermediated Chain</span>
+              </div>
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#C47B1A]/15 text-[#E6992A] border border-[#C47B1A]/30">
+                3–5 Middlemen
+              </span>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <div className="p-3 rounded-lg flex justify-between items-center bg-[#1B2320] border border-[#273029]">
+                <span className="text-[#B8C4BC]">Farmer Farmgate Realization</span>
+                <span className="font-bold font-mono text-sm text-[#E84F4F]">₹21.00 / kg (30%)</span>
+              </div>
+
+              <div className="text-center text-[10px] py-1 text-[#7F8F85] font-mono">
+                ↓ Trader Margin (8%) + Wholesaler (10%) + Broker Cess (12%) + Spoilage (8%)
+              </div>
+
+              <div className="p-3 rounded-lg flex justify-between items-center bg-[#1B2320] border border-[#273029]">
+                <span className="text-[#B8C4BC]">Urban Retail Price</span>
+                <span className="font-bold font-mono text-sm text-[#F2F4F3]">₹70.00 / kg (100%)</span>
+              </div>
+            </div>
+
+            <p className="text-[11px] leading-relaxed text-[#7F8F85]">
+              Uncoordinated distress sales, physical handling losses, and cascading middleman markups erode producer net profit.
+            </p>
           </div>
-          <p className="text-xs" style={{ color: 'var(--ad-text-muted)' }}>Zero intermediaries, direct producer-to-buyer</p>
-          <div className="space-y-2 text-xs">
-            <div
-              className="p-3 rounded-lg flex justify-between items-center"
-              style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border-subtle)' }}
-            >
-              <span style={{ color: 'var(--ad-text-secondary)' }}>Farmer Direct Payout</span>
-              <strong style={{ color: 'var(--ad-brand-bright)', fontFamily: 'var(--ad-font-display)' }}>₹32.50/kg (+55%)</strong>
+
+          {/* Panel B: AgriDirect Direct Trade Ecosystem */}
+          <div
+            className="p-6 rounded-2xl border border-[rgba(199,163,86,0.35)] space-y-4 bg-[#141A17]"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 font-bold text-sm text-[#C7A356]">
+                <ShieldCheck className="w-4 h-4 shrink-0" />
+                <span>AgriDirect Direct Trade Ecosystem</span>
+              </div>
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#C7A356]/15 text-[#C7A356] border border-[#C7A356]/30">
+                Zero Intermediaries
+              </span>
             </div>
-            <div className="text-center text-[10px] py-1" style={{ color: 'var(--ad-accent)', opacity: 0.7 }}>
-              ↓ Direct Trade + 2-Opt Pooled Logistics + 14-Day Optimization
+
+            <div className="space-y-2 text-xs">
+              <div className="p-3 rounded-lg flex justify-between items-center bg-[#1B2320] border border-[#273029]">
+                <span className="text-[#B8C4BC]">Farmer Direct Payout</span>
+                <span className="font-bold font-mono text-sm text-[#34C772]">₹32.50 / kg (+55% Realization)</span>
+              </div>
+
+              <div className="text-center text-[10px] py-1 text-[#C7A356] font-mono opacity-90">
+                ↓ Direct Offtake + 2-Opt Pooled Freight + 14-Day Storage Arbitrage
+              </div>
+
+              <div className="p-3 rounded-lg flex justify-between items-center bg-[#1B2320] border border-[#273029]">
+                <span className="text-[#B8C4BC]">Verified Buyer Landed Cost</span>
+                <span className="font-bold font-mono text-sm text-[#F2F4F3]">₹45.00 / kg (35% Net Savings)</span>
+              </div>
             </div>
-            <div
-              className="p-3 rounded-lg flex justify-between items-center"
-              style={{ background: 'var(--ad-surface-1)', border: '1px solid var(--ad-border-subtle)' }}
-            >
-              <span style={{ color: 'var(--ad-text-secondary)' }}>Verified Buyer Landed Cost</span>
-              <strong style={{ color: 'var(--ad-text-primary)', fontFamily: 'var(--ad-font-display)' }}>₹45.00/kg (35% Net Savings)</strong>
-            </div>
+
+            <p className="text-[11px] leading-relaxed text-[#7F8F85]">
+              Direct contract offtake and pooled cold transport capture mutual value for both producer cooperatives and buyers.
+            </p>
           </div>
-          <p className="text-[11px] leading-relaxed" style={{ color: 'var(--ad-text-muted)' }}>
-            Direct offtake and zero broker cess capture mutual value for producer and buyer.
-          </p>
         </div>
       </section>
     </div>
