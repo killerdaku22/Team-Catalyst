@@ -8,6 +8,7 @@ import {
   LifeBuoy
 } from 'lucide-react';
 import { Modal } from '../ui/Modal';
+import { AgriDirectLogo } from './AgriDirectLogo';
 
 interface FooterProps {
   onNavigate?: (tab: string, role?: string) => void;
@@ -78,34 +79,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             
             {/* BRAND & DIRECT INFO (Cols 1–4 on Desktop) */}
             <div className="lg:col-span-4 space-y-3 pr-0 lg:pr-4">
-              <div className="flex items-center space-x-2.5">
-                <div
-                  className="w-7 h-7 rounded-lg flex items-center justify-center shadow-xs"
-                  style={{
-                    backgroundColor: '#1E4D34', // Deep forest green
-                    color: '#FAF8F3',
-                  }}
-                  aria-hidden="true"
-                >
-                  <Sprout className="w-4 h-4" style={{ color: '#E8D5A3' }} />
-                </div>
-                <div>
-                  <span
-                    className="font-bold text-lg tracking-tight leading-none block"
-                    style={{
-                      fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
-                      color: '#12281E',
-                    }}
-                  >
-                    AgriDirect
-                  </span>
-                  <span
-                    className="text-[9px] font-semibold tracking-wider uppercase block text-[#557061]"
-                  >
-                    Agricultural Commerce
-                  </span>
-                </div>
-              </div>
+              <AgriDirectLogo size="md" showText variant="light" />
 
               <p
                 className="text-[11px] leading-relaxed max-w-xs text-[#455D4F]"

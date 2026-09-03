@@ -17,6 +17,7 @@ import {
   KeyRound,
   HelpCircle
 } from 'lucide-react';
+import { AgriDirectLogo } from '../common/AgriDirectLogo';
 
 interface LoginPageViewProps {
   onLoginSuccess: (role: UserRole, userEmail: string, fullName?: string) => void;
@@ -30,6 +31,9 @@ interface DemoRoleConfig {
   email: string;
   password: string;
   icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  badgeBg: string;
+  badgeBorder: string;
+  iconColor: string;
 }
 
 const DEMO_PRESETS: DemoRoleConfig[] = [
@@ -39,7 +43,10 @@ const DEMO_PRESETS: DemoRoleConfig[] = [
     subtitle: 'Ramesh Kumar (Kolar Hub)',
     email: 'farmer@agridirect.org',
     password: 'FarmerPass123!',
-    icon: Sprout
+    icon: Sprout,
+    badgeBg: 'linear-gradient(135deg, rgba(40, 114, 78, 0.3) 0%, rgba(20, 48, 33, 0.55) 100%)',
+    badgeBorder: 'rgba(52, 199, 114, 0.4)',
+    iconColor: '#34C772',
   },
   {
     role: 'BUYER',
@@ -47,7 +54,10 @@ const DEMO_PRESETS: DemoRoleConfig[] = [
     subtitle: 'BigBasket North Regional',
     email: 'buyer@bigbasket.com',
     password: 'BuyerPass123!',
-    icon: ShoppingCart
+    icon: ShoppingCart,
+    badgeBg: 'linear-gradient(135deg, rgba(199, 163, 86, 0.25) 0%, rgba(60, 45, 18, 0.5) 100%)',
+    badgeBorder: 'rgba(232, 213, 163, 0.45)',
+    iconColor: '#E0BE6A',
   },
   {
     role: 'LOGISTICS',
@@ -55,15 +65,21 @@ const DEMO_PRESETS: DemoRoleConfig[] = [
     subtitle: 'Kisan Express Cold Chain Logistics',
     email: 'transporter@agridirect.org',
     password: 'TransporterPass123!',
-    icon: Truck
+    icon: Truck,
+    badgeBg: 'linear-gradient(135deg, rgba(88, 134, 160, 0.25) 0%, rgba(24, 42, 58, 0.5) 100%)',
+    badgeBorder: 'rgba(109, 163, 194, 0.45)',
+    iconColor: '#6DA3C2',
   },
   {
     role: 'DOCA_OBSERVER',
     title: 'DoCA Market Observer',
-    subtitle: 'Dept of Consumer Affairs • Read-Only Intelligence',
+    subtitle: 'Dept of Consumer Affairs • Read-Only',
     email: 'observer@doca.gov.in',
     password: 'ObserverPass123!',
-    icon: Landmark
+    icon: Landmark,
+    badgeBg: 'linear-gradient(135deg, rgba(85, 112, 97, 0.3) 0%, rgba(27, 35, 32, 0.55) 100%)',
+    badgeBorder: 'rgba(184, 196, 188, 0.4)',
+    iconColor: '#BACBBF',
   }
 ];
 
@@ -176,24 +192,8 @@ export const LoginPageView: React.FC<LoginPageViewProps> = ({
           />
 
           {/* Top Brand Mark */}
-          <div className="relative z-10 flex items-center space-x-2.5">
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center shadow-md"
-              style={{ background: 'linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%)' }}
-            >
-              <Sprout className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <span
-                className="font-extrabold text-base tracking-tight block leading-none"
-                style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}
-              >
-                Agri<span style={{ color: 'var(--ad-accent-bright)' }}>Direct</span>
-              </span>
-              <span className="text-[10px] font-mono font-medium" style={{ color: 'var(--ad-accent)' }}>
-                SIH26033 Platform
-              </span>
-            </div>
+          <div className="relative z-10">
+            <AgriDirectLogo size="lg" showText textSubtitle="National Platform" />
           </div>
 
           {/* Bottom Editorial Content */}
@@ -260,7 +260,7 @@ export const LoginPageView: React.FC<LoginPageViewProps> = ({
                 <span className="font-mono" style={{ color: 'var(--ad-accent-bright)' }}>1-Click Fast Fill</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-1.5">
+              <div className="grid grid-cols-2 gap-2">
                 {DEMO_PRESETS.map((p) => {
                   const isSelected = email === p.email;
                   const Icon = p.icon;
@@ -269,21 +269,26 @@ export const LoginPageView: React.FC<LoginPageViewProps> = ({
                       key={p.role}
                       type="button"
                       onClick={() => handleSelectDemo(p)}
-                      className="p-2.5 rounded-xl text-left transition-all flex items-start space-x-2 cursor-pointer"
+                      className="p-2.5 rounded-xl text-left transition-all flex items-center space-x-2.5 cursor-pointer group"
                       style={{
                         background: isSelected ? 'var(--ad-surface-1)' : 'var(--ad-surface-0)',
-                        border: isSelected ? '1px solid var(--ad-border-accent)' : '1px solid var(--ad-border)',
-                        borderLeft: isSelected ? '3px solid var(--ad-accent)' : '1px solid var(--ad-border)',
-                        boxShadow: isSelected ? '0 0 10px rgba(199, 163, 86, 0.15)' : 'none',
+                        border: isSelected ? `1px solid ${p.iconColor}` : '1px solid var(--ad-border)',
+                        boxShadow: isSelected ? `0 0 14px ${p.badgeBorder}` : 'none',
                       }}
                     >
-                      <Icon
-                        className="w-3.5 h-3.5 mt-0.5 shrink-0"
-                        style={{ color: isSelected ? 'var(--ad-accent-bright)' : 'var(--ad-text-muted)' }}
-                      />
+                      {/* Premium Role Icon Badge */}
+                      <div
+                        className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105"
+                        style={{
+                          background: p.badgeBg,
+                          border: `1px solid ${p.badgeBorder}`,
+                        }}
+                      >
+                        <Icon className="w-4 h-4" style={{ color: p.iconColor }} />
+                      </div>
                       <div className="truncate">
                         <strong
-                          className="text-[11px] block truncate"
+                          className="text-[11px] font-bold block truncate"
                           style={{
                             color: isSelected ? 'var(--ad-text-primary)' : 'var(--ad-text-secondary)',
                             fontFamily: 'var(--ad-font-display)'
@@ -302,46 +307,50 @@ export const LoginPageView: React.FC<LoginPageViewProps> = ({
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleLoginSubmit} className="space-y-3 pt-2 text-xs" style={{ borderTop: '1px solid var(--ad-border)' }}>
-              <div className="space-y-1">
-                <label className="block text-slate-300 font-semibold">Email Address</label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <form onSubmit={handleLoginSubmit} className="space-y-3.5 pt-2 text-xs" style={{ borderTop: '1px solid var(--ad-border)' }}>
+              <div className="space-y-1.5">
+                <label className="block text-slate-300 font-semibold text-[11px]">Email Address</label>
+                <div className="relative flex items-center">
+                  <div className="w-10 h-10 rounded-l-xl bg-[#141A17] border border-r-0 border-[#273029] flex items-center justify-center shrink-0">
+                    <Mail className="w-4 h-4 text-[#C7A356]" />
+                  </div>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@agridirect.org"
-                    className="w-full pl-9 pr-3 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full h-10 px-3 bg-[#101613] border border-[#273029] rounded-r-xl text-white font-mono text-xs focus:outline-none focus:border-[#C7A356] transition-colors"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="block text-slate-300 font-semibold">Password</label>
+                  <label className="block text-slate-300 font-semibold text-[11px]">Password</label>
                   <button
                     type="button"
                     onClick={() => setShowForgotModal(true)}
-                    className="text-[11px] text-slate-400 hover:text-emerald-400 transition-colors"
+                    className="text-[11px] text-[#C7A356] hover:text-[#E8D5A3] transition-colors cursor-pointer"
                   >
                     Forgot password?
                   </button>
                 </div>
-                <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <div className="relative flex items-center">
+                  <div className="w-10 h-10 rounded-l-xl bg-[#141A17] border border-r-0 border-[#273029] flex items-center justify-center shrink-0">
+                    <Lock className="w-4 h-4 text-[#C7A356]" />
+                  </div>
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-9 pr-10 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full h-10 pl-3 pr-10 bg-[#101613] border border-[#273029] rounded-r-xl text-white font-mono text-xs focus:outline-none focus:border-[#C7A356] transition-colors"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    className="absolute right-3 text-[#7F8F85] hover:text-white cursor-pointer"
                     aria-label="Toggle password visibility"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

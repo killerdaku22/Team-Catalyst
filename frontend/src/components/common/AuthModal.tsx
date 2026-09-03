@@ -15,6 +15,7 @@ import {
   ArrowRight,
   Sparkles
 } from 'lucide-react';
+import { AgriDirectLogo } from './AgriDirectLogo';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -26,10 +27,13 @@ const SEEDED_ACCOUNTS = [
   {
     role: 'FARMER' as UserRole,
     title: 'Farmer / Producer',
-    name: 'Ramesh Kumar',
+    name: 'Ramesh Kumar (Kolar)',
     email: 'farmer@agridirect.org',
     password: 'FarmerPass123!',
     icon: Sprout,
+    badgeBg: 'linear-gradient(135deg, rgba(40, 114, 78, 0.3) 0%, rgba(20, 48, 33, 0.55) 100%)',
+    badgeBorder: 'rgba(52, 199, 114, 0.4)',
+    iconColor: '#34C772',
   },
   {
     role: 'BUYER' as UserRole,
@@ -38,22 +42,31 @@ const SEEDED_ACCOUNTS = [
     email: 'buyer@bigbasket.com',
     password: 'BuyerPass123!',
     icon: ShoppingCart,
+    badgeBg: 'linear-gradient(135deg, rgba(199, 163, 86, 0.25) 0%, rgba(60, 45, 18, 0.5) 100%)',
+    badgeBorder: 'rgba(232, 213, 163, 0.45)',
+    iconColor: '#E0BE6A',
   },
   {
     role: 'LOGISTICS' as UserRole,
     title: 'Transport Operator',
-    name: 'Kisan Express Cold Chain Logistics',
+    name: 'Kisan Express Cold Chain',
     email: 'transporter@agridirect.org',
     password: 'TransporterPass123!',
     icon: Truck,
+    badgeBg: 'linear-gradient(135deg, rgba(88, 134, 160, 0.25) 0%, rgba(24, 42, 58, 0.5) 100%)',
+    badgeBorder: 'rgba(109, 163, 194, 0.45)',
+    iconColor: '#6DA3C2',
   },
   {
     role: 'DOCA_OBSERVER' as UserRole,
-    title: 'DoCA Market Observer',
-    name: 'Dept of Consumer Affairs (Read-Only)',
+    title: 'DoCA Observer',
+    name: 'Dept of Consumer Affairs',
     email: 'observer@doca.gov.in',
     password: 'ObserverPass123!',
     icon: Landmark,
+    badgeBg: 'linear-gradient(135deg, rgba(85, 112, 97, 0.3) 0%, rgba(27, 35, 32, 0.55) 100%)',
+    badgeBorder: 'rgba(184, 196, 188, 0.4)',
+    iconColor: '#BACBBF',
   }
 ];
 
@@ -180,19 +193,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           />
 
           {/* Top Brand Mark */}
-          <div className="relative z-10 flex items-center space-x-2">
-            <div
-              className="w-7 h-7 rounded-lg flex items-center justify-center shadow"
-              style={{ background: 'linear-gradient(135deg, #2D7A52 0%, #1F5C3D 100%)' }}
-            >
-              <Sprout className="w-4 h-4 text-white" />
-            </div>
-            <span
-              className="font-extrabold text-sm tracking-tight"
-              style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}
-            >
-              Agri<span style={{ color: 'var(--ad-accent-bright)' }}>Direct</span>
-            </span>
+          <div className="relative z-10">
+            <AgriDirectLogo size="md" showText />
           </div>
 
           {/* Bottom Narrative */}
@@ -255,7 +257,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <span style={{ color: 'var(--ad-text-muted)' }}>1-Click Demo Accounts:</span>
               <span style={{ color: 'var(--ad-accent)' }}>Fast Fill</span>
             </div>
-            <div className="grid grid-cols-2 gap-1.5">
+            <div className="grid grid-cols-2 gap-2">
               {SEEDED_ACCOUNTS.map((acc) => {
                 const isSelected = email === acc.email;
                 const IconComponent = acc.icon;
@@ -264,18 +266,23 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     key={acc.email}
                     type="button"
                     onClick={() => handleSelectPreset(acc)}
-                    className="p-2 rounded-xl text-left transition-all cursor-pointer flex items-center space-x-2"
+                    className="p-2.5 rounded-xl text-left transition-all cursor-pointer flex items-center space-x-2.5 group"
                     style={{
                       background: isSelected ? 'var(--ad-surface-1)' : 'var(--ad-surface-0)',
-                      border: isSelected ? '1px solid var(--ad-border-accent)' : '1px solid var(--ad-border)',
-                      borderLeft: isSelected ? '3px solid var(--ad-accent)' : '1px solid var(--ad-border)',
-                      boxShadow: isSelected ? '0 0 10px rgba(199, 163, 86, 0.15)' : 'none',
+                      border: isSelected ? `1px solid ${acc.iconColor}` : '1px solid var(--ad-border)',
+                      boxShadow: isSelected ? `0 0 12px ${acc.badgeBorder}` : 'none',
                     }}
                   >
-                    <IconComponent
-                      className="w-3.5 h-3.5 shrink-0"
-                      style={{ color: isSelected ? 'var(--ad-accent-bright)' : 'var(--ad-text-muted)' }}
-                    />
+                    {/* Premium Role Badge */}
+                    <div
+                      className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105"
+                      style={{
+                        background: acc.badgeBg,
+                        border: `1px solid ${acc.badgeBorder}`,
+                      }}
+                    >
+                      <IconComponent className="w-4 h-4" style={{ color: acc.iconColor }} />
+                    </div>
                     <div className="truncate">
                       <span
                         className="text-[11px] font-bold block truncate"
@@ -302,13 +309,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <label className="block font-semibold mb-1 text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>
                 Email Address:
               </label>
-              <div className="relative">
-                <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--ad-text-muted)' }} />
+              <div className="relative flex items-center">
+                <div className="w-9 h-9 rounded-l-xl bg-[#141A17] border border-r-0 border-[#273029] flex items-center justify-center shrink-0">
+                  <User className="w-3.5 h-3.5 text-[#C7A356]" />
+                </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-8 pr-3 py-2 rounded-xl text-xs font-mono focus:outline-none"
+                  className="w-full h-9 px-3 rounded-r-xl text-xs font-mono focus:outline-none focus:border-[#C7A356] transition-colors"
                   style={{
                     background: 'var(--ad-surface-1)',
                     border: '1px solid var(--ad-border)',
@@ -323,13 +332,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <label className="block font-semibold mb-1 text-[11px]" style={{ color: 'var(--ad-text-secondary)' }}>
                 Password:
               </label>
-              <div className="relative">
-                <Lock className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--ad-text-muted)' }} />
+              <div className="relative flex items-center">
+                <div className="w-9 h-9 rounded-l-xl bg-[#141A17] border border-r-0 border-[#273029] flex items-center justify-center shrink-0">
+                  <Lock className="w-3.5 h-3.5 text-[#C7A356]" />
+                </div>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-8 pr-3 py-2 rounded-xl text-xs font-mono focus:outline-none"
+                  className="w-full h-9 px-3 rounded-r-xl text-xs font-mono focus:outline-none focus:border-[#C7A356] transition-colors"
                   style={{
                     background: 'var(--ad-surface-1)',
                     border: '1px solid var(--ad-border)',

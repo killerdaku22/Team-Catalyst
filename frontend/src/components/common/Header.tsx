@@ -17,6 +17,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { AuthModal } from './AuthModal';
+import { AgriDirectLogo } from './AgriDirectLogo';
 
 interface HeaderProps {
   activeRole: UserRole;
@@ -135,30 +136,10 @@ export const Header: React.FC<HeaderProps> = ({
 
               <button
                 onClick={() => setActiveTab('home')}
-                className="flex items-center space-x-2.5 text-left focus:outline-none group"
+                className="focus:outline-none group cursor-pointer"
+                aria-label="AgriDirect Home"
               >
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm shrink-0"
-                  style={{
-                    backgroundColor: '#1E4D34', // Deep forest badge
-                  }}
-                  aria-hidden="true"
-                >
-                  <Sprout className="w-4 h-4" style={{ color: '#E8D5A3' }} />
-                </div>
-                <div className="flex flex-col">
-                  <span
-                    className="font-bold text-white text-base leading-none tracking-tight"
-                    style={{ fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)' }}
-                  >
-                    AgriDirect
-                  </span>
-                  <span
-                    className="text-[9px] font-semibold tracking-wider uppercase block mt-0.5 text-[#7F8F85]"
-                  >
-                    Agricultural Commerce
-                  </span>
-                </div>
+                <AgriDirectLogo size="md" showText />
               </button>
             </div>
 
@@ -167,29 +148,43 @@ export const Header: React.FC<HeaderProps> = ({
                 ========================================================= */}
             <nav className="hidden lg:flex items-center space-x-1" aria-label="Main Navigation">
               {navItems.map((item) => {
+                const Icon = item.icon;
                 const isActive = activeTab === item.id;
                 return (
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className="relative px-3.5 py-2 text-xs font-semibold tracking-wide transition-colors duration-150 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#C7A356] rounded-md"
+                    className="relative px-3 py-1.5 text-xs font-semibold tracking-wide transition-all duration-150 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#C7A356] rounded-lg flex items-center space-x-1.5 cursor-pointer"
                     style={{
                       color: isActive ? '#F2F4F3' : '#8E9E94',
+                      backgroundColor: isActive ? 'rgba(27, 35, 32, 0.6)' : 'transparent',
+                      border: isActive ? '1px solid rgba(199, 163, 86, 0.25)' : '1px solid transparent',
                       fontFamily: 'var(--ad-font-display, "DM Sans", sans-serif)',
                     }}
                     onMouseEnter={(e) => {
-                      if (!isActive) (e.currentTarget as HTMLElement).style.color = '#F2F4F3';
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.color = '#F2F4F3';
+                        (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(20, 26, 23, 0.5)';
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      if (!isActive) (e.currentTarget as HTMLElement).style.color = '#8E9E94';
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.color = '#8E9E94';
+                        (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+                      }
                     }}
                   >
+                    <Icon
+                      className="w-3.5 h-3.5 shrink-0 transition-colors"
+                      style={{ color: isActive ? 'var(--ad-accent, #C7A356)' : '#6C7E73' }}
+                      aria-hidden="true"
+                    />
                     <span>{item.label}</span>
 
                     {/* Active underline cue (Quiet wheat gold) */}
                     {isActive && (
                       <span
-                        className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full"
+                        className="absolute bottom-0 left-2.5 right-2.5 h-[2px] rounded-full"
                         style={{ backgroundColor: 'var(--ad-accent, #C7A356)' }}
                         aria-hidden="true"
                       />
@@ -297,21 +292,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div>
               {/* Drawer Top Header */}
               <div className="flex items-center justify-between pb-5 border-b border-[#273029]">
-                <div className="flex items-center space-x-2.5">
-                  <div
-                    className="w-7 h-7 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: '#1E4D34' }}
-                    aria-hidden="true"
-                  >
-                    <Sprout className="w-4 h-4 text-[#E8D5A3]" />
-                  </div>
-                  <span
-                    className="font-bold text-white text-base"
-                    style={{ fontFamily: 'var(--ad-font-display)' }}
-                  >
-                    AgriDirect
-                  </span>
-                </div>
+                <AgriDirectLogo size="sm" showText />
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-1.5 text-[#7F8F85] hover:text-white rounded-lg focus:outline-none"
