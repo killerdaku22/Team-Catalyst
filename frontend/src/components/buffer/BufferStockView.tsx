@@ -378,66 +378,96 @@ export const BufferStockView: React.FC = () => {
             <form onSubmit={handleTriggerIntervention} className="space-y-3.5 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-400 mb-1">Target Commodity:</label>
+                  <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Target Commodity:</label>
                   <input
                     type="text"
                     value={commodity}
                     onChange={(e) => setCommodity(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg p-2 font-medium"
+                    className="w-full rounded-xl px-3 py-2 font-medium focus:outline-none"
+                    style={{
+                      background: 'var(--ad-surface-1)',
+                      border: '1px solid var(--ad-border)',
+                      color: 'var(--ad-text-primary)',
+                    }}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 mb-1">Release Volume (Tonnes):</label>
+                  <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Release Volume (Tonnes):</label>
                   <input
                     type="number"
                     value={releaseQuantity}
                     onChange={(e) => setReleaseQuantity(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg p-2 font-mono"
+                    className="w-full rounded-xl px-3 py-2 font-mono focus:outline-none"
+                    style={{
+                      background: 'var(--ad-surface-1)',
+                      border: '1px solid var(--ad-border)',
+                      color: 'var(--ad-text-primary)',
+                    }}
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">Deficit Urban Market Cluster:</label>
+                <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Deficit Urban Market Cluster:</label>
                 <input
                   type="text"
                   value={urbanCluster}
                   onChange={(e) => setUrbanCluster(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg p-2 font-medium"
+                  className="w-full rounded-xl px-3 py-2 font-medium focus:outline-none"
+                  style={{
+                    background: 'var(--ad-surface-1)',
+                    border: '1px solid var(--ad-border)',
+                    color: 'var(--ad-text-primary)',
+                  }}
                   required
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="block text-slate-400 mb-1">Current Retail (₹/kg):</label>
+                  <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Current Retail (₹/kg):</label>
                   <input
                     type="number"
                     value={currentMarketPrice}
                     onChange={(e) => setCurrentMarketPrice(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 text-rose-400 font-bold rounded-lg p-2 font-mono"
+                    className="w-full rounded-xl px-3 py-2 font-mono font-bold focus:outline-none"
+                    style={{
+                      background: 'var(--ad-surface-1)',
+                      border: '1px solid var(--ad-border)',
+                      color: 'var(--ad-danger-bright)',
+                    }}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 mb-1">Historical Baseline (₹/kg):</label>
+                  <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Historical Baseline (₹/kg):</label>
                   <input
                     type="number"
                     value={benchmarkPrice}
                     onChange={(e) => setBenchmarkPrice(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 text-slate-300 rounded-lg p-2 font-mono"
+                    className="w-full rounded-xl px-3 py-2 font-mono focus:outline-none"
+                    style={{
+                      background: 'var(--ad-surface-1)',
+                      border: '1px solid var(--ad-border)',
+                      color: 'var(--ad-text-secondary)',
+                    }}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 mb-1">Subsidized Price (₹/kg):</label>
+                  <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Subsidized Price (₹/kg):</label>
                   <input
                     type="number"
                     value={subsidizedPrice}
                     onChange={(e) => setSubsidizedPrice(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 text-emerald-400 font-bold rounded-lg p-2 font-mono"
+                    className="w-full rounded-xl px-3 py-2 font-mono font-bold focus:outline-none"
+                    style={{
+                      background: 'var(--ad-surface-1)',
+                      border: '1px solid var(--ad-border)',
+                      color: 'var(--ad-brand-bright)',
+                    }}
                     required
                   />
                 </div>
@@ -446,7 +476,12 @@ export const BufferStockView: React.FC = () => {
               <button
                 type="submit"
                 disabled={isTriggering}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 rounded-xl transition-all shadow-lg shadow-amber-500/20 text-xs"
+                className="w-full font-bold py-3 rounded-xl transition-all text-xs cursor-pointer"
+                style={{
+                  background: 'var(--ad-brand-bright)',
+                  color: '#FFFFFF',
+                  boxShadow: 'var(--ad-shadow-sm)',
+                }}
               >
                 {isTriggering ? 'Simulating Dispatch...' : 'Dispatch Strategic Buffer Convoy'}
               </button>

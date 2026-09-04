@@ -306,31 +306,62 @@ export const MinistryAdminView: React.FC = () => {
         </div>
 
         {/* Regional Trade Corridor Overview */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-800">
-          <h2 className="text-lg font-bold text-white mb-2">Active Agricultural Trade Corridors</h2>
-          <p className="text-xs text-slate-400 mb-4">Direct FPO-to-City logistics routes monitored by DoCA</p>
+        <div
+          className="p-6 rounded-2xl shadow-sm"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+          }}
+        >
+          <h2 className="text-lg font-bold mb-1" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+            Active Agricultural Trade Corridors
+          </h2>
+          <p className="text-xs mb-4" style={{ color: 'var(--ad-text-tertiary)' }}>
+            Direct FPO-to-City logistics routes monitored by DoCA
+          </p>
 
           <div className="space-y-3">
             {regional_breakdown.map((item, idx) => (
-              <div key={idx} className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 hover:border-emerald-500/30 transition-all">
+              <div
+                key={idx}
+                className="p-3.5 rounded-xl transition-all"
+                style={{
+                  background: 'var(--ad-surface-1)',
+                  border: '1px solid var(--ad-border)',
+                }}
+              >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-sm text-white">{item.region}</span>
-                  <span className="bg-emerald-500/15 text-emerald-400 text-xs px-2 py-0.5 rounded font-mono font-medium">
+                  <span className="font-bold text-sm" style={{ color: 'var(--ad-text-primary)' }}>{item.region}</span>
+                  <span
+                    className="text-xs px-2 py-0.5 rounded font-mono font-medium"
+                    style={{
+                      background: 'var(--ad-accent-light)',
+                      color: 'var(--ad-accent-bright)',
+                      border: '1px solid var(--ad-border-accent)',
+                    }}
+                  >
                     {item.price_variance_reduction} volatility ↓
                   </span>
                 </div>
-                <div className="flex items-center justify-between mt-2 text-xs text-slate-400">
-                  <span>Crop: <strong className="text-slate-200">{item.primary_crop}</strong></span>
-                  <span>Routes: <strong className="text-slate-200">{item.active_routes} pooled trucks</strong></span>
+                <div className="flex items-center justify-between mt-2 text-xs" style={{ color: 'var(--ad-text-tertiary)' }}>
+                  <span>Crop: <strong style={{ color: 'var(--ad-text-secondary)' }}>{item.primary_crop}</strong></span>
+                  <span>Routes: <strong style={{ color: 'var(--ad-text-secondary)' }}>{item.active_routes} pooled trucks</strong></span>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-5 p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start space-x-3 text-xs text-slate-300">
-            <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+          <div
+            className="mt-5 p-3 rounded-xl flex items-start space-x-3 text-xs"
+            style={{
+              background: 'var(--ad-surface-1)',
+              border: '1px solid var(--ad-border)',
+              color: 'var(--ad-text-secondary)',
+            }}
+          >
+            <ShieldCheck className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'var(--ad-brand-bright)' }} />
             <div>
-              <strong className="text-white block font-semibold">Verified Provenance & Metrology</strong>
+              <strong className="block font-semibold" style={{ color: 'var(--ad-text-primary)' }}>Verified Provenance & Metrology</strong>
               Every direct listing is batch-certified with legal metrology packaging standards.
             </div>
           </div>
@@ -387,7 +418,12 @@ export const MinistryAdminView: React.FC = () => {
                   rp: 38.0
                 });
               }}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition-all font-medium"
+              className="px-3 py-1.5 rounded-lg transition-all font-medium text-xs"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-secondary)',
+              }}
             >
               Preset: Buffer Release
             </button>
@@ -404,7 +440,12 @@ export const MinistryAdminView: React.FC = () => {
                   rp: 22.0
                 });
               }}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition-all font-medium"
+              className="px-3 py-1.5 rounded-lg transition-all font-medium text-xs"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-secondary)',
+              }}
             >
               Preset: Storage Subsidy
             </button>
@@ -414,11 +455,16 @@ export const MinistryAdminView: React.FC = () => {
         {/* Interactive Controls */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
           <div>
-            <label className="block text-slate-400 mb-1">Policy Intervention Type</label>
+            <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Policy Intervention Type</label>
             <select
               value={policyType}
               onChange={(e) => setPolicyType(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2"
+              className="w-full rounded-xl px-3 py-2 font-medium focus:outline-none"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-primary)',
+              }}
             >
               <option value="FREIGHT_SUBSIDY">FREIGHT_SUBSIDY</option>
               <option value="BUFFER_STOCK_RELEASE">BUFFER_STOCK_RELEASE</option>
@@ -428,32 +474,47 @@ export const MinistryAdminView: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-slate-400 mb-1">Target Commodity</label>
+            <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Target Commodity</label>
             <input
               type="text"
               value={targetCommodity}
               onChange={(e) => setTargetCommodity(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2"
+              className="w-full rounded-xl px-3 py-2 font-medium focus:outline-none"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-primary)',
+              }}
             />
           </div>
 
           <div>
-            <label className="block text-slate-400 mb-1">Intervention Magnitude (%)</label>
+            <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Intervention Magnitude (%)</label>
             <input
               type="number"
               value={magnitudePct}
               onChange={(e) => setMagnitudePct(Number(e.target.value))}
-              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2 font-mono"
+              className="w-full rounded-xl px-3 py-2 font-mono focus:outline-none"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-primary)',
+              }}
             />
           </div>
 
           <div>
-            <label className="block text-slate-400 mb-1">Volume (Tonnes)</label>
+            <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Volume (Tonnes)</label>
             <input
               type="number"
               value={volumeTonnes}
               onChange={(e) => setVolumeTonnes(Number(e.target.value))}
-              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2 font-mono"
+              className="w-full rounded-xl px-3 py-2 font-mono focus:outline-none"
+              style={{
+                background: 'var(--ad-surface-1)',
+                border: '1px solid var(--ad-border)',
+                color: 'var(--ad-text-primary)',
+              }}
             />
           </div>
         </div>
@@ -462,7 +523,12 @@ export const MinistryAdminView: React.FC = () => {
           <button
             onClick={handleSimulatePolicy}
             disabled={isSimulating}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20 flex items-center space-x-2"
+            className="font-bold px-6 py-2.5 rounded-xl text-xs transition-all flex items-center space-x-2 cursor-pointer"
+            style={{
+              background: 'var(--ad-brand-bright)',
+              color: '#FFFFFF',
+              boxShadow: 'var(--ad-shadow-sm)',
+            }}
           >
             <Sliders className="w-4 h-4" />
             <span>{isSimulating ? 'Running Microeconomic Simulation...' : 'Simulate Policy Impact'}</span>
@@ -471,44 +537,68 @@ export const MinistryAdminView: React.FC = () => {
 
         {/* Policy Simulation Results */}
         {policyResult && (
-          <div className="space-y-4 pt-4 border-t border-slate-800/80">
+          <div className="space-y-4 pt-4" style={{ borderTop: '1px solid var(--ad-border)' }}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-              <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
-                <span className="text-slate-400 font-mono text-[10px] uppercase">Farmer Income Uplift</span>
-                <div className="text-xl font-extrabold text-emerald-400 mt-1">
+              <div
+                className="p-4 rounded-xl shadow-sm"
+                style={{
+                  background: 'var(--ad-surface-1)',
+                  border: '1px solid var(--ad-border)',
+                }}
+              >
+                <span className="font-mono text-[10px] uppercase" style={{ color: 'var(--ad-text-muted)' }}>Farmer Income Uplift</span>
+                <div className="text-xl font-extrabold mt-1" style={{ color: 'var(--ad-brand-bright)' }}>
                   ₹{policyResult.farmer_earnings_uplift_total_inr.toLocaleString()}
                 </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
+                <div className="text-[11px] mt-0.5" style={{ color: 'var(--ad-text-tertiary)' }}>
                   Farmgate Price: ₹{policyResult.projected_new_farmer_price_per_kg}/kg
                 </div>
               </div>
 
-              <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
-                <span className="text-slate-400 font-mono text-[10px] uppercase">Consumer Welfare Savings</span>
-                <div className="text-xl font-extrabold text-cyan-400 mt-1">
+              <div
+                className="p-4 rounded-xl shadow-sm"
+                style={{
+                  background: 'var(--ad-surface-1)',
+                  border: '1px solid var(--ad-border)',
+                }}
+              >
+                <span className="font-mono text-[10px] uppercase" style={{ color: 'var(--ad-text-muted)' }}>Consumer Welfare Savings</span>
+                <div className="text-xl font-extrabold mt-1" style={{ color: 'var(--ad-cool-bright)' }}>
                   ₹{policyResult.consumer_savings_total_inr.toLocaleString()}
                 </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
+                <div className="text-[11px] mt-0.5" style={{ color: 'var(--ad-text-tertiary)' }}>
                   Retail Price: ₹{policyResult.projected_new_retail_price_per_kg}/kg
                 </div>
               </div>
 
-              <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
-                <span className="text-slate-400 font-mono text-[10px] uppercase">Fiscal Outlay</span>
-                <div className="text-xl font-extrabold text-rose-400 mt-1">
+              <div
+                className="p-4 rounded-xl shadow-sm"
+                style={{
+                  background: 'var(--ad-surface-1)',
+                  border: '1px solid var(--ad-border)',
+                }}
+              >
+                <span className="font-mono text-[10px] uppercase" style={{ color: 'var(--ad-text-muted)' }}>Fiscal Outlay</span>
+                <div className="text-xl font-extrabold mt-1" style={{ color: 'var(--ad-danger-bright)' }}>
                   ₹{policyResult.total_government_fiscal_outlay_inr.toLocaleString()}
                 </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
+                <div className="text-[11px] mt-0.5" style={{ color: 'var(--ad-text-tertiary)' }}>
                   Government Budget Requirement
                 </div>
               </div>
 
-              <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
-                <span className="text-slate-400 font-mono text-[10px] uppercase">Benefit-Cost Ratio (BCR)</span>
-                <div className="text-xl font-extrabold text-purple-400 mt-1">
+              <div
+                className="p-4 rounded-xl shadow-sm"
+                style={{
+                  background: 'var(--ad-surface-1)',
+                  border: '1px solid var(--ad-border)',
+                }}
+              >
+                <span className="font-mono text-[10px] uppercase" style={{ color: 'var(--ad-text-muted)' }}>Benefit-Cost Ratio (BCR)</span>
+                <div className="text-xl font-extrabold mt-1" style={{ color: 'var(--ad-accent-bright)' }}>
                   {policyResult.benefit_cost_ratio}×
                 </div>
-                <div className="text-[11px] text-emerald-400 font-semibold mt-0.5">
+                <div className="text-[11px] font-semibold mt-0.5" style={{ color: 'var(--ad-brand-bright)' }}>
                   Risk: {policyResult.market_distortion_risk}
                 </div>
               </div>

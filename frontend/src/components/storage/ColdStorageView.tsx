@@ -293,13 +293,26 @@ export const ColdStorageView: React.FC = () => {
         </div>
 
         {/* Subsidized Capacity Booking Panel */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-            <h3 className="font-bold text-white text-sm flex items-center space-x-2">
-              <Snowflake className="w-4 h-4 text-cyan-400" />
+        <div
+          className="p-6 rounded-2xl shadow-sm space-y-4"
+          style={{
+            background: 'var(--ad-surface-0)',
+            border: '1px solid var(--ad-border)',
+          }}
+        >
+          <div className="flex items-center justify-between pb-3" style={{ borderBottom: '1px solid var(--ad-border)' }}>
+            <h3 className="font-bold text-sm flex items-center space-x-2" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+              <Snowflake className="w-4 h-4" style={{ color: 'var(--ad-cool-bright)' }} />
               <span>FPO Space Reservation & Subsidy</span>
             </h3>
-            <span className="bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full">
+            <span
+              className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full"
+              style={{
+                background: 'var(--ad-cool-light)',
+                color: 'var(--ad-cool-bright)',
+                border: '1px solid rgba(88, 134, 160, 0.2)',
+              }}
+            >
               PMKSY ASSIST
             </span>
           </div>
@@ -307,40 +320,55 @@ export const ColdStorageView: React.FC = () => {
           {selectedFacility ? (
             <form onSubmit={handleBookingSubmit} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-400 mb-1">Selected Facility:</label>
-                <div className="font-bold text-white text-sm">{selectedFacility.name}</div>
-                <div className="text-[11px] text-cyan-400">{selectedFacility.location}</div>
+                <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Selected Facility:</label>
+                <div className="font-bold text-sm" style={{ color: 'var(--ad-text-primary)' }}>{selectedFacility.name}</div>
+                <div className="text-[11px]" style={{ color: 'var(--ad-cool-bright)' }}>{selectedFacility.location}</div>
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">FPO Name:</label>
+                <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>FPO Name:</label>
                 <input
                   type="text"
                   value={fpoName}
                   onChange={(e) => setFpoName(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 font-medium"
+                  className="w-full rounded-xl px-3 py-2 font-medium focus:outline-none"
+                  style={{
+                    background: 'var(--ad-surface-1)',
+                    border: '1px solid var(--ad-border)',
+                    color: 'var(--ad-text-primary)',
+                  }}
                   required
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-400 mb-1">Commodity:</label>
+                  <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Commodity:</label>
                   <input
                     type="text"
                     value={commodity}
                     onChange={(e) => setCommodity(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 font-medium"
+                    className="w-full rounded-xl px-3 py-2 font-medium focus:outline-none"
+                    style={{
+                      background: 'var(--ad-surface-1)',
+                      border: '1px solid var(--ad-border)',
+                      color: 'var(--ad-text-primary)',
+                    }}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 mb-1">Quantity (Tonnes):</label>
+                  <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Quantity (Tonnes):</label>
                   <input
                     type="number"
                     value={quantityTonnes}
                     onChange={(e) => setQuantityTonnes(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 font-mono"
+                    className="w-full rounded-xl px-3 py-2 font-mono focus:outline-none"
+                    style={{
+                      background: 'var(--ad-surface-1)',
+                      border: '1px solid var(--ad-border)',
+                      color: 'var(--ad-text-primary)',
+                    }}
                     max={selectedFacility.available_capacity_tonnes}
                     min="1"
                     required
@@ -349,46 +377,63 @@ export const ColdStorageView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">Planned Duration (Days):</label>
+                <label className="block mb-1 font-semibold" style={{ color: 'var(--ad-text-secondary)' }}>Planned Duration (Days):</label>
                 <input
                   type="number"
                   value={durationDays}
                   onChange={(e) => setDurationDays(Number(e.target.value))}
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 font-mono"
+                  className="w-full rounded-xl px-3 py-2 font-mono focus:outline-none"
+                  style={{
+                    background: 'var(--ad-surface-1)',
+                    border: '1px solid var(--ad-border)',
+                    color: 'var(--ad-text-primary)',
+                  }}
                   min="1"
                   max="180"
                   required
                 />
               </div>
 
-              <div className="flex items-center space-x-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+              <div
+                className="flex items-center space-x-2 p-2.5 rounded-xl"
+                style={{
+                  background: 'var(--ad-surface-1)',
+                  border: '1px solid var(--ad-border)',
+                }}
+              >
                 <input
                   type="checkbox"
                   id="subsidyCheck"
                   checked={applySubsidy}
                   onChange={(e) => setApplySubsidy(e.target.checked)}
-                  className="rounded bg-slate-950 border-slate-700 text-cyan-500 focus:ring-cyan-500"
+                  className="rounded cursor-pointer"
                 />
-                <label htmlFor="subsidyCheck" className="text-slate-300 text-xs font-semibold cursor-pointer">
+                <label htmlFor="subsidyCheck" className="text-xs font-semibold cursor-pointer" style={{ color: 'var(--ad-text-secondary)' }}>
                   Apply DoCA Power Tariff Assistance (₹{selectedFacility.doca_subsidized_rate_per_kg_day}/kg/day)
                 </label>
               </div>
 
               {/* Fee Breakdown */}
-              <div className="bg-slate-900/90 p-3 rounded-xl border border-slate-800 space-y-1.5 font-mono text-[11px]">
-                <div className="flex justify-between text-slate-400">
+              <div
+                className="p-3 rounded-xl space-y-1.5 font-mono text-[11px]"
+                style={{
+                  background: 'var(--ad-surface-1)',
+                  border: '1px solid var(--ad-border)',
+                }}
+              >
+                <div className="flex justify-between" style={{ color: 'var(--ad-text-tertiary)' }}>
                   <span>Gross Storage Fee:</span>
-                  <span>₹{(quantityTonnes * 1000 * selectedFacility.base_rate_per_kg_day * durationDays).toLocaleString()}</span>
+                  <span style={{ color: 'var(--ad-text-primary)' }}>₹{(quantityTonnes * 1000 * selectedFacility.base_rate_per_kg_day * durationDays).toLocaleString()}</span>
                 </div>
                 {applySubsidy && (
-                  <div className="flex justify-between text-cyan-400">
+                  <div className="flex justify-between" style={{ color: 'var(--ad-cool-bright)' }}>
                     <span>DoCA Tariff Subsidy:</span>
                     <span>-₹{((selectedFacility.base_rate_per_kg_day - selectedFacility.doca_subsidized_rate_per_kg_day) * quantityTonnes * 1000 * durationDays).toLocaleString()}</span>
                   </div>
                 )}
-                <div className="pt-2 border-t border-slate-800 flex justify-between font-bold text-white text-xs">
+                <div className="pt-2 flex justify-between font-bold text-xs" style={{ borderTop: '1px solid var(--ad-border)', color: 'var(--ad-text-primary)' }}>
                   <span>Net Payable by FPO:</span>
-                  <span className="text-cyan-400">
+                  <span style={{ color: 'var(--ad-brand-bright)' }}>
                     ₹{(quantityTonnes * 1000 * (applySubsidy ? selectedFacility.doca_subsidized_rate_per_kg_day : selectedFacility.base_rate_per_kg_day) * durationDays).toLocaleString()}
                   </span>
                 </div>
@@ -397,7 +442,12 @@ export const ColdStorageView: React.FC = () => {
               <button
                 type="submit"
                 disabled={isBooking}
-                className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-cyan-600/20 text-xs flex items-center justify-center space-x-2"
+                className="w-full font-bold py-3 rounded-xl transition-all text-xs flex items-center justify-center space-x-2 cursor-pointer"
+                style={{
+                  background: 'var(--ad-brand-bright)',
+                  color: '#FFFFFF',
+                  boxShadow: 'var(--ad-shadow-sm)',
+                }}
               >
                 <Zap className="w-4 h-4" />
                 <span>{isBooking ? 'Locking Space...' : 'Confirm Subsidized Chamber Reservation'}</span>

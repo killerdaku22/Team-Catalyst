@@ -303,35 +303,67 @@ export const DemandForecastView: React.FC = () => {
 
             {/* Right: Key Fundamental Drivers & Weather Telemetry */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="glass-panel p-6 rounded-3xl border border-slate-800 space-y-4">
-                <h3 className="font-bold text-white text-sm flex items-center space-x-2">
-                  <Activity className="w-4 h-4 text-emerald-400" />
+              <div
+                className="p-6 rounded-2xl space-y-4 shadow-sm"
+                style={{
+                  background: 'var(--ad-surface-0)',
+                  border: '1px solid var(--ad-border)',
+                }}
+              >
+                <h3 className="font-bold text-sm flex items-center space-x-2" style={{ color: 'var(--ad-text-primary)' }}>
+                  <Activity className="w-4 h-4" style={{ color: 'var(--ad-brand-bright)' }} />
                   <span>Key Market Drivers</span>
                 </h3>
 
-                <ul className="space-y-2.5 text-xs text-slate-300">
+                <ul className="space-y-2.5 text-xs" style={{ color: 'var(--ad-text-secondary)' }}>
                   {forecast.key_drivers.map((driver, idx) => (
-                    <li key={idx} className="flex items-start space-x-2 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
-                      <span className="text-emerald-400 font-bold">•</span>
-                      <span>{driver}</span>
+                    <li
+                      key={idx}
+                      className="flex items-start space-x-2.5 p-3 rounded-xl"
+                      style={{
+                        background: 'var(--ad-surface-1)',
+                        border: '1px solid var(--ad-border)',
+                      }}
+                    >
+                      <span className="font-bold shrink-0 mt-0.5" style={{ color: 'var(--ad-brand-bright)' }}>•</span>
+                      <span className="leading-relaxed">{driver}</span>
                     </li>
                   ))}
                 </ul>
 
                 {forecast.weather_telemetry && (
-                  <div className="pt-3 border-t border-slate-800/80 space-y-2">
-                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center space-x-1.5">
-                      <CloudSun className="w-3.5 h-3.5 text-amber-400" />
+                  <div className="pt-3 space-y-2" style={{ borderTop: '1px solid var(--ad-border)' }}>
+                    <span
+                      className="text-[11px] font-bold uppercase tracking-wider flex items-center space-x-1.5"
+                      style={{ color: 'var(--ad-text-tertiary)' }}
+                    >
+                      <CloudSun className="w-3.5 h-3.5" style={{ color: 'var(--ad-accent-bright)' }} />
                       <span>Live Agricultural Telemetry</span>
                     </span>
                     <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
-                      <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
-                        <span className="text-slate-500">Temperature:</span>
-                        <div className="text-white font-bold">{forecast.weather_telemetry.temperature_celsius}°C</div>
+                      <div
+                        className="p-2.5 rounded-xl"
+                        style={{
+                          background: 'var(--ad-surface-1)',
+                          border: '1px solid var(--ad-border)',
+                        }}
+                      >
+                        <span className="text-[10px]" style={{ color: 'var(--ad-text-muted)' }}>Temperature:</span>
+                        <div className="font-bold text-sm mt-0.5" style={{ color: 'var(--ad-text-primary)' }}>
+                          {forecast.weather_telemetry.temperature_celsius}°C
+                        </div>
                       </div>
-                      <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
-                        <span className="text-slate-500">Humidity:</span>
-                        <div className="text-cyan-400 font-bold">{forecast.weather_telemetry.relative_humidity_percent}%</div>
+                      <div
+                        className="p-2.5 rounded-xl"
+                        style={{
+                          background: 'var(--ad-surface-1)',
+                          border: '1px solid var(--ad-border)',
+                        }}
+                      >
+                        <span className="text-[10px]" style={{ color: 'var(--ad-text-muted)' }}>Humidity:</span>
+                        <div className="font-bold text-sm mt-0.5" style={{ color: 'var(--ad-cool-bright)' }}>
+                          {forecast.weather_telemetry.relative_humidity_percent}%
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -342,46 +374,101 @@ export const DemandForecastView: React.FC = () => {
 
           {/* Model Benchmark & Backtesting Comparison Table */}
           {forecast.baseline_comparison && forecast.baseline_comparison.length > 0 && (
-            <div className="glass-panel p-6 rounded-3xl border border-slate-800 space-y-4">
-              <div className="flex items-center justify-between">
+            <div
+              className="p-6 rounded-2xl space-y-4 shadow-sm"
+              style={{
+                background: 'var(--ad-surface-0)',
+                border: '1px solid var(--ad-border)',
+              }}
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <h3 className="font-bold text-white text-base flex items-center space-x-2">
-                    <Cpu className="w-4 h-4 text-cyan-400" />
+                  <h3 className="font-bold text-base flex items-center space-x-2" style={{ fontFamily: 'var(--ad-font-display)', color: 'var(--ad-text-primary)' }}>
+                    <Cpu className="w-4 h-4" style={{ color: 'var(--ad-cool-bright)' }} />
                     <span>Time-Series Model Performance Benchmarks (Walk-Forward Validation)</span>
                   </h3>
-                  <p className="text-xs text-slate-400">Comparing test errors across 14-day holdout windows. Model with lowest RMSE is selected automatically.</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--ad-text-tertiary)' }}>
+                    Comparing cross-validated test errors across 14-day holdout windows. Model with lowest sMAPE & RMSE is selected automatically.
+                  </p>
                 </div>
+                <span
+                  className="self-start sm:self-auto text-[11px] font-mono px-3 py-1 rounded-full font-bold uppercase tracking-wider"
+                  style={{
+                    background: 'var(--ad-accent-light)',
+                    color: 'var(--ad-accent-bright)',
+                    border: '1px solid var(--ad-border-accent)',
+                  }}
+                >
+                  5-Model Tournament
+                </span>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs font-mono">
-                  <thead className="bg-slate-900/80 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+              <div className="overflow-x-auto rounded-xl" style={{ border: '1px solid var(--ad-border)' }}>
+                <table className="w-full text-left text-xs font-mono ad-table-responsive">
+                  <thead
+                    className="uppercase text-[10px]"
+                    style={{
+                      background: 'var(--ad-surface-1)',
+                      color: 'var(--ad-text-tertiary)',
+                      borderBottom: '1px solid var(--ad-border)',
+                    }}
+                  >
                     <tr>
                       <th className="py-3 px-4">Model Identifier</th>
                       <th className="py-3 px-4">Algorithm Family</th>
                       <th className="py-3 px-4 text-right">Mean Abs Error (MAE)</th>
                       <th className="py-3 px-4 text-right">Root Mean Squared Error (RMSE)</th>
-                      <th className="py-3 px-4 text-right">Mean Abs % Error (MAPE)</th>
-                      <th className="py-3 px-4 text-center">Status</th>
+                      <th className="py-3 px-4 text-right">sMAPE (%)</th>
+                      <th className="py-3 px-4 text-center">Tournament Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60 text-slate-200">
+                  <tbody className="divide-y" style={{ borderColor: 'var(--ad-border)', color: 'var(--ad-text-secondary)' }}>
                     {forecast.baseline_comparison.map((bm) => {
                       const isActive = bm.model_name === forecast.active_model || bm.model_id === forecast.active_model;
                       return (
-                        <tr key={bm.model_id} className={isActive ? 'bg-emerald-950/20 font-bold' : ''}>
-                          <td className="py-3 px-4 text-white">{bm.model_id.toUpperCase()}</td>
-                          <td className="py-3 px-4 text-slate-300">{bm.model_name}</td>
-                          <td className="py-3 px-4 text-right">₹{bm.mae.toFixed(2)}/kg</td>
-                          <td className="py-3 px-4 text-right text-emerald-400">₹{bm.rmse.toFixed(2)}/kg</td>
-                          <td className="py-3 px-4 text-right">{bm.mape.toFixed(1)}%</td>
+                        <tr
+                          key={bm.model_id}
+                          className="transition-colors"
+                          style={{
+                            background: isActive ? 'var(--ad-accent-light)' : 'transparent',
+                            fontWeight: isActive ? '700' : 'normal',
+                          }}
+                        >
+                          <td className="py-3 px-4 font-bold" style={{ color: 'var(--ad-text-primary)' }}>
+                            {bm.model_id.toUpperCase().replace(/_/g, ' ')}
+                          </td>
+                          <td className="py-3 px-4" style={{ color: 'var(--ad-text-secondary)' }}>{bm.model_name}</td>
+                          <td className="py-3 px-4 text-right" style={{ color: 'var(--ad-text-primary)' }}>₹{bm.mae.toFixed(2)}/kg</td>
+                          <td className="py-3 px-4 text-right font-bold" style={{ color: isActive ? 'var(--ad-brand-bright)' : 'var(--ad-text-primary)' }}>
+                            ₹{bm.rmse.toFixed(2)}/kg
+                          </td>
+                          <td className="py-3 px-4 text-right font-bold" style={{ color: isActive ? 'var(--ad-accent-bright)' : 'var(--ad-text-secondary)' }}>
+                            {bm.mape.toFixed(1)}%
+                          </td>
                           <td className="py-3 px-4 text-center">
                             {isActive ? (
-                              <span className="bg-emerald-500/20 text-emerald-300 text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/40">
-                                ACTIVE SELECTION
+                              <span
+                                className="text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider inline-flex items-center space-x-1"
+                                style={{
+                                  background: 'var(--ad-accent-light)',
+                                  color: 'var(--ad-accent-bright)',
+                                  border: '1px solid var(--ad-border-accent)',
+                                }}
+                              >
+                                <span>★</span>
+                                <span>ACTIVE SELECTION</span>
                               </span>
                             ) : (
-                              <span className="text-slate-500 text-[10px]">Benchmark</span>
+                              <span
+                                className="text-[10px] px-2 py-0.5 rounded-full"
+                                style={{
+                                  background: 'var(--ad-surface-1)',
+                                  color: 'var(--ad-text-muted)',
+                                  border: '1px solid var(--ad-border)',
+                                }}
+                              >
+                                Benchmark
+                              </span>
                             )}
                           </td>
                         </tr>
