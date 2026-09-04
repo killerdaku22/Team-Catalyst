@@ -5,11 +5,12 @@
 <h1 align="center">🌾 AgriDirect — SIH Problem Statement 26033</h1>
 
 <p align="center">
-  <strong>Direct Farmer-to-Consumer Market Intelligence, AI Decision Optimizer, Smart Logistics & Price Stabilization Platform</strong>
+  <strong>Direct Farmer-to-Consumer Market Intelligence, AI Decision Optimizer, Smart Logistics & Price Stabilization Platform</strong><br/>
+  <em>Developed for Smart India Hackathon 2026 by <strong>Team Jack_Sparrow</strong></em>
 </p>
 
 <p align="center">
-  <a href="#test-suite"><img src="https://img.shields.io/badge/Pytest_Suite-76%2F76_Passing_(100%25)-10B981?style=for-the-badge&logo=pytest&logoColor=white" alt="Pytest Status"/></a>
+  <a href="#test-suite"><img src="https://img.shields.io/badge/Pytest_Suite-90%2F90_Passing_(100%25)-10B981?style=for-the-badge&logo=pytest&logoColor=white" alt="Pytest Status"/></a>
   <a href="#architecture"><img src="https://img.shields.io/badge/Phases-16_Complete-3B82F6?style=for-the-badge&logo=checkmarx&logoColor=white" alt="16 Phases"/></a>
   <a href="#docker"><img src="https://img.shields.io/badge/Docker-Multi--Stage_Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/></a>
   <a href="#voice"><img src="https://img.shields.io/badge/Voice_AI-7_Indian_Languages-F59E0B?style=for-the-badge&logo=soundcharts&logoColor=white" alt="Bhashini Voice AI"/></a>
@@ -22,6 +23,7 @@
   <img src="https://img.shields.io/badge/FastAPI-0.109+-009688?logo=fastapi&logoColor=white" alt="FastAPI"/>
   <img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white" alt="TypeScript"/>
   <img src="https://img.shields.io/badge/Vite-5.0-646CFF?logo=vite&logoColor=white" alt="Vite"/>
+  <img src="https://img.shields.io/badge/Team-Jack__Sparrow-amber" alt="Team"/>
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License"/>
 </p>
 
@@ -29,8 +31,9 @@
 
 ### 🌐 Live Production Deployments & Links
 
-| Service | Environment | Live URL |
+| Service | Details / Environment | Live URL |
 |:---|:---:|:---|
+| **Hackathon Team** | SIH 2026 Finalist | **Team Jack_Sparrow** |
 | **Frontend Web Application** | Vercel (Production) | [**https://team-catalyst-mu.vercel.app**](https://team-catalyst-mu.vercel.app/) |
 | **Backend REST Engine** | Render (Production) | [**https://agridirect-backend-ogxs.onrender.com**](https://agridirect-backend-ogxs.onrender.com) |
 | **Interactive OpenAPI Docs** | Swagger UI | [**https://agridirect-backend-ogxs.onrender.com/docs**](https://agridirect-backend-ogxs.onrender.com/docs) |
@@ -199,7 +202,7 @@ graph TB
 | # | Engine Module | Source File | Core Methodology & Mathematical Formulation |
 |---|---|---|---|
 | **1** | **Produce Disposition Decision Engine** | `decision_engine.py` | Calculates Storage Opportunity Index ($\text{SOI} = P_{\text{forecast}} - P_{\text{current}} - C_{\text{storage}} - L_{\text{spoilage}}$) across **SELL_NOW**, **STORE**, **MOVE**, and **SPLIT** actions with farmer working capital liquidity constraints. |
-| **2** | **Multi-Model Demand Forecaster** | `forecasting_engine.py` | Automated walk-forward backtesting evaluating Naive Persistence, 7-Day MA, Holt-Winters Exponential Smoothing, and **Ridge Auto-Regressive AR(7)** with Open-Meteo temperature covariates and expanding uncertainty intervals. |
+| **2** | **Multi-Model Tournament Forecaster** | `forecasting_engine.py` & `agricultural_forecasting_engine.py` | Automated empirical walk-forward tournament evaluating **Gradient Boosted Trees (HistGradientBoostingRegressor)**, **Ridge ARX (Weather + Arrivals)**, **Holt-Winters Smoothing**, **7-Day Moving Average**, and **Naive Persistence** with expanding 80% & 95% confidence intervals trained on 35,136 Agmarknet records. |
 | **3** | **Fair Price & Disintermediation Engine** | `price_engine.py` | Computes transparent disintermediation margin breakdowns, guaranteed farmer payout uplifts, and direct buyer savings. |
 | **4** | **Capacitated VRP Logistics Optimizer** | `logistics_engine.py` | Capacity-constrained vehicle routing using Nearest-Neighbor + 2-Opt local search improvement heuristic, pro-rata freight allocation, dynamic dispatch timing viability evaluator, and DEFRA CO₂ factor ($0.218\text{ kg CO}_2/\text{km}$). |
 | **5** | **Strategic Buffer Stock & MIS Engine** | `buffer_stock_engine.py` | Tracks NAFED / NCCF silo inventories and simulates Market Intervention Scheme (MIS) retail price-cooling elasticity. |
@@ -209,6 +212,9 @@ graph TB
 | **9** | **Market Opportunity & Spoilage Ranker** | `market_opportunity_engine.py` | Evaluates real-time price arbitrage across distant terminal mandis penalized by freight haulage and ambient heat spoilage. |
 | **10**| **Policy Greens Subsidy Simulator** | `policy_simulation_engine.py` | Simulates Operation Greens TOP 50% freight and storage subsidies, evaluating Benefit-Cost Ratios (BCR) for government interventions. |
 | **11**| **Multilingual Voice Intent Advisor** | `voice_advisor_engine.py` | Multi-intent voice assistant supporting **7 Indian languages** (Hindi, Marathi, Punjabi, Telugu, Tamil, Kannada, and English) with Romanized transliterations, Web Speech synthesis, and direct engine lookups. |
+| **12**| **Spatial Arbitrage & Market Analytics Engine** | `analytics_engine.py` | Real-time cross-mandi spatial price arbitrage net-realization solver factoring in geodesic Haversine distance, freight haulage penalties (₹2.1/ton-km), and ambient thermal spoilage decay. |
+| **13**| **Feature Ablation & SHAP Explainability Engine** | `explainability.py` & `ablation.py` | Quantifies price driver percentage contributions (temperature deluges, rainfall shocks, arrival contractions, momentum) and computes feature ablation benchmarks proving error reductions from environmental telemetry. |
+
 
 ---
 
@@ -448,21 +454,18 @@ sih26/
 │   │   │   ├── 📂 ui/                          # Design System (DataProvenance, ErrorState, etc.)
 │   │   │   └── 📂 voice/                       # VoiceKisanAssistant (Bhashini AI)
 │   │   ├── 📂 services/
-│   │   │   └── api.ts                          # Type-Safe REST API Client with Fallback Resilience
-│   │   ├── 📂 lib/
-│   │   │   └── supabase.ts                     # Supabase Client Configuration
-│   │   └── 📂 types/
-│   │       └── index.ts                        # Unified TypeScript Type Definitions
-│   ├── Dockerfile                              # Multi-Stage NGINX Container
-│   ├── nginx.conf                              # Production NGINX Reverse Proxy Config
-│   ├── package.json                            # Frontend Dependencies & Scripts
-│   └── vite.config.ts                          # Vite Bundler Configuration
-│
-├── 📂 dataset/                                  # Benchmark & Meteorological Datasets
-├── docker-compose.yml                          # Full-Stack Multi-Container Orchestration
-├── SECURITY_REPORT.md                          # OWASP ASVS Security & RBAC Audit Report
-├── SIH26033_Presentation.md                   # Grand Finale Jury Presentation Slides
-├── SIH_PITCH_DEMO_GUIDE.md                     # Step-by-Step Demonstration Pitch Guide
+│   │   │   └── api.ts                          # Unified Axios REST Client
+│   │   ├── 📂 types/
+│   │   │   └── index.ts                        # Shared TypeScript Domain Types
+│   │   ├── App.tsx                             # Master Navigation & Role Switcher
+│   │   ├── main.tsx                            # Root React 18 Entrypoint
+│   │   └── index.css                           # Design System 2 (Warm Ivory + Forest Green)
+│   ├── package.json                            # Vite + React + Lucide + Tailwind
+│   └── vite.config.ts                          # Build Configuration & Local Dev Proxy
+├── 📂 docs/
+│   ├── AGRI_DIRECT_WHITE_PAPER.md              # Technical & Economic White Paper
+│   ├── SIH26033_Presentation.md               # Hackathon Finalist Presentation Deck
+│   └── SIH_DEMO_GUIDE.md                       # Step-by-Step Demonstration Pitch Guide
 └── README.md                                   # Master Project Documentation
 ```
 
@@ -470,7 +473,7 @@ sih26/
 
 ## 🧪 Automated Test Suite & Stress Benchmark
 
-### Automated Tests (78 Passing Tests — 100% Coverage)
+### Automated Tests (90 Passing Tests — 100% Coverage)
 
 ```bash
 cd backend
@@ -479,7 +482,7 @@ python -m pytest tests -v
 
 ```
 ============================== test session starts ==============================
-collected 78 items
+collected 90 items
 
 tests/test_api.py (4 passed)
 tests/test_api_resiliency_phase2.py (3 passed)
@@ -489,19 +492,21 @@ tests/test_data_foundation_phase2.py (6 passed)
 tests/test_decision_phase4.py (8 passed)
 tests/test_end_to_end_pipeline.py (1 passed)
 tests/test_engines.py (3 passed)
-tests/test_forecasting_phase3.py (5 passed)
+tests/test_forecasting_phase3.py (6 passed)
 tests/test_intelligence_phase6.py (5 passed)
+tests/test_logistics_dynamic_consolidation_pr15.py (4 passed)
 tests/test_logistics_phase9.py (4 passed)
 tests/test_marketplace_concurrency.py (1 passed)
+tests/test_ml_subsystem.py (7 passed)
 tests/test_opportunity_phase5.py (4 passed)
 tests/test_policy_phase7.py (4 passed)
 tests/test_security_phase1.py (9 passed)
 tests/test_storage_phase14.py (4 passed)
 tests/test_stress_load.py (3 passed)
-tests/test_voice_phase13.py (4 passed)
+tests/test_voice_phase13.py (6 passed)
 tests/verify_live_data_truth.py (1 passed)
 
-====================== 78 passed in 54.47s (100% SUCCESS) ======================
+====================== 90 passed in 77.10s (100% SUCCESS) ======================
 ```
 
 ### High-Concurrency Stress Benchmark
