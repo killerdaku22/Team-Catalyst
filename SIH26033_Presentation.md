@@ -3,7 +3,7 @@
 
 > **Smart India Hackathon 2026** | Ministry of Consumer Affairs, Food & Public Distribution  
 > Department of Consumer Affairs (DoCA) | Problem Statement ID: **SIH26033**  
-> Team: **Team Jack_Sparrow** | Repository: [`killerdaku22/Team-Catalyst`](https://github.com/killerdaku22/Team-Catalyst)
+> Team: **Team Jack_Sparrow** | Repository: [`killerdaku22/Team-Jack_Sparrow`](https://github.com/killerdaku22/Team-Jack_Sparrow)
 
 ---
 

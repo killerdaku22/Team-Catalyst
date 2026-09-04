@@ -37,7 +37,7 @@
 | **Frontend Web Application** | Vercel (Production) | [**https://team-catalyst-mu.vercel.app**](https://team-catalyst-mu.vercel.app/) |
 | **Backend REST Engine** | Render (Production) | [**https://agridirect-backend-ogxs.onrender.com**](https://agridirect-backend-ogxs.onrender.com) |
 | **Interactive OpenAPI Docs** | Swagger UI | [**https://agridirect-backend-ogxs.onrender.com/docs**](https://agridirect-backend-ogxs.onrender.com/docs) |
-| **Source Repository** | GitHub | [**killerdaku22/Team-Catalyst**](https://github.com/killerdaku22/Team-Catalyst) |
+| **Source Repository** | GitHub | [**killerdaku22/Team-Jack_Sparrow**](https://github.com/killerdaku22/Team-Jack_Sparrow) |
 
 </div>
 
@@ -529,8 +529,8 @@ Multi-threaded stress testing (`tests/test_stress_load.py`) executing concurrent
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/killerdaku22/Team-Catalyst.git
-cd Team-Catalyst
+git clone https://github.com/killerdaku22/Team-Jack_Sparrow.git
+cd Team-Jack_Sparrow
 ```
 
 ### 2. Backend Setup
