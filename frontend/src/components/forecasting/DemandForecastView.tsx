@@ -96,7 +96,7 @@ export const DemandForecastView: React.FC = () => {
               14-Day Market Price Outlook
             </h1>
             <p className="text-sm max-w-2xl mt-1" style={{ color: 'var(--ad-text-tertiary)' }}>
-              Automated backtesting evaluation across Naive Persistence, 7-Day Moving Average, Holt-Winters Exponential Smoothing, and Ridge Autoregressive Regression.
+              Automated walk-forward tournament evaluation across Naive Persistence, 7-Day Moving Average, Holt-Winters Exponential Smoothing, Ridge Autoregressive Regression, and Gradient Boosted Trees.
             </p>
           </div>
 
